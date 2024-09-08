@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { Repeat, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList } from 'lucide-react';
+import { Repeat, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 
 // Import your existing action components
 import SwapTokenAction from '../campaignActions/SwapTokenAction';
-import ProvideLiquidityAction from '../campaignActions/ProvideLiquidityAction';
+// import ProvideLiquidityAction from '../campaignActions/ProvideLiquidityAction';
 import StakeTokenAction from '../campaignActions/StakeTokenAction';
 import BurnTokenAction from '../campaignActions/BurnTokenAction';
 import SellDigitalProductAction from '../campaignActions/SellDigitalProductAction';
+import CompressTokenAction from '../campaignActions/CompressTokenAction';
+import DecompressTokenAction from '../campaignActions/DecompressTokenAction';
 
 const campaignTypes = [
   { name: 'Onchain'},
@@ -17,11 +19,13 @@ const campaignTypes = [
 
 const actions = {
   Onchain: [
-    { name: 'Swap tokens', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
-    { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
-    { name: 'Stake tokens', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction },
-    { name: 'Burn tokens', icon: <Flame className="text-red-500" />, component: BurnTokenAction },
-    { name: 'Sell digital product', icon: <ShoppingCart className="text-purple-500" />, component: SellDigitalProductAction }
+    { name: 'Burn token', icon: <Flame className="text-red-500" />, component: BurnTokenAction },
+    { name: 'Sell digital product', icon: <ShoppingCart className="text-purple-500" />, component: SellDigitalProductAction },
+    { name: 'Compress token', icon: <Minimize className="text-indigo-500" />, component: CompressTokenAction },
+    { name: 'Decompress token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
+    { name: 'Swap token', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
+    // { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
+    { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
   ],
   Offchain: [
     { name: 'Share on Twitter', icon: <Share className="text-blue-400" />},
@@ -46,7 +50,16 @@ const CampaignTypeAndActions = ({
     if (selectedActions.includes(action.name)) {
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
-    } else if (selectedActions.length > 0) {
+    } 
+    else if (action.name === 'Swap token') {
+      toast.error('Swap token action is not yet live!');
+      setCurrentAction(null)
+    }
+    else if (action.name === 'Stake token') {
+      toast.error('Stake tokens action is yet live!');
+      setCurrentAction(null)
+    }
+    else if (selectedActions.length > 0) {
       toast.error('An action is already selected. Please deselect it first.');
     } else {
       toggleAction(action.name);
@@ -99,7 +112,7 @@ const CampaignTypeAndActions = ({
       </div>
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {actions[campaignType].map((action) => (
             <div 
               key={action.name}
@@ -144,7 +157,7 @@ const CampaignTypeAndActions = ({
       >
         {currentAction && (
           <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">{currentAction.name}</h2>
+            {/* <h2 className="text-2xl font-bold mb-4">{currentAction.name}</h2> */}
             {currentAction.component && React.createElement(currentAction.component, { 
               onSave: handleSave,
               initialData: actionData[currentAction.name] // Add this line

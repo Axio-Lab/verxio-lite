@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PlatformSelector from './PlatformSelector';
+import { Coins } from 'lucide-react';
 
 const StakeTokenAction = ({ onSave }) => {
   const [platform, setPlatform] = useState('');
@@ -12,7 +13,9 @@ const StakeTokenAction = ({ onSave }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-4">Stake Token Details</h3>
+      <h3 className="text-lg font-semibold mb-4 flex items-center">
+        <Coins className="mr-2 text-yellow-500" />
+        Stake Token Details</h3>
       <PlatformSelector selectedPlatform={platform} onSelectPlatform={setPlatform} />
       <input
         className="w-full p-2 mb-2 border rounded"

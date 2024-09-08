@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
 
 const SellDigitalProductAction = ({ onSave }) => {
   const [productImage, setProductImage] = useState(null);
@@ -13,7 +14,9 @@ const SellDigitalProductAction = ({ onSave }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-4">Sell Digital Product Details</h3>
+      <h3 className="text-lg font-semibold mb-4 flex items-center">
+        <ShoppingCart className="mr-2 text-purple-500" />
+        Sell Digital Product Details</h3>
       <input
         className="w-full p-2 mb-2 border rounded"
         type="file"

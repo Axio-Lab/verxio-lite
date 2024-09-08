@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Users, Gift, Trophy, PlusCircle, CheckCircle, MinusCircle } from 'lucide-react';
 
 const availableRewards = [
-  { name: 'Whitelist spots', icon: <Users className="text-blue-500" /> },
-  { name: 'NFT drops', icon: <Gift className="text-purple-500" /> },
-  { name: 'Tokens', icon: <Trophy className="text-yellow-500" /> },
-  { name: 'Airdrops', icon: <PlusCircle className="text-green-500" /> },
+  { name: 'Whitelist spot', icon: <Users className="text-blue-500" /> },
+  { name: 'NFT drop', icon: <Gift className="text-purple-500" /> },
+  { name: 'Token', icon: <Trophy className="text-yellow-500" /> },
+  { name: 'Airdrop', icon: <PlusCircle className="text-green-500" /> },
   { name: 'Merch drop', icon: <Gift className="text-red-500" /> },
-  { name: 'Verxio credit', icon: <CheckCircle className="text-indigo-500" /> }
+  { name: 'Verxio XP', icon: <CheckCircle className="text-indigo-500" /> }
 ];
 
 const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWinners }) => {

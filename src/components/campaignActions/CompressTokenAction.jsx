@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { Flame } from 'lucide-react';
+import { Minimize } from 'lucide-react';
 
-const BurnTokenAction = ({ onSave }) => {
+const CompressTokenAction = ({ onSave }) => {
   const [tokenMint, setTokenMint] = useState('');
-  const [minBurnAmount, setMinBurnAmount] = useState('');
+  const [amount, setAmount] = useState('');
 
   const handleSave = () => {
-    onSave({ tokenMint, minBurnAmount });
+    onSave({ tokenMint, amount });
   };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
-        <Flame className="mr-2 text-red-500" />
-        Burn Token Details</h3>
+      <h3 className="text-lg font-semibold mb-4 flex items-center">
+        <Minimize className="mr-2 text-indigo-500" />
+        Compress Token Details
+      </h3>
       <input
         className="w-full p-2 mb-2 border rounded"
         placeholder="Token mint address"
@@ -23,9 +24,9 @@ const BurnTokenAction = ({ onSave }) => {
       <input
         className="w-full p-2 mb-2 border rounded"
         type="number"
-        placeholder="Minimum burn amount"
-        value={minBurnAmount}
-        onChange={(e) => setMinBurnAmount(e.target.value)}
+        placeholder="Minimum amount to compress"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
       />
       <button
         className="w-full p-2 bg-blue-500 text-white rounded"
@@ -37,4 +38,4 @@ const BurnTokenAction = ({ onSave }) => {
   );
 };
 
-export default BurnTokenAction;
+export default CompressTokenAction;

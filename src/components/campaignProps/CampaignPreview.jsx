@@ -2,7 +2,7 @@ import React from 'react';
 import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import 'react-markdown-editor-lite/lib/index.css';
-import { Repeat, Droplet, Coins, ShoppingCart, Share, Flame, MessageCircle, UserPlus, ClipboardList, Users, Gift, Trophy, PlusCircle, Calendar, Activity, Award, Zap, Clock } from 'lucide-react';
+import { Repeat, Droplet, Coins, ShoppingCart, Minimize, Maximize, Share, Flame, MessageCircle, UserPlus, ClipboardList, Users, Gift, Trophy, PlusCircle, Calendar, Activity, Award, Zap, Clock } from 'lucide-react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { SiExpertsexchange } from 'react-icons/si';
 import { GiWaveCrest } from 'react-icons/gi';
@@ -10,11 +10,13 @@ import { GiWaveCrest } from 'react-icons/gi';
 const mdParser = new MarkdownIt();
 
 const actionIcons = {
-  'Swap tokens': { icon: Repeat, color: 'text-blue-500' },
+  'Swap token': { icon: Repeat, color: 'text-blue-500' },
   'Sell digital product': { icon: ShoppingCart, color: 'text-purple-500' },
   'Provide liquidity': { icon: Droplet, color: 'text-green-500' },
-  'Stake tokens': { icon: Coins, color: 'text-yellow-500' },
-  'Burn tokens': { icon: Flame, color: 'text-red-500' },
+  'Stake token': { icon: Coins, color: 'text-yellow-500' },
+  'Compress token': { icon: Minimize, color: 'text-indigo-500' },
+  'Decompress token': { icon: Maximize, color: 'text-pink-500' },
+  'Burn token': { icon: Flame, color: 'text-red-500' },
   'Share on Twitter': { icon: Share, color: 'text-blue-400' },
   'Join Discord': { icon: MessageCircle, color: 'text-indigo-500' },
   'Refer a friend': { icon: UserPlus, color: 'text-green-500' },
@@ -22,12 +24,12 @@ const actionIcons = {
 };
 
 const rewardIcons = {
-  'Whitelist spots': { icon: Users, color: 'text-blue-500' },
-  'NFT drops': { icon: Gift, color: 'text-purple-500' },
-  'Tokens': { icon: Trophy, color: 'text-yellow-500' },
-  'Airdrops': { icon: PlusCircle, color: 'text-green-500' },
+  'Whitelist spot': { icon: Users, color: 'text-blue-500' },
+  'NFT drop': { icon: Gift, color: 'text-purple-500' },
+  'Token': { icon: Trophy, color: 'text-yellow-500' },
+  'Airdrop': { icon: PlusCircle, color: 'text-green-500' },
   'Merch drop': { icon: Gift, color: 'text-red-500' },
-  'Verxio credit': { icon: Coins, color: 'text-indigo-500' }
+  'Verxio XP': { icon: Coins, color: 'text-indigo-500' }
 };
 
 const platformIcons = {
@@ -127,12 +129,16 @@ const CampaignPreview = ({ campaignData }) => {
         <h3 className="text-2xl font-semibold mb-4 text-indigo-700">Selected Rewards</h3>
         <div className="flex flex-wrap gap-2">
           {campaignData.selectedRewards.map((reward) => (
-            <ActionRewardBadge 
-              key={reward} 
-              text={reward} 
-              IconComponent={rewardIcons[reward].icon} 
-              color={rewardIcons[reward].color}
-            />
+            rewardIcons[reward] ? (
+              <ActionRewardBadge 
+                key={reward} 
+                text={reward} 
+                IconComponent={rewardIcons[reward].icon} 
+                color={rewardIcons[reward].color}
+              />
+            ) : (
+              <span key={reward} className="text-red-500">Unknown reward: {reward}</span>
+            )
           ))}
         </div>
       </div>

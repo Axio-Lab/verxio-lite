@@ -62,7 +62,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between">
             <NavButton icon={<Compass />} label="Explore" onClick={() => setActiveTab('explore')} active={activeTab === 'explore'} />
-            <NavButton icon={<Briefcase />} label="My Campaigns" onClick={() => setActiveTab('myCampaigns')} active={activeTab === 'myCampaigns'} />
+            <NavButton icon={<Briefcase />} label="Campaigns" onClick={() => setActiveTab('myCampaigns')} active={activeTab === 'myCampaigns'} />
             <NavButton icon={<PlusCircle />} label="Create" onClick={() => setActiveTab('create')} active={activeTab === 'create'} />
             <NavButton icon={<User />} label="Profile" onClick={() => setActiveTab('profile')} active={activeTab === 'profile'} />
             <NavButton icon={<LayoutDashboard />} label="Leaderboard" onClick={() => setActiveTab('leaderboard')} active={activeTab === 'leaderboard'} />

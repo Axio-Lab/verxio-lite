@@ -55,12 +55,12 @@ const Dashboard = () => {
     <WalletProvider wallets={wallets} autoConnect>
       <WalletModalProvider>
     <div className="flex flex-col h-screen bg-gray-100">
-      <main className="flex-1 overflow-y-auto p-4">
+      <main className="flex-1 p-4 overflow-y-auto">
         {renderContent()}
       </main>
-      <nav className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between">
+      <nav className="w-full max-w-full overflow-x-auto bg-white border-t border- gray-200">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
             <NavButton icon={<Compass />} label="Explore" onClick={() => setActiveTab('explore')} active={activeTab === 'explore'} />
             <NavButton icon={<Briefcase />} label="Campaigns" onClick={() => setActiveTab('myCampaigns')} active={activeTab === 'myCampaigns'} />
             <NavButton icon={<PlusCircle />} label="Create" onClick={() => setActiveTab('create')} active={activeTab === 'create'} />

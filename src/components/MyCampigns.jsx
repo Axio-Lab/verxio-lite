@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import CampaignCard from './campaignProps/CampaignCard';
-import Link from 'next/link';
-import CampaignPage from './CampaignPage';
-
+import React, { useState } from "react";
+import CampaignCard from "./campaignProps/CampaignCard";
+import CampaignPage from "./CampaignPage";
+import Button from "@/components/button";
 const MyCampaigns = () => {
   const [campaigns] = useState([
     {
@@ -13,7 +12,17 @@ const MyCampaigns = () => {
       winners: 50,
       daysLeft: 7,
       action: "Swap tokens",
-      reward: "NFT drop"
+      reward: "NFT drop",
+    },
+    {
+      id: 2,
+      title: "Franklyn Test Run",
+      status: "InActive",
+      participants: 34,
+      winners: 50,
+      daysLeft: 2,
+      action: "Swap tokens",
+      reward: "Merch Drop",
     },
     {
       id: 2,
@@ -45,20 +54,18 @@ const MyCampaigns = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-xl p-8 mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-indigo-900">My Campaigns</h1>
-            <Link href="/campaigns/create">
-              <button className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-300">
-                Create Campaign
-              </button>
-            </Link>
+    <div className="min-h-screen px-4 py-12 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
+      <div className="mx-auto">
+        <div className="p-8 mb-8 bg-white shadow-sm bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl">
+          <div className="flex items-center justify-between mb-6 ">
+            <h1 className="mb-6 text-3xl font-bold text-center text-[#0D0E32] sm:text-base">
+              My Campaigns
+            </h1>
+            <Button href={"/campaigns/create"} name=" Create Campaign" />
           </div>
           <div className="space-y-6">
-            {campaigns.map(campaign => (
-              <div 
+            {campaigns.map((campaign) => (
+              <div
                 className="cursor-pointer"
                 onClick={() => setSelectedCampaign(campaign)}
               >

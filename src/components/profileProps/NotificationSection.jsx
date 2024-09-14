@@ -17,13 +17,13 @@ const NotificationSection = ({ notifications, clearAllNotifications }) => {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
       <div className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold text-indigo-800">Notifications</h2>
+        <div className="flex items-center justify-between mb-4 transition-all duration-300 ease-in-out">
+          <h2 className="text-2xl font-semibold text-[#0D0E32]">Notifications</h2>
           <div className="flex items-center space-x-4">
             {notifications.length > 0 && (
               <button
                 onClick={clearAllNotifications}
-                className="text-sm text-indigo-600 hover:text-indigo-800"
+                className="text-sm text-[#0D0E32] hover:text-indigo-800"
               >
                 Clear All
               </button>
@@ -32,7 +32,7 @@ const NotificationSection = ({ notifications, clearAllNotifications }) => {
               onClick={() => setIsOpen(!isOpen)}
               className="relative p-2 bg-indigo-100 rounded-full hover:bg-indigo-200 transition duration-300"
             >
-              <Bell className="h-6 w-6 text-indigo-600" />
+              <Bell className="h-6 w-6 text-[#00ADEF]" />
               {unreadCount > 0 && (
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
                   {unreadCount}
@@ -48,7 +48,7 @@ const NotificationSection = ({ notifications, clearAllNotifications }) => {
                 <div className="mt-4 space-y-4">
                   {currentNotifications.map((notification, index) => (
                     <div key={index} className={`p-3 rounded-lg ${notification.read ? 'bg-gray-100' : 'bg-indigo-100'}`}>
-                      <p className="text-sm text-gray-700">{notification.message}</p>
+                      <p className="text-sm text-[#0D0E32]">{notification.message}</p>
                     </div>
                   ))}
                 </div>
@@ -59,7 +59,7 @@ const NotificationSection = ({ notifications, clearAllNotifications }) => {
                       disabled={currentPage === 1}
                       className="p-2 bg-indigo-100 rounded-full hover:bg-indigo-200 transition duration-300 disabled:opacity-50"
                     >
-                      <ChevronLeft className="h-5 w-5 text-indigo-600" />
+                      <ChevronLeft className="h-5 w-5 text-[#00ADEF]" />
                     </button>
                     <span className="text-sm text-gray-600">
                       Page {currentPage} of {pageCount}
@@ -69,7 +69,7 @@ const NotificationSection = ({ notifications, clearAllNotifications }) => {
                       disabled={currentPage === pageCount}
                       className="p-2 bg-indigo-100 rounded-full hover:bg-indigo-200 transition duration-300 disabled:opacity-50"
                     >
-                      <ChevronRight className="h-5 w-5 text-indigo-600" />
+                      <ChevronRight className="h-5 w-5 text-[#00ADEF]" />
                     </button>
                   </div>
                 )}

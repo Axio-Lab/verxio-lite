@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Wallet, Award, BarChart2, LogOut, Bell } from 'lucide-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { useWallet } from '@solana/wallet-adapter-react';
-import NotificationSection from './profileProps/NotificationSection';
-import CustomAudiences from './profileProps/CustomAudiences';
-import ApiSection from './profileProps/ApiKey';
+import React, { useState, useEffect } from "react";
+import { Wallet, Award, BarChart2, LogOut, Bell } from "lucide-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
+import NotificationSection from "./profileProps/NotificationSection";
+import CustomAudiences from "./profileProps/CustomAudiences";
+import ApiSection from "./profileProps/ApiKey";
 
 // Import styles
-import '@solana/wallet-adapter-react-ui/styles.css';
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 const ProfilePage = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -29,7 +29,9 @@ const ProfilePage = () => {
   }, []);
 
   const generateAvatar = (address) => {
-    return `https://api.dicebear.com/9.x/micah/svg?seed=${address || 'placeholder'}.svg`;
+    return `https://api.dicebear.com/9.x/micah/svg?seed=${
+      address || "placeholder"
+    }.svg`;
   };
 
   const clearAllNotifications = () => {
@@ -37,20 +39,20 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-2xl overflow-hidden mb-8">
+    <div className="min-h-screen bg-[#FBFBFE] rounded-2xl py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
           <div className="relative">
             <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
-              {isClient && (
-                publicKey ? (
+              {isClient &&
+                (publicKey ? (
                   <button
                     onClick={disconnect}
                     className="flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
                     style={{
                       fontFamily: '"Space Grotesk", sans-serif',
-                      fontSize: '16px',
-                      fontWeight: '500',
+                      fontSize: "16px",
+                      fontWeight: "500",
                     }}
                   >
                     <LogOut className="mr-2" size={18} />
@@ -59,22 +61,21 @@ const ProfilePage = () => {
                 ) : (
                   <WalletMultiButton
                     style={{
-                      backgroundColor: '#9D71F7',
+                      backgroundColor: "#00ADEF",
                       fontFamily: '"Space Grotesk", sans-serif',
-                      fontSize: '16px',
-                      fontWeight: '500',
-                      '&:hover': {
-                        backgroundColor: '#8146EC',
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      "&:hover": {
+                        backgroundColor: "#02a1df",
                       },
                     }}
                   >
                     Connect Wallet
                   </WalletMultiButton>
-                )
-              )}
+                ))}
             </div>
             <div className="md:flex">
-              <div className="md:flex-shrink-0 p-8 bg-gradient-to-b from-indigo-500 to-purple-600 text-white">
+              <div className="md:flex-shrink-0 p-8 bg-[#00ADEF] text-white">
                 <div className="relative mb-4">
                   <img
                     className="h-48 w-48 rounded-full object-cover border-4 border-white shadow-lg"
@@ -88,7 +89,7 @@ const ProfilePage = () => {
                   ) : (
                     <button
                       onClick={() => setIsVerified(true)}
-                      className="absolute -bottom-2 -right-2 bg-yellow-400 text-gray-800 text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-yellow-300 transition duration-300"
+                      className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF]  hover:border hover:border-gray transition duration-300"
                     >
                       Verify
                     </button>
@@ -96,15 +97,32 @@ const ProfilePage = () => {
                 </div>
                 {publicKey && (
                   <h1 className="text-2xl font-bold text-center mb-2">
-                    {`${publicKey.toBase58().slice(0, 6)}...${publicKey.toBase58().slice(-4)}`}
+                    {`${publicKey.toBase58().slice(0, 6)}...${publicKey
+                      .toBase58()
+                      .slice(-4)}`}
                   </h1>
                 )}
               </div>
               <div className="p-8 md:flex-grow bg-gradient-to-br from-indigo-50 to-purple-50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-                  <StatCard icon={Wallet} title="Earnings" value="3.5" unit="SOL" />
-                  <StatCard icon={Award} title="Verxio XP" value="678" unit="XP" />
-                  <StatCard icon={BarChart2} title="Campaigns" value="42" unit="Participated" />
+                  <StatCard
+                    icon={Wallet}
+                    title="Earnings"
+                    value="3.5"
+                    unit="SOL"
+                  />
+                  <StatCard
+                    icon={Award}
+                    title="Verxio XP"
+                    value="678"
+                    unit="XP"
+                  />
+                  <StatCard
+                    icon={BarChart2}
+                    title="Campaigns"
+                    value="42"
+                    unit="Participated"
+                  />
                 </div>
               </div>
             </div>
@@ -113,14 +131,14 @@ const ProfilePage = () => {
 
         {/* Notification Section */}
 
-        <NotificationSection 
-          notifications={notifications} 
-          clearAllNotifications={clearAllNotifications} 
+        <NotificationSection
+          notifications={notifications}
+          clearAllNotifications={clearAllNotifications}
         />
 
         {/* API Section */}
         <ApiSection />
-        
+
         {/* Custom Audiences Section */}
         <CustomAudiences />
       </div>
@@ -129,12 +147,12 @@ const ProfilePage = () => {
 };
 
 const StatCard = ({ icon: Icon, title, value, unit }) => (
-  <div className="bg-white rounded-xl p-6 flex items-center shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
-    <Icon className="h-12 w-12 text-indigo-500 mr-4" />
+  <div className="bg-white rounded-xl p-6 flex items-center shadow-sm transition duration-300 transform hover:-translate-y-1">
+    <Icon className="h-12 w-12 text-[#00ADEF] mr-4" />
     <div>
-      <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
-      <p className="text-2xl font-bold text-indigo-600">
-        {value} <span className="text-sm text-indigo-400">{unit}</span>
+      <h2 className="text-lg font-semibold text[#0D0E32]">{title}</h2>
+      <p className="text-2xl font-bold text[#0D0E32] ">
+        {value} <span className="text-sm text[#0D0E32]">{unit}</span>
       </p>
     </div>
   </div>

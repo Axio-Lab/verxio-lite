@@ -97,10 +97,10 @@ const CampaignTypeAndActions = ({
             <button
               key={type.name}
               type="button"
-              onClick={() => {
-                setCampaignType(type.name);
-                selectedActions.forEach(action => toggleAction(action));
-              }}
+              // onClick={() => {
+              //   setCampaignType(type.name);
+              //   selectedActions.forEach(action => toggleAction(action));
+              // }}
               className={`p-4 text-center rounded-lg flex items-center justify-center ${
                 campaignType === type.name ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
               }`}

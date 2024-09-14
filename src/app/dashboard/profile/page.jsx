@@ -1,15 +1,16 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { Wallet, Award, BarChart2, LogOut, Bell } from "lucide-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
-import NotificationSection from "./profileProps/NotificationSection";
-import CustomAudiences from "./profileProps/CustomAudiences";
-import ApiSection from "./profileProps/ApiKey";
+import NotificationSection from "@/components/profileProps/NotificationSection";
+import CustomAudiences from "@/components/profileProps/CustomAudiences";
+import ApiSection from "@/components/profileProps/ApiKey";
 
 // Import styles
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-const ProfilePage = () => {
+const page = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { publicKey, disconnect } = useWallet();
@@ -158,4 +159,4 @@ const StatCard = ({ icon: Icon, title, value, unit }) => (
   </div>
 );
 
-export default ProfilePage;
+export default page;

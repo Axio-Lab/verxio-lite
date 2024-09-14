@@ -1,13 +1,14 @@
+"use client"
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import campaignBanner from "./assets/images/campaign_header_null.svg";
-import Button from "./button";
-import goldTag from "./assets/images/goldTag.svg";
-import silverTag from "./assets/images/silverTag.svg";
-import bronzeTag from "./assets/images/bronzeTag.svg";
-import Image from "next/image";
+import campaignBanner from "@/components/assets/images/campaign_header_null.svg";
+import Button from "@/components/button";
+import goldTag from "@/components/assets/images/goldTag.svg";
+import silverTag from "@/components/assets/images/silverTag.svg";
+import bronzeTag from "@/components/assets/images/bronzeTag.svg";
 import {
   // Trophy,
   // Medal,
@@ -19,7 +20,7 @@ import {
   Shield,
 } from "lucide-react";
 
-const Leaderboard = () => {
+const page = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("xp");
@@ -263,4 +264,4 @@ const Leaderboard = () => {
   );
 };
 
-export default Leaderboard;
+export default page;

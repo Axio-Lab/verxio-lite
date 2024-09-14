@@ -1,7 +1,9 @@
+"use client"
 import React, { useState } from "react";
-import CampaignCard from "./campaignProps/CampaignCard";
-import CampaignPage from "./CampaignPage";
 import Button from "@/components/button";
+import CampaignPage from "@/components/CampaignPage";
+import CampaignCard from "@/components/campaignProps/CampaignCard";
+
 const MyCampaigns = () => {
   const [campaigns] = useState([
     {

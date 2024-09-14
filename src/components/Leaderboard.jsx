@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Medal, Award, ChevronLeft, ChevronRight, Gift, Coins, Shield } from 'lucide-react';
+import { Trophy, ChevronLeft, ChevronRight, ImagePlay, ShoppingBasket } from 'lucide-react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { motion } from 'framer-motion';
 
@@ -21,9 +21,9 @@ const Leaderboard = () => {
         earnings: (Math.random() * 1000).toFixed(2),
         xp: Math.floor(Math.random() * 10000) + 1,
         rewardTypes: [
-          { type: 'NFT', count: Math.floor(Math.random() * 5) },
-          { type: 'Token', count: Math.floor(Math.random() * 100) },
-          { type: 'Badge', count: Math.floor(Math.random() * 10) },
+          { type: 'NFT', count: 12 },
+          { type: 'Token', count: 4 },
+          { type: 'Merch drop', count: 3 },
         ],
       }));
       setUsers(mockUsers);
@@ -41,9 +41,12 @@ const Leaderboard = () => {
 
   const getRankIcon = (overallRank) => {
     switch (overallRank) {
-      case 1: return <Trophy className="w-8 h-8 text-yellow-600" />;
-      case 2: return <Medal className="w-8 h-8 text-gray-500" />;
-      case 3: return <Award className="w-8 h-8 text-amber-700" />;
+      case 1: return <ImagePlay className="w-8 h-8 text-purple-500" />;
+      case 2: return <Trophy className="text-yellow-500" />;
+      case 3: return <ShoppingBasket className="w-8 h-8 text-red-500" />;
+      case 4: return <ImagePlay className="w-8 h-8 text-purple-500" />;
+      case 5: return <PlusCircle className="w-8 h-8 text-green-500" />;
+      case 6: return <CheckCircle className="w-8 h-8 text-indigo-500" />;
       default: return null;
     }
   };
@@ -59,9 +62,12 @@ const Leaderboard = () => {
 
   const getRewardIcon = (type) => {
     switch (type) {
-      case 'NFT': return <Gift className="w-4 h-4 mr-1 text-purple-500" />;
-      case 'Token': return <Coins className="w-4 h-4 mr-1 text-yellow-500" />;
-      case 'Badge': return <Shield className="w-4 h-4 mr-1 text-blue-500" />;
+      case 1: return <ImagePlay className="w-8 h-8 text-purple-500" />;
+      case 2: return <Trophy className="text-yellow-500" />;
+      case 3: return <ShoppingBasket className="w-8 h-8 text-red-500" />;
+      case 4: return <ImagePlay className="w-8 h-8 text-purple-500" />;
+      case 5: return <PlusCircle className="w-8 h-8 text-green-500" />;
+      case 6: return <CheckCircle className="w-8 h-8 text-indigo-500" />;
       default: return null;
     }
   };

@@ -15,6 +15,26 @@ const MyCampaigns = () => {
       action: "Swap tokens",
       reward: "NFT drop"
     },
+    {
+      id: 2,
+      title: "Bonk Token Burn Giveaway 🎉🎊 ",
+      status: "Upcoming",
+      participants: 3000,
+      winners: 100,
+      daysLeft: 47,
+      action: "Burn tokens",
+      reward: "Token"
+    },
+    {
+      id: 3,
+      title: "Verxio x Breakpoint Extravaganza 🎊",
+      status: "Active",
+      participants: 700,
+      winners: 20,
+      daysLeft: 50,
+      action: "Share on Twitter",
+      reward: "Merch drop"
+    },
     // Add more campaign objects here
   ]);
 

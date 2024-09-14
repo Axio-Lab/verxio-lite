@@ -2,7 +2,7 @@ import React from 'react';
 import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import 'react-markdown-editor-lite/lib/index.css';
-import { Repeat, Droplet, Coins, ShoppingCart, Minimize, Maximize, Share, Flame, MessageCircle, UserPlus, ClipboardList, Users, Gift, Trophy, PlusCircle, Calendar, Activity, Award, Zap, Clock } from 'lucide-react';
+import { Repeat, Droplet, Coins, ShoppingCart, Minimize, Maximize, Share, Flame, MessageCircle, UserPlus, ClipboardList, Users, Gift, Trophy, PlusCircle, Calendar, Activity, Award, Zap, Clock, ImagePlay, ShoppingBasket } from 'lucide-react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { SiExpertsexchange } from 'react-icons/si';
 import { GiWaveCrest } from 'react-icons/gi';
@@ -25,10 +25,10 @@ const actionIcons = {
 
 const rewardIcons = {
   'Whitelist spot': { icon: Users, color: 'text-blue-500' },
-  'NFT drop': { icon: Gift, color: 'text-purple-500' },
+  'NFT drop': { icon: ImagePlay, color: 'text-purple-500' },
   'Token': { icon: Trophy, color: 'text-yellow-500' },
   'Airdrop': { icon: PlusCircle, color: 'text-green-500' },
-  'Merch drop': { icon: Gift, color: 'text-red-500' },
+  'Merch drop': { icon: ShoppingBasket, color: 'text-red-500' },
   'Verxio XP': { icon: Coins, color: 'text-indigo-500' }
 };
 

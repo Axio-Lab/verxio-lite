@@ -1,14 +1,14 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Users, Award, Calendar, ChevronRight, Gift, Clock, Trophy, PlusCircle, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, CheckCircle, Repeat } from 'lucide-react';
+import { Users, Award, Calendar, ChevronRight, Gift, Clock, Trophy, PlusCircle,ImagePlay, ShoppingBasket, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, CheckCircle, Repeat } from 'lucide-react';
 
 const availableRewards = [
   { name: 'Whitelist spots', icon: <Users className="text-blue-500" /> },
-  { name: 'NFT drops', icon: <Gift className="text-purple-500" /> },
+  { name: 'NFT drops', icon: <ImagePlay className="text-purple-500" /> },
   { name: 'Tokens', icon: <Trophy className="text-yellow-500" /> },
   { name: 'Airdrops', icon: <PlusCircle className="text-green-500" /> },
-  { name: 'Merch drop', icon: <Gift className="text-red-500" /> },
+  { name: 'Merch drop', icon: <ShoppingBasket className="text-red-500" /> },
   { name: 'Verxio credit', icon: <CheckCircle className="text-indigo-500" /> }
 ];
 

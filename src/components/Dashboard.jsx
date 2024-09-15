@@ -31,7 +31,7 @@ const Dashboard = () => {
   );
 
 
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('explore');
 
   const renderContent = () => {
     switch (activeTab) {

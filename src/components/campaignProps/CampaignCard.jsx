@@ -19,25 +19,26 @@ import {
   ClipboardList,
   CheckCircle,
   Repeat,
+  PackageOpen
 } from "lucide-react";
 
 const availableRewards = [
-  { name: "Whitelist spots", icon: <Users className="text-blue-500" /> },
-  { name: "NFT drops", icon: <Gift className="text-purple-500" /> },
-  { name: "Tokens", icon: <Trophy className="text-yellow-500" /> },
-  { name: "Airdrops", icon: <PlusCircle className="text-green-500" /> },
-  { name: "Merch drop", icon: <Gift className="text-red-500" /> },
-  { name: "Verxio credit", icon: <CheckCircle className="text-indigo-500" /> },
+  { name: "Whitelist Spot", icon: <Users className="text-blue-500" /> },
+  { name: "NFT Drop", icon: <Gift className="text-purple-500" /> },
+  { name: "Token", icon: <Trophy className="text-yellow-500" /> },
+  { name: "Airdrop", icon: <PlusCircle className="text-green-500" /> },
+  { name: "Merch Drop", icon: <PackageOpen className="text-red-500" /> },
+  { name: "Verxio Credit", icon: <CheckCircle className="text-indigo-500" /> },
 ];
 
 const actions = {
   Onchain: [
-    { name: "Swap tokens", icon: <Repeat className="text-blue-500" /> },
-    { name: "Provide liquidity", icon: <Droplet className="text-green-500" /> },
-    { name: "Stake tokens", icon: <Coins className="text-yellow-500" /> },
-    { name: "Burn tokens", icon: <Flame className="text-red-500" /> },
+    { name: "Swap Token", icon: <Repeat className="text-blue-500" /> },
+    { name: "Provide Liquidity", icon: <Droplet className="text-green-500" /> },
+    { name: "Stake Token", icon: <Coins className="text-yellow-500" /> },
+    { name: "Burn Token", icon: <Flame className="text-red-500" /> },
     {
-      name: "Sell digital product",
+      name: "Sell Digital Product",
       icon: <ShoppingCart className="text-purple-500" />,
     },
   ],
@@ -82,7 +83,7 @@ const CampaignCard = ({ campaign }) => {
             className={`px-3 py-1 rounded-full text-sm font-semibold ${
               campaign.status === "Active"
                 ? "bg-green-100 text-green-800"
-                : campaign.status === "Completed"
+                : campaign.status === "Upcoming"
                 ? "bg-blue-100 text-blue-800"
                 : "bg-red-100 text-red-800"
             }`}

@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import Head from "next/head";
 import ReduxProvider from "@/providers/reduxProvider";
+import DatePickerProvider from "@/providers/datePickerProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +30,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReduxProvider>{children}</ReduxProvider>
+        <DatePickerProvider>
+          <ReduxProvider>{children}</ReduxProvider>
+        </DatePickerProvider>
       </body>
     </html>
   );

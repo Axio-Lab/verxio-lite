@@ -25,7 +25,8 @@ const actions = {
     { name: 'Decompress token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
     { name: 'Swap token', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
     // { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
-    { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    // { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    { name: 'Submit Url', icon: <Share className="text-yellow-400" />},
   ],
   Offchain: [
     { name: 'Share on Twitter', icon: <Share className="text-blue-400" />},
@@ -97,10 +98,10 @@ const CampaignTypeAndActions = ({
             <button
               key={type.name}
               type="button"
-              onClick={() => {
-                setCampaignType(type.name);
-                selectedActions.forEach(action => toggleAction(action));
-              }}
+              // onClick={() => {
+              //   setCampaignType(type.name);
+              //   selectedActions.forEach(action => toggleAction(action));
+              // }}
               className={`p-4 text-center rounded-lg flex items-center justify-center ${
                 campaignType === type.name ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
               }`}

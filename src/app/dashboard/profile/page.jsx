@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { Wallet, Award, BarChart2, LogOut, Bell } from "lucide-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
@@ -24,6 +24,8 @@ const page = () => {
     { message: "New feature available: Custom Audiences", read: true },
     // Add more notifications as needed
   ]);
+
+  console.log(publicKey, "public key here!!!");
 
   useEffect(() => {
     setIsClient(true);

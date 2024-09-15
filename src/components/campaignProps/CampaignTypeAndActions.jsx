@@ -25,7 +25,8 @@ const actions = {
     { name: 'Decompress token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
     { name: 'Swap token', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
     // { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
-    { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    // { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    { name: 'Submit Url', icon: <Share className="text-yellow-400" />},
   ],
   Offchain: [
     { name: 'Share on Twitter', icon: <Share className="text-blue-400" />},

@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
             <nav className="w-full max-w-full overflow-x-auto bg-white border-t border- gray-200">
               <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
-                  <NavButton icon={<Compass />} label="Explore" href={"/dashboard"}/>
+                  <NavButton icon={<Compass />} label="Explore" href={"/dashboard/explore"}/>
                   <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign"}/>
                   <NavButton icon={<Briefcase />} label="Campaigns" href={"/dashboard/manage-campaign"}/>
                   <NavButton icon={<LayoutDashboard />} label="Leaderboard" href={"/dashboard/leaderboard"} />

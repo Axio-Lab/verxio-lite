@@ -12,18 +12,28 @@ const MyCampaigns = () => {
       participants: 1234,
       winners: 50,
       daysLeft: 7,
-      action: "Swap tokens",
-      reward: "NFT drop",
+      action: "Sell Digital Product",
+      reward: "NFT Drop",
     },
     {
       id: 2,
       title: "Franklyn Test Run",
-      status: "InActive",
+      status: "Ended",
       participants: 34,
       winners: 50,
       daysLeft: 2,
-      action: "Swap tokens",
+      action: "Create Poll",
       reward: "Merch Drop",
+    },
+    {
+      id: 3,
+      title: "Bonk Token Burn Giveaway 🎉🎊 ",
+      status: "Upcoming",
+      participants: 3000,
+      winners: 100,
+      daysLeft: 47,
+      action: "Burn Token",
+      reward: "Token",
     },
   ]);
 
@@ -35,7 +45,7 @@ const MyCampaigns = () => {
             <h1 className="mb-6 text-3xl font-bold text-center text-[#0D0E32] sm:text-base">
               My Campaigns
             </h1>
-            <Button href={"/campaigns/create"} name=" Create Campaign" />
+            <Button href={"/dashboard/create-campaign"} name="Create Campaign" />
           </div>
           <div className="space-y-6">
             {campaigns.map((campaign) => (

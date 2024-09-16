@@ -41,8 +41,8 @@ const Layout = ({ children }) => {
               <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
                   <NavButton icon={<Compass />} label="Explore" href={"/dashboard/explore"}/>
-                  <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign"}/>
                   <NavButton icon={<Briefcase />} label="Campaigns" href={"/dashboard/manage-campaign"}/>
+                  <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign"}/>
                   <NavButton icon={<LayoutDashboard />} label="Leaderboard" href={"/dashboard/leaderboard"} />
                   <NavButton icon={<User />} label="Profile" href={"/dashboard/profile"} />
                 </div>

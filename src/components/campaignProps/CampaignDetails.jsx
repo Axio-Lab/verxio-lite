@@ -5,9 +5,11 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import React, { useState, useRef } from "react";
 import "react-markdown-editor-lite/lib/index.css";
-import UploadIcon from "@/components/assets/images/uploadIcon.svg";
+import Button from "@/components/button";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from 'dayjs';
+import { FiUploadCloud } from "react-icons/fi"
 
 const CampaignDetails = () => {
   const fileInputRef = useRef(null);
@@ -77,108 +79,98 @@ const CampaignDetails = () => {
   });
 
   return (
-    <section>
+    <section className="max-w-4xl mx-auto px-4 py-8">
       <Formik
         onSubmit={() => {}}
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
         {({ values, setFieldValue }) => (
-          <Form className="flex flex-col gap-8">
-            <div className="w-full md:w-[90%] my-3">
-              <p className="font-medium text-base md:text-xl text-[#303036] mb-3">
-                Campaign Title
-              </p>
-              <Field
-                className="border outline-none bg-transparent font-normal text-[14px] rounded-lg w-full px-5 py-3 border-[#0D0E32]"
-                name="title"
-                value={values.title}
-                placeholder="Enter campaign name"
-                onChange={(event) => {
-                  setFieldValue("title", event.target.value);
-                }}
-              />
-            </div>
-
-            <div className="w-full md:w-[90%]">
-              <p className="font-medium text-base md:text-xl text-[#303036] mb-3">
-                Campaign Description
-              </p>
-
-              <Tiptap
-                onChange={handleDescriptionChange}
-                setFieldValue={setFieldValue}
-              />
-            </div>
-
-            <div className="w-full md:w-[90%]">
-              <p className="font-medium text-base md:text-xl text-[#303036] mb-3">
-                Campaign Display Banner
-              </p>
-
-              <div className="flex flex-col justify-center items-center mx-auto rounded-lg border border-primary border-dashed bg-[#DFDFF7]">
-                {selectedImage ? (
-                  <Image
-                    src={selectedImage}
-                    alt="cover Banner"
-                    className="w-full h-full bg-cover"
-                    width={500}
-                    height={400}
+          <Form className="space-y-8">
+            <div className="bg-white shadow-md rounded-lg p-6">
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="title" className="font-medium text-lg text-gray-700 mb-2 block">
+                    Campaign Title
+                  </label>
+                  <Field
+                    id="title"
+                    className="border outline-none bg-transparent font-normal text-[16px] rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+                    name="title"
+                    value={values.title}
+                    placeholder="Enter campaign name"
+                    onChange={(event) => {
+                      setFieldValue("title", event.target.value);
+                    }}
                   />
-                ) : (
-                  <div className="mx-28 my-24 justify-center border rounded-lg px-2 py-1 border-[#0D0E32] w-[150px] ">
-                    <div className="flex items-center gap-2 justify-center">
-                      <Image alt="upload" src={UploadIcon} />
-                      <button
-                        className="text-[14px]"
-                        onClick={handleUploadButtonClick}
-                      >
-                        Upload Image
-                      </button>
-                    </div>
+                </div>
+
+                <div>
+                  <label htmlFor="description" className="font-medium text-lg text-gray-700 mb-2 block">
+                    Campaign Description
+                  </label>
+                  <Tiptap
+                    onChange={handleDescriptionChange}
+                    setFieldValue={setFieldValue}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                    Campaign Banner
+                  </label>
+                  <div 
+                    className="border-2 border-dashed border-indigo-300 rounded-lg p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
+                    onClick={() => fileInputRef.current.click()}
+                  >
+                    {selectedImage ? (
+                      <div className="relative w-full h-48">
+                        <Image
+                          src={selectedImage}
+                          alt="Campaign Banner"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <FiUploadCloud className="w-12 h-12 text-[#00ADEF] mb-4" />
+                        <p className="text-[#00ADEF] font-medium">Click to upload campaign banner</p>
+                        <p className="text-sm text-gray-500 mt-2">PNG, JPG, GIF up to 10MB</p>
+                      </>
+                    )}
                     <input
-                      name="profileImageDoc"
-                      type="file"
-                      capture="environment"
-                      className="hidden"
-                      accept="image/*"
                       ref={fileInputRef}
-                      onChange={(e) => {
-                        handleImageChange(e, setFieldValue);
-                      }}
+                      type="file"
+                      hidden
+                      onChange={(e) => handleImageChange(e, setFieldValue)}
+                      accept="image/*"
                     />
                   </div>
-                )}
-              </div>
-              <div className="flex justify-between items-center text-[13px] mt-2">
-                <p>PNG / SVG / JPEG / 120*804</p>
-                <p>Max 24MB</p>
-              </div>
-            </div>
+                </div>
 
-            <div className="w-full md:w-[90%]">
-              <section className="relative">
-                <div className="flex flex-col md:flex-row gap-10 items-end w-full relative z-40 bg-white">
-                  <div className="w-full flex flex-col items-start gap-2">
-                    <p className="font-medium text-base md:text-xl text-[#303036] mb-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="font-medium text-lg text-gray-700 mb-2 block">
                       Campaign Start Date
-                    </p>
+                    </label>
                     <DatePicker
                       format="DD/MM/YYYY"
                       onChange={(date) => {
                         handleDateChange(date);
-                        console.log(date);
                         setFieldValue(
                           "startDate",
                           dayjs(date).format("DD/MM/YYYY")
                         );
                       }}
+                      className="w-full"
                     />
                   </div>
-                  <div className="w-full flex flex-col items-start gap-2">
-                    <p className="font-medium text-base md:text-xl text-[#303036] mb-3">
+                  <div>
+                    <label className="font-medium text-lg text-gray-700 mb-2 block">
                       Campaign End Date
-                    </p>
+                    </label>
                     <DatePicker
                       format="DD/MM/YYYY"
                       onChange={(date) => {
@@ -188,10 +180,11 @@ const CampaignDetails = () => {
                           dayjs(date).format("DD/MM/YYYY")
                         );
                       }}
+                      className="w-full"
                     />
                   </div>
                 </div>
-              </section>
+              </div>
             </div>
           </Form>
         )}

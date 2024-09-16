@@ -56,55 +56,63 @@ const CreateCampaign = () => {
   };
 
   return (
-    <>
-      <div className="flex gap-10 items-center shadow-sm mb-3 overflow-y-auto max-w-full w-full">
-        <TabButton
-          name="1. Details"
-          href="/dashboard/create-campaign?route=details"
-          isActive={route === "details"}
-        />
-        <TabButton
-          name="2. Action"
-          href="/dashboard/create-campaign?route=action"
-          isActive={route === "action"}
-        />
-        <TabButton
-          name="3. Rewards"
-          href="/dashboard/create-campaign?route=rewards"
-          isActive={route === "rewards"}
-        />
-        <TabButton
-          name="4. Preview"
-          href="/dashboard/create-campaign?route=preview"
-          isActive={route === "preview"}
-        />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-6 text-center">Create Your Campaign</h1>
+        
+        <div className="bg-white shadow-xl rounded-xl overflow-hidden">
+          <div className="flex flex-wrap justify-center gap-2 p-4 bg-indigo-50">
+            <TabButton
+              name="1. Details"
+              href="/dashboard/create-campaign?route=details"
+              isActive={route === "details"}
+            />
+            <TabButton
+              name="2. Actions"
+              href="/dashboard/create-campaign?route=action"
+              isActive={route === "action"}
+            />
+            <TabButton
+              name="3. Rewards"
+              href="/dashboard/create-campaign?route=rewards"
+              isActive={route === "rewards"}
+            />
+            <TabButton
+              name="4. Preview"
+              href="/dashboard/create-campaign?route=preview"
+              isActive={route === "preview"}
+            />
+          </div>
 
-      {route === "details" && <CampaignDetails />}
-      {route === "action" && (
-        <CampaignTypeAndActions
-          campaignType={campaignData.type}
-          setCampaignType={(type) => updateCampaignData("type", type)}
-          selectedActions={campaignData.selectedActions}
-          toggleAction={toggleAction}
-          updateActionData={updateActionData}
-          actionData={campaignData.actionData}
-        />
-      )}
-      {route === "rewards" && (
-        <RewardsAndWinners
-          selectedRewards={campaignData.selectedRewards}
-          toggleReward={toggleReward}
-          numWinners={campaignData.numWinners}
-          setNumWinners={setNumWinners}
-        />
-      )}
-      {route === "preview" && (
-        <CampaignPreview
-          campaignData={campaignData}
-        />
-      )}
-    </>
+          <div className="p-6">
+            {route === "details" && <CampaignDetails />}
+            {route === "action" && (
+              <CampaignTypeAndActions
+                campaignType={campaignData.type}
+                setCampaignType={(type) => updateCampaignData("type", type)}
+                selectedActions={campaignData.selectedActions}
+                toggleAction={toggleAction}
+                updateActionData={updateActionData}
+                actionData={campaignData.actionData}
+              />
+            )}
+            {route === "rewards" && (
+              <RewardsAndWinners
+                selectedRewards={campaignData.selectedRewards}
+                toggleReward={toggleReward}
+                numWinners={campaignData.numWinners}
+                setNumWinners={setNumWinners}
+              />
+            )}
+            {route === "preview" && (
+              <CampaignPreview
+                campaignData={campaignData}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

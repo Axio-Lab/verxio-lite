@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "react-toastify";
 import React, { useState, useEffect } from "react";
 import { Wallet, Award, BarChart2, LogOut, Bell } from "lucide-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
@@ -6,8 +7,9 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import NotificationSection from "@/components/profileProps/NotificationSection";
 import CustomAudiences from "@/components/profileProps/CustomAudiences";
 import ApiSection from "@/components/profileProps/ApiKey";
-
-// Import styles
+import { createProfile } from "@/store/slices/profileSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserId, setUserProfile } from "@/store/slices/statesSlice";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 const NoWalletConnected = () => (
@@ -36,13 +38,53 @@ const Page = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { publicKey, disconnect } = useWallet();
+  const [generatedAPIKey, setGeneratedAPIKey] = useState("");
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the platform!", read: false },
     { message: "New feature available: Custom Audiences", read: true },
-    // ... other notifications
+    { message: "New feature available: Custom Audiences", read: true },
+    { message: "New feature available: Custom Audiences", read: false },
+    { message: "New feature available: Custom Audiences", read: true },
+    { message: "New feature available: Custom Audiences", read: false },
+    { message: "New feature available: Custom Audiences", read: true },
+    // Add more notifications as needed
   ]);
 
-  console.log(publicKey, "public key here!!!");
+  const dispatch = useDispatch();
+  let userId = "";
+
+  if (publicKey) {
+    userId = publicKey?.toString();
+  }
+
+  const userProfile = useSelector((state) => state.generalStates.userProfile);
+
+  const createNewProfile = async () => {
+    try {
+      console.log(userId, "user Id from response!!!");
+      const response = await dispatch(createProfile({ id: userId }));
+      console.log(response, "response");
+      if (response.payload.success === true) {
+        toast.success(response.payload.message);
+        dispatch(setUserId(response.payload.profile._id));
+        dispatch(setUserProfile(response.payload.profile));
+        console.log(response);
+      } else {
+        toast.error(response.payload.message);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+ 
+
+  useEffect(() => {
+    if (userId) {
+      createNewProfile();
+    }
+  }, [userId]);
 
   useEffect(() => {
     setIsClient(true);
@@ -110,9 +152,24 @@ const Page = () => {
               </div>
               <div className="p-8 md:flex-grow bg-gradient-to-br from-indigo-50 to-purple-50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-                  <StatCard icon={Wallet} title="Earnings" value="3.5" unit="SOL" />
-                  <StatCard icon={Award} title="Verxio XP" value="678" unit="XP" />
-                  <StatCard icon={BarChart2} title="Campaigns" value="42" unit="Participated" />
+                  <StatCard
+                    icon={Wallet}
+                    title="Earnings"
+                    value={`${userProfile?.sol ?? 0}`}
+                    unit="SOL"
+                  />
+                  <StatCard
+                    icon={Award}
+                    title="Verxio XP"
+                    value={`${userProfile?.xp ?? 0}`}
+                    unit="XP"
+                  />
+                  <StatCard
+                    icon={BarChart2}
+                    title="Campaigns"
+                    value="42"
+                    unit="Participated"
+                  />
                 </div>
               </div>
             </div>

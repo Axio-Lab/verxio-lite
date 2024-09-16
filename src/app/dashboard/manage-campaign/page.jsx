@@ -1,7 +1,6 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Button from "@/components/button";
-import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
 
 const MyCampaigns = () => {
@@ -26,14 +25,7 @@ const MyCampaigns = () => {
       action: "Swap tokens",
       reward: "Merch Drop",
     },
-    // Add more campaign objects here
   ]);
-
-  const [selectedCampaign, setSelectedCampaign] = useState(null);
-
-  if (selectedCampaign) {
-    return <CampaignPage campaign={selectedCampaign} />;
-  }
 
   return (
     <div className="min-h-screen px-4 py-12 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
@@ -47,11 +39,8 @@ const MyCampaigns = () => {
           </div>
           <div className="space-y-6">
             {campaigns.map((campaign) => (
-              <div
-                className="cursor-pointer"
-                onClick={() => setSelectedCampaign(campaign)}
-              >
-                <CampaignCard campaign={campaign} />
+              <div className="cursor-pointer">
+                <CampaignCard key={campaign.id} campaign={campaign} />
               </div>
             ))}
           </div>

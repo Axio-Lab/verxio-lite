@@ -12,7 +12,6 @@ const initialState = {
   },
 };
 
-
 export const createProduct = createAsyncThunk(
   "profile/newProduct",
   async ({ data, userId }) => {
@@ -59,7 +58,6 @@ const productSlice = createSlice({
         state.product.error = action.payload;
         state.product.status = "failed";
       })
-
 
       //purge all state
       .addCase(PURGE, () => {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Trophy, PlusCircle, CheckCircle, MinusCircle, ImagePlay, ShoppingBasket } from 'lucide-react';
+import { Users, PlusCircle, CheckCircle, MinusCircle, ImagePlay, ShoppingBasket, Coins } from 'lucide-react';
 
 const availableRewards = [
-  { name: 'Whitelist spot', icon: <Users className="text-blue-500" /> },
-  { name: 'NFT drop', icon: <ImagePlay className="text-purple-500" /> },
-  { name: 'Token', icon: <Trophy className="text-yellow-500" /> },
+  { name: 'Whitelist Spot', icon: <Users className="text-blue-500" /> },
+  { name: 'NFT Drop', icon: <ImagePlay className="text-purple-500" /> },
+  { name: 'Token', icon: <Coins className="text-yellow-500" /> },
   { name: 'Airdrop', icon: <PlusCircle className="text-green-500" /> },
-  { name: 'Merch drop', icon: <ShoppingBasket className="text-red-500" /> },
+  { name: 'Merch Drop', icon: <ShoppingBasket className="text-red-500" /> },
   { name: 'Verxio XP', icon: <CheckCircle className="text-indigo-500" /> }
 ];
 

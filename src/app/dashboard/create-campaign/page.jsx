@@ -59,7 +59,7 @@ const CreateCampaign = () => {
     <>
       <div className="flex gap-10 items-center shadow-sm mb-3 overflow-y-auto max-w-full w-full">
         <TabButton
-          name="1. Campaign Details"
+          name="1. Details"
           href="/dashboard/create-campaign?route=details"
           isActive={route === "details"}
         />

@@ -16,7 +16,6 @@ const page = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { publicKey, disconnect } = useWallet();
-  const [generatedAPIKey, setGeneratedAPIKey] = useState("");
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the platform!", read: false },
     { message: "New feature available: Custom Audiences", read: true },
@@ -38,25 +37,34 @@ const page = () => {
   const userProfile = useSelector((state) => state.generalStates.userProfile);
 
   const createNewProfile = async () => {
+    if (!userId) {
+      toast.error("Please connect your wallet!");
+      console.log("User id does not exists");
+      return;
+    }
     try {
-      console.log(userId, "user Id from response!!!");
       const response = await dispatch(createProfile({ id: userId }));
       console.log(response, "response");
+      console.log(userId, "user Id from response!!!");
       if (response.payload.success === true) {
         toast.success(response.payload.message);
-        dispatch(setUserId(response.payload.profile._id));
+        dispatch(setUserId(response.payload.profile.profile._id));
         dispatch(setUserProfile(response.payload.profile));
         console.log(response);
       } else {
-        toast.error(response.payload.message);
+        // toast.error(response.payload.message);
+        //
+        const message =
+          response?.payload?.message ||
+          "An error occurred while creating the profile";
+        toast.error(message);
         console.log(response);
       }
     } catch (error) {
       console.error(error);
+      toast.error("An unexpected error occurred.");
     }
   };
-
- 
 
   useEffect(() => {
     if (userId) {
@@ -170,7 +178,6 @@ const page = () => {
         </div>
 
         {/* Notification Section */}
-
         <NotificationSection
           notifications={notifications}
           clearAllNotifications={clearAllNotifications}

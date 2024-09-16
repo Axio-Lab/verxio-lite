@@ -5,9 +5,11 @@ import Button from "../button";
 import { createAPIKey, invalidateAPIKey } from "@/store/slices/apiKeySlice";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const ApiSection = () => {
-  const [apiKey, setApiKey] = useState("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+  const [generatedAPIKey, setGeneratedAPIKey] = useState("");
   const [createdDate, setCreatedDate] = useState("2023-05-01");
+  const [apiKey, setApiKey] = useState("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
 
   const generateNewApiKey = () => {
     // In a real application, this would be an API call

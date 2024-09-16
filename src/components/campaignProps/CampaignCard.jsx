@@ -9,8 +9,9 @@ import {
   Clock,
   Trophy,
   PlusCircle,
-  Droplet,
-  Coins,
+  Minimize,
+  Maximize,
+  BarChart2,
   Flame,
   ShoppingCart,
   Share,
@@ -18,7 +19,6 @@ import {
   UserPlus,
   ClipboardList,
   CheckCircle,
-  Repeat,
   PackageOpen,
 } from "lucide-react";
 
@@ -33,14 +33,12 @@ const availableRewards = [
 
 const actions = {
   Onchain: [
-    { name: "Swap Token", icon: <Repeat className="text-blue-500" /> },
-    { name: "Provide Liquidity", icon: <Droplet className="text-green-500" /> },
-    { name: "Stake Token", icon: <Coins className="text-yellow-500" /> },
     { name: "Burn Token", icon: <Flame className="text-red-500" /> },
-    {
-      name: "Sell Digital Product",
-      icon: <ShoppingCart className="text-purple-500" />,
-    },
+    { name: "Sell Digital Product", icon: <ShoppingCart className="text-purple-500" />},
+    { name: 'Compress Token', icon: <Minimize className="text-indigo-500" />},
+    { name: 'Decompress Token', icon: <Maximize className="text-pink-500" />},
+    { name: 'Create Poll', icon: <BarChart2 className="text-green-500" /> }, 
+    { name: 'Submit Url', icon: <Share className="text-yellow-400" />},
   ],
   Offchain: [
     { name: "Share on Twitter", icon: <Share className="text-blue-400" /> },

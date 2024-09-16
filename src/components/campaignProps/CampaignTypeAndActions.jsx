@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { Repeat, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize, BarChart2 } from 'lucide-react';
+import { Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize, BarChart2 } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 
 // Import your existing action components
@@ -48,20 +48,12 @@ const CampaignTypeAndActions = ({
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
     } 
-    else if (action.name === 'Swap token') {
-      toast.error('Swap token action is not yet live!');
-      setCurrentAction(null)
-    }
-    else if (action.name === 'Stake token') {
-      toast.error('Stake tokens action is yet live!');
-      setCurrentAction(null)
-    }
     else if (selectedActions.length > 0) {
       toast.error('An action is already selected. Please deselect it first.');
     } else {
       toggleAction(action.name);
       toast.success(`${action.name} selected`);
-      if (campaignType === 'Onchain') {
+      if (campaignType === 'Onchain' && action.name !== 'Submit Url') {
         openModal(action);
       }
     }

@@ -34,7 +34,7 @@ const CampaignInfo = ({ campaign }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-8">
-        <Link href="/campaigns" className="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-300 mb-6">
+        <Link href="/dashboard/manage-campaign" className="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-300 mb-6">
           <ChevronLeft size={20} className="mr-2" />
           Back to My Campaigns
         </Link>

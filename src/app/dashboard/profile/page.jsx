@@ -77,7 +77,6 @@ const Page = () => {
       console.error(error);
     }
   };
-
  
 
   useEffect(() => {

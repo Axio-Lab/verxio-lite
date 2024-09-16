@@ -16,7 +16,7 @@ const Explore = () => {
       participants: 1234,
       winners: 50,
       daysLeft: 7,
-      action: "Swap Token",
+      action: "Compress Token",
       reward: "NFT Drop",
     },
     {
@@ -26,7 +26,7 @@ const Explore = () => {
       participants: 34,
       winners: 50,
       daysLeft: 2,
-      action: "Swap Token",
+      action: "Sell Digital Product",
       reward: "Merch Drop",
     },
     {

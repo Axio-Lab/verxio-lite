@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Key, Copy, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Button from "../button";
+import { createAPIKey, invalidateAPIKey } from "@/store/slices/apiKeySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ApiSection = () => {
   const [apiKey, setApiKey] = useState("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
@@ -26,6 +28,39 @@ const ApiSection = () => {
     setApiKey("");
     setCreatedDate("");
     toast.success("API key revoked successfully!");
+  };
+
+  const createNewApiKey = async () => {
+    try {
+      const response = await dispatch(createAPIKey({ id: userId }));
+      console.log(response, "response");
+      if (response.payload.success === true) {
+        toast.success(response.payload.message);
+        setGeneratedAPIKey(response.payload.data);
+        console.log(response);
+      } else {
+        toast.error(response.payload.message);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const invalidateNewApiKey = async () => {
+    try {
+      const response = await dispatch(invalidateAPIKey({ id: userId }));
+      console.log(response, "response");
+      if (response.payload.success === true) {
+        toast.success(response.payload.message);
+        console.log(response);
+      } else {
+        toast.error(response.payload.message);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import Head from "next/head";
+import { ToastContainer } from "react-toastify";
 import ReduxProvider from "@/providers/reduxProvider";
 import DatePickerProvider from "@/providers/datePickerProvider";
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
       >
         <DatePickerProvider>
           <ReduxProvider>{children}</ReduxProvider>
+          <ToastContainer />
         </DatePickerProvider>
       </body>
     </html>

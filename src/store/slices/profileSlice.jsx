@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PURGE } from "redux-persist";
 
-const apiUrl = process.env.BASE_URL;
+const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const initialState = {
   profile: {
@@ -24,11 +24,10 @@ const initialState = {
 
 export const createProfile = createAsyncThunk(
   "profile/newProfile",
-  async ({ data, id }) => {
+  async ({ id }) => {
     try {
       const response = await axios.put(
-        `https://backend-verxio.vercel.app/api/v1/profiles/${id}`, // Assuming apiUrl is defined somewhere in your code
-        data
+        `${apiBaseURL}/profile/${id}` // Assuming apiUrl is defined somewhere in your code
       );
       return response.data;
     } catch (err) {
@@ -59,23 +58,20 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-export const claim = createAsyncThunk(
-  "profile/claim",
-  async ({ id }) => {
-    try {
-      const response = await axios.patch(
-        `https://backend-verxio.vercel.app/api/v1/profiles/claim/${id}` 
-      );
-      return response.data;
-    } catch (err) {
-      console.log(err.response.data);
-      if (!err.response) {
-        throw err.message;
-      }
-      return err.response.data;
+export const claim = createAsyncThunk("profile/claim", async ({ id }) => {
+  try {
+    const response = await axios.patch(
+      `https://backend-verxio.vercel.app/api/v1/profiles/claim/${id}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.response.data);
+    if (!err.response) {
+      throw err.message;
     }
+    return err.response.data;
   }
-);
+});
 
 const profileSlice = createSlice({
   name: "profile",
@@ -126,28 +122,28 @@ const profileSlice = createSlice({
         state.userProfile.error = action.payload;
         state.userProfile.status = "failed";
       })
-      
-        //claim user point
-        .addCase(claim.pending, (state) => {
-          state.claim.status = "loading";
-          state.claim.error = null;
-        })
-        .addCase(claim.fulfilled, (state, action) => {
-          if (
-            // action.payload === "Success" ||
-            action.payload.success === true
-          ) {
-            state.claim.data = action.payload;
-            state.claim.status = "succeeded";
-          } else {
-            state.claim.status = "failed";
-            state.claim.error = action.payload;
-          }
-        })
-        .addCase(claim.rejected, (state, action) => {
-          state.claim.error = action.payload;
+
+      //claim user point
+      .addCase(claim.pending, (state) => {
+        state.claim.status = "loading";
+        state.claim.error = null;
+      })
+      .addCase(claim.fulfilled, (state, action) => {
+        if (
+          // action.payload === "Success" ||
+          action.payload.success === true
+        ) {
+          state.claim.data = action.payload;
+          state.claim.status = "succeeded";
+        } else {
           state.claim.status = "failed";
-        })
+          state.claim.error = action.payload;
+        }
+      })
+      .addCase(claim.rejected, (state, action) => {
+        state.claim.error = action.payload;
+        state.claim.status = "failed";
+      })
 
       //purge all state
       .addCase(PURGE, () => {

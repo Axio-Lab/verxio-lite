@@ -19,7 +19,7 @@ import {
   ClipboardList,
   CheckCircle,
   Repeat,
-  PackageOpen
+  PackageOpen,
 } from "lucide-react";
 
 const availableRewards = [
@@ -75,7 +75,8 @@ const CampaignCard = ({ campaign }) => {
   )?.icon || <Clock className="text-gray-500" />;
 
   return (
-    <Link href={`/`}>
+    // <Link href={`/dashboard/manage-campaign/${campaign.id}`}>
+    <Link href={`/dashboard/manage-campaign/${campaign.id}`}>
       <div className="bg-[#FBFBFE] rounded-lg shadow hover:shadow-sm transition-all duration-300 p-6 mb-4 relative overflow-hidden border border-[##DCE0EF]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-800">{campaign.title}</h2>

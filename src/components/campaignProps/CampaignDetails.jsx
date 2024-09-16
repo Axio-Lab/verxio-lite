@@ -135,8 +135,8 @@ const CampaignDetails = () => {
                       </div>
                     ) : (
                       <>
-                        <FiUploadCloud className="w-12 h-12 text-indigo-500 mb-4" />
-                        <p className="text-indigo-500 font-medium">Click to upload campaign banner</p>
+                        <FiUploadCloud className="w-12 h-12 text-[#00ADEF] mb-4" />
+                        <p className="text-[#00ADEF] font-medium">Click to upload campaign banner</p>
                         <p className="text-sm text-gray-500 mt-2">PNG, JPG, GIF up to 10MB</p>
                       </>
                     )}

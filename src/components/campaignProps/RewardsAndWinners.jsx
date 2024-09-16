@@ -50,7 +50,6 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWi
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Campaign Rewards</h2>
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4 text-gray-700">Available Rewards</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

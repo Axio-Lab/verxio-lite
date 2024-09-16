@@ -63,19 +63,19 @@ const CreateCampaign = () => {
         <div className="bg-white shadow-xl rounded-xl overflow-hidden">
           <div className="flex flex-wrap justify-center gap-2 p-4 bg-indigo-50">
             <TabButton
-              name="1. Details"
-              href="/dashboard/create-campaign?route=details"
-              isActive={route === "details"}
+              name="1. Detail"
+              href="/dashboard/create-campaign?route=detail"
+              isActive={route === "detail"}
             />
             <TabButton
-              name="2. Actions"
+              name="2. Action"
               href="/dashboard/create-campaign?route=action"
               isActive={route === "action"}
             />
             <TabButton
-              name="3. Rewards"
-              href="/dashboard/create-campaign?route=rewards"
-              isActive={route === "rewards"}
+              name="3. Reward"
+              href="/dashboard/create-campaign?route=reward"
+              isActive={route === "reward"}
             />
             <TabButton
               name="4. Preview"
@@ -85,7 +85,7 @@ const CreateCampaign = () => {
           </div>
 
           <div className="p-6">
-            {route === "details" && <CampaignDetails />}
+            {route === "detail" && <CampaignDetails />}
             {route === "action" && (
               <CampaignTypeAndActions
                 campaignType={campaignData.type}
@@ -96,7 +96,7 @@ const CreateCampaign = () => {
                 actionData={campaignData.actionData}
               />
             )}
-            {route === "rewards" && (
+            {route === "reward" && (
               <RewardsAndWinners
                 selectedRewards={campaignData.selectedRewards}
                 toggleReward={toggleReward}

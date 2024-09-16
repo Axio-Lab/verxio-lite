@@ -45,7 +45,7 @@ const Explore = () => {
       status: "Active",
       participants: 700,
       winners: 20,
-      action: "Share on Twitter",
+      action: "Share URL",
       reward: "Merch Drop",
     },
     // Add more campaign objects here
@@ -127,8 +127,9 @@ const Explore = () => {
               <option value="Burn Token">Burn Token</option>
               <option value="Sell Digital Product">Sell Digital Product</option>
               <option value="Compress Token">Compress Token</option>
+              <option value="Create Poll">Create Poll</option>
               <option value="Decompress Token">Decompress Token</option>
-              <option value="Share on Twitter">Share on Twitter</option>
+              <option value="Share URL">Share URL</option>
             </select>
             <select
               value={filter.status}

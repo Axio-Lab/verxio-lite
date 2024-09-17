@@ -1,5 +1,5 @@
 "use client";
-import TabButton from "../../../components/TabButton";
+import TabButton from "@/components/TabButton";
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import CampaignDetails from "@/components/campaignProps/CampaignDetails";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Key, Copy, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import Button from "../button";
+import Button from "../Button";
 import { createAPIKey, invalidateAPIKey } from "@/store/slices/apiKeySlice";
 import { useDispatch, useSelector } from "react-redux";
 

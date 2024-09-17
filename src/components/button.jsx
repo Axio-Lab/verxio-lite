@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
-import LoadingSpinner from "../components/loadingSpinner";
+import LoadingSpinner from "./loadingSpinner";
 
 const Button = ({
   href,

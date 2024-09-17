@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import React, { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import campaignBanner from "@/components/assets/images/campaign_header_null.svg";
-import Button from "../../../components/Button";
+import Button from "@/components/Button";
 import goldTag from "@/components/assets/images/goldTag.svg";
 import silverTag from "@/components/assets/images/silverTag.svg";
 import bronzeTag from "@/components/assets/images/bronzeTag.svg";

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useState, useMemo } from "react";
 import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
-import Button from "@/components/button";
+import Button from "@/components/Button";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

@@ -80,26 +80,6 @@ const CampaignTypeAndActions = ({
     <>
       <Toaster position="top-right" />
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Campaign Type</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {campaignTypes.map(type => (
-            <button
-              key={type.name}
-              type="button"
-              // onClick={() => {
-              //   setCampaignType(type.name);
-              //   selectedActions.forEach(action => toggleAction(action));
-              // }}
-              className={`p-4 text-center rounded-lg flex items-center justify-center ${
-                campaignType === type.name ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
-              }`}
-            >
-              {type.name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
         <div className="grid grid-cols-3 gap-4">
           {actions[campaignType].map((action) => (

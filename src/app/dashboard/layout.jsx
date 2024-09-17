@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
                 <div className="flex items-center justify-between">
                   <NavButton icon={<Compass />} label="Explore" href={"/dashboard/explore"}/>
                   <NavButton icon={<Briefcase />} label="Campaigns" href={"/dashboard/manage-campaign"}/>
-                  <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign?route=action"}/>
+                  <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign?route=detail"}/>
                   <NavButton icon={<LayoutDashboard />} label="Leaderboard" href={"/dashboard/leaderboard"} />
                   <NavButton icon={<User />} label="Profile" href={"/dashboard/profile"} />
                 </div>

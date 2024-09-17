@@ -1,8 +1,10 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import React from 'react';
-import Head from 'next/head';
-
+import React from "react";
+import Head from "next/head";
+import { ToastContainer } from "react-toastify";
+import ReduxProvider from "@/providers/reduxProvider";
+import DatePickerProvider from "@/providers/datePickerProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,8 +23,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
-
   return (
     <html lang="en">
       <Head>
@@ -31,9 +31,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-
-          {children}
-
+        <DatePickerProvider>
+          <ReduxProvider>{children}</ReduxProvider>
+          <ToastContainer />
+        </DatePickerProvider>
       </body>
     </html>
   );

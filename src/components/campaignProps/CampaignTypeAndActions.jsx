@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { Repeat, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize } from 'lucide-react';
+import { Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize, BarChart2 } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 
 // Import your existing action components
-import SwapTokenAction from '../campaignActions/SwapTokenAction';
-// import ProvideLiquidityAction from '../campaignActions/ProvideLiquidityAction';
-import StakeTokenAction from '../campaignActions/StakeTokenAction';
 import BurnTokenAction from '../campaignActions/BurnTokenAction';
 import SellDigitalProductAction from '../campaignActions/SellDigitalProductAction';
 import CompressTokenAction from '../campaignActions/CompressTokenAction';
 import DecompressTokenAction from '../campaignActions/DecompressTokenAction';
+import PollAction from '../campaignActions/CreatePoll'; 
 
 const campaignTypes = [
   { name: 'Onchain'},
@@ -19,13 +17,12 @@ const campaignTypes = [
 
 const actions = {
   Onchain: [
-    { name: 'Burn token', icon: <Flame className="text-red-500" />, component: BurnTokenAction },
-    { name: 'Sell digital product', icon: <ShoppingCart className="text-purple-500" />, component: SellDigitalProductAction },
-    { name: 'Compress token', icon: <Minimize className="text-indigo-500" />, component: CompressTokenAction },
-    { name: 'Decompress token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
-    { name: 'Swap token', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
-    // { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
-    { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    { name: 'Burn Token', icon: <Flame className="text-red-500" />, component: BurnTokenAction },
+    { name: 'Sell Digital Product', icon: <ShoppingCart className="text-purple-500" />, component: SellDigitalProductAction },
+    { name: 'Compress Token', icon: <Minimize className="text-indigo-500" />, component: CompressTokenAction },
+    { name: 'Decompress Token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
+    { name: 'Create Poll', icon: <BarChart2 className="text-green-500" />, component: PollAction }, // Update this line
+    { name: 'Submit Url', icon: <Share className="text-yellow-400" />},
   ],
   Offchain: [
     { name: 'Share on Twitter', icon: <Share className="text-blue-400" />},
@@ -51,20 +48,12 @@ const CampaignTypeAndActions = ({
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
     } 
-    else if (action.name === 'Swap token') {
-      toast.error('Swap token action is not yet live!');
-      setCurrentAction(null)
-    }
-    else if (action.name === 'Stake token') {
-      toast.error('Stake tokens action is yet live!');
-      setCurrentAction(null)
-    }
     else if (selectedActions.length > 0) {
       toast.error('An action is already selected. Please deselect it first.');
     } else {
       toggleAction(action.name);
       toast.success(`${action.name} selected`);
-      if (campaignType === 'Onchain') {
+      if (campaignType === 'Onchain' && action.name !== 'Submit Url') {
         openModal(action);
       }
     }
@@ -97,10 +86,10 @@ const CampaignTypeAndActions = ({
             <button
               key={type.name}
               type="button"
-              onClick={() => {
-                setCampaignType(type.name);
-                selectedActions.forEach(action => toggleAction(action));
-              }}
+              // onClick={() => {
+              //   setCampaignType(type.name);
+              //   selectedActions.forEach(action => toggleAction(action));
+              // }}
               className={`p-4 text-center rounded-lg flex items-center justify-center ${
                 campaignType === type.name ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
               }`}

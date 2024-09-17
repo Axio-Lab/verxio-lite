@@ -1,108 +1,196 @@
-import React, { useState, useEffect } from 'react';
-import MdEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
+"use client";
+import Tiptap from "./tiptap";
+import * as Yup from "yup";
+import Image from "next/image";
+import { Formik, Form, Field } from "formik";
+import React, { useState, useRef } from "react";
+import "react-markdown-editor-lite/lib/index.css";
+import Button from "@/components/button";
+import { useDispatch, useSelector } from "react-redux";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from 'dayjs';
+import { FiUploadCloud } from "react-icons/fi"
 
-const CampaignDetails = ({ 
-  campaignName, 
-  setCampaignName, 
-  description, 
-  setDescription, 
-  showDescriptionPreview, 
-  setShowDescriptionPreview, 
-  renderedDescription,
-  mdParser,
-  startDate, 
-  setStartDate, 
-  endDate, 
-  setEndDate 
-}) => {
-  const [localStartDate, setLocalStartDate] = useState(startDate || '');
-  const [localEndDate, setLocalEndDate] = useState(endDate || '');
+const CampaignDetails = () => {
+  const fileInputRef = useRef(null);
+  const [description, setDescription] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    setLocalStartDate(startDate || '');
-    setLocalEndDate(endDate || '');
-  }, [startDate, endDate]);
+  const details = useSelector((state) => state.generalStates.details);
 
-  const handleEditorChange = ({ text }) => {
-    setDescription(text);
+  const handleDateChange = (date) => {
+    const formattedDate = dayjs(date).format("DD/MM/YYYY");
+    // setSelectedDate(formattedDate)
+    console.log(formattedDate);
   };
 
-  const handleDateChange = (setter, parentSetter) => (e) => {
-    const date = e.target.value;
-    setter(date);
-    if (date && !isNaN(new Date(date).getTime()) && typeof parentSetter === 'function') {
-      parentSetter(date);
+  const handleUploadButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleDescriptionChange = (newContent) => {
+    setDescription(newContent);
+    console.log(newContent);
+  };
+
+  const handleImageChange = async (event, setFieldValue) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setSelectedImage(URL.createObjectURL(file));
+    await getImageDataUrl(file, setFieldValue);
+  };
+
+  const getImageDataUrl = async (file, setFieldValue) => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "Ibelachi_Test_Run");
+    formData.append("api_key", "968631257356497");
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/verxioaventor/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const results = await response.json();
+      setFieldValue("bannerImg", results.url);
+    } catch (error) {
+      console.log("Error uploading image:", error);
     }
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const initialValues = {
+    title: details?.title || "",
+    description: details?.description || "",
+    bannerImg: details?.bannerImg || "",
+    startDate: details?.startDatate || "",
+    endDate: details?.endDate || "",
+  };
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Campaign name is required"),
+    startDate: Yup.date().required("Start date is required").nullable(),
+    endDate: Yup.date().required("End date is required").nullable(),
+  });
 
   return (
-    <>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-4">Campaign Title</h3>
-        <input 
-          type="text" 
-          id="name" 
-          value={campaignName}
-          onChange={(e) => setCampaignName(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-          placeholder="Enter campaign name"
-        />
-      </div>
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-        <h3 className="text-xl font-semibold mb-4">Campaign Description</h3>
-        </div>
-        {showDescriptionPreview ? (
-          <div className="prose max-w-none border border-gray-300 rounded-md p-4 bg-white">
-            <div dangerouslySetInnerHTML={{ __html: renderedDescription }} />
-          </div>
-        ) : (
-          <MdEditor
-            style={{ height: '250px' }}
-            renderHTML={(text) => mdParser.render(text)}  
-            onChange={handleEditorChange}
-            value={description}
-            config={{
-              view: { menu: true, md: true, html: false },
-              canView: { menu: true, md: true, html: false, fullScreen: false, hideMenu: true },
-            }}
-          />
+    <section className="max-w-4xl mx-auto px-4 py-8">
+      <Formik
+        onSubmit={() => {}}
+        validationSchema={validationSchema}
+        initialValues={initialValues}
+      >
+        {({ values, setFieldValue }) => (
+          <Form className="space-y-8">
+            <div className="bg-white shadow-md rounded-lg p-6">
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="title" className="font-medium text-lg text-gray-700 mb-2 block">
+                    Campaign Title
+                  </label>
+                  <Field
+                    id="title"
+                    className="border outline-none bg-transparent font-normal text-[16px] rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+                    name="title"
+                    value={values.title}
+                    placeholder="Enter campaign name"
+                    onChange={(event) => {
+                      setFieldValue("title", event.target.value);
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="description" className="font-medium text-lg text-gray-700 mb-2 block">
+                    Campaign Description
+                  </label>
+                  <Tiptap
+                    onChange={handleDescriptionChange}
+                    setFieldValue={setFieldValue}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                    Campaign Banner
+                  </label>
+                  <div 
+                    className="border-2 border-dashed border-indigo-300 rounded-lg p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
+                    onClick={() => fileInputRef.current.click()}
+                  >
+                    {selectedImage ? (
+                      <div className="relative w-full h-48">
+                        <Image
+                          src={selectedImage}
+                          alt="Campaign Banner"
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <FiUploadCloud className="w-12 h-12 text-[#00ADEF] mb-4" />
+                        <p className="text-[#00ADEF] font-medium">Click to upload campaign banner</p>
+                        <p className="text-sm text-gray-500 mt-2">PNG, JPG, GIF up to 10MB</p>
+                      </>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      hidden
+                      onChange={(e) => handleImageChange(e, setFieldValue)}
+                      accept="image/*"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="font-medium text-lg text-gray-700 mb-2 block">
+                      Campaign Start Date
+                    </label>
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      onChange={(date) => {
+                        handleDateChange(date);
+                        setFieldValue(
+                          "startDate",
+                          dayjs(date).format("DD/MM/YYYY")
+                        );
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-medium text-lg text-gray-700 mb-2 block">
+                      Campaign End Date
+                    </label>
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      onChange={(date) => {
+                        handleDateChange(date);
+                        setFieldValue(
+                          "endDate",
+                          dayjs(date).format("DD/MM/YYYY")
+                        );
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Form>
         )}
-      </div>
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-4">Campaign Dates</h3>
-        <div className="flex space-x-4">
-          <div className="flex-1">
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date</label>
-            <input
-              type="date"
-              id="startDate"
-              value={localStartDate}
-              onChange={handleDateChange(setLocalStartDate, setStartDate)}
-              min={today}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div className="flex-1">
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date</label>
-            <input
-              type="date"
-              id="endDate"
-              value={localEndDate}
-              onChange={handleDateChange(setLocalEndDate, setEndDate)}
-              min={localStartDate || today}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-        </div>
-      </div>
-    </>
+      </Formik>
+    </section>
   );
 };
 
 export default CampaignDetails;
-
-

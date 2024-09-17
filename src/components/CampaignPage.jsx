@@ -1,5 +1,5 @@
 
-import CampaignInfo from '../components/CampaignInfo';
+import CampaignInfo from './CampaignInfo';
 
 export default function CampaignPage() {
 
@@ -7,18 +7,18 @@ export default function CampaignPage() {
   // For now, we'll use dummy data
   const campaign = {
     id: 1,
-    title: "Campaign " ,
-    description: "This is a description of the campaign",
+    title: "Bonk Token Burn Giveaway 🎉🎊" ,
+    description: "This is a description of the Bonk Token Burn Giveaway campaign",
     status: "Active",
     participants: 1234,
     actionData: {
-        action: "Swap tokens",
+        action: "Burn Token",
         platform: "Jupiter",
     },
     winners: 50,
     daysLeft: 7,
-    action: "Swap tokens",
-    reward: "NFT drops"
+    action: "Swap Token",
+    reward: "NFT Drop"
   };
 
   return <CampaignInfo campaign={campaign} />;

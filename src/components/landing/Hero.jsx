@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import Button from '@/components/button'
+import Button from '@/components/Button'
 
 export default function Hero() {
   const [animatedText, setAnimatedText] = useState('')

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, PlusCircle, CheckCircle, MinusCircle, ImagePlay, ShoppingBasket, Coins } from 'lucide-react';
-import Button from '@/components/button'; // Make sure to import the Button component
+import Button from '@/components/Button'; // Make sure to import the Button component
 
 const availableRewards = [
   { name: 'Whitelist Spot', icon: <Users className="text-blue-500" /> },

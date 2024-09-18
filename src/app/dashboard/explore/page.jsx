@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from 'next/link';
 import React, { useState, useMemo } from "react";
 import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
@@ -107,7 +108,13 @@ const Explore = () => {
     <div className="min-h-screen px-4 py-12 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
       <div className="mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <Image src={VerxioLogo} alt="Verxio Logo" className="h-13" />
+        <Link href="/" passHref>
+            <Image 
+              src={VerxioLogo} 
+              alt="Verxio Logo" 
+              className="h-13 cursor-pointer" 
+            />
+          </Link>
 
           <Button href={"/dashboard/create-campaign?route=detail"} name="Create Campaign" />
         </div>

@@ -5,7 +5,7 @@ import "react-markdown-editor-lite/lib/index.css";
 import { FaExchangeAlt } from "react-icons/fa";
 import { SiExpertsexchange } from "react-icons/si";
 import { GiWaveCrest } from "react-icons/gi";
-import Button from "@/components/Button";
+import { Button } from "@/components";
 import {
   Repeat,
   Droplet,

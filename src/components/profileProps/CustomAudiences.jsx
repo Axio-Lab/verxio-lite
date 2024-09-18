@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
-import Button from "../Button";
+import {Button} from "@/components";
 
 const CustomAudiences = () => {
   const [customAudiences, setCustomAudiences] = useState([    

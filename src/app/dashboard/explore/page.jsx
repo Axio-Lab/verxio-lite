@@ -1,10 +1,10 @@
 "use client";
+import { Button } from "@/components";
 import Image from "next/image";
 import Link from 'next/link';
 import React, { useState, useMemo } from "react";
 import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
-import Button from "@/components/Button";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -116,7 +116,10 @@ const Explore = () => {
             />
           </Link>
 
-          <Button href={"/dashboard/create-campaign?route=detail"} name="Create Campaign" />
+          <Button
+            href={"/dashboard/create-campaign?route=detail"}
+            name="Create Campaign"
+          />
         </div>
         <div className="mb-4">
           <h2 className="text-xl font-bold">Filter Campaigns</h2>

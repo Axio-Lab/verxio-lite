@@ -1,4 +1,4 @@
-import Button from "../Button";
+import { Button } from "@/components";
 import React, { useState } from "react";
 import { Key, Copy, Trash2 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";

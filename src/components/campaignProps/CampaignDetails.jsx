@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import React, { useState, useRef } from "react";
 import "react-markdown-editor-lite/lib/index.css";
-import Button from "@/components/Button";
+import {Button} from "@/components";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -16,6 +16,7 @@ const CampaignDetails = () => {
   const fileInputRef = useRef(null);
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const dispatch = useDispatch();
 
   const details = useSelector((state) => state.generalStates.details);
 
@@ -199,7 +200,7 @@ const CampaignDetails = () => {
 
               <div className="w-full my-6">
                 <Button
-                  // href="/dashboard/create-campaign?route=action"
+                  href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
                   onClick={() => dispatch(setDetails(values))}
                 />

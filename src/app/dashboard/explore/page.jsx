@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components";
+import { Button } from "@/components/Button";
 import Image from "next/image";
 import Link from 'next/link';
 import React, { useState, useMemo } from "react";

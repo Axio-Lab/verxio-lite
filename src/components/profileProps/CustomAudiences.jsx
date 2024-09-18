@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
-import {Button} from "@/components/Button";
+import { Button } from "@/components/Button";
 
 const CustomAudiences = () => {
   const [customAudiences, setCustomAudiences] = useState([    
@@ -41,10 +41,10 @@ const CustomAudiences = () => {
   };
 
   const NoAudiencesFound = () => (
-    <div className="flex flex-col items-center justify-center p-8 bg-gray-50 rounded-lg">
-      <Users className="w-16 h-16 text-gray-400 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">No Audiences Found</h3>
-      <p className="text-gray-600 text-center mb-4">You haven't created or imported any custom audience yet.</p>
+    <div className="flex flex-col items-center justify-center p-6 sm:p-8 bg-gray-50 rounded-lg">
+      <Users className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-4" />
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">No Audiences Found</h3>
+      <p className="text-gray-600 text-center text-sm sm:text-base">You haven't created or imported any custom audience yet.</p>
     </div>
   );
 
@@ -57,18 +57,18 @@ const CustomAudiences = () => {
   }, [customAudiences, currentPage]);
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-sm">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-[#0D0E32]">Custom Audiences</h2>
+    <div className="bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#0D0E32]">Custom Audiences</h2>
         <Button
           name="Import Audience"
-          className="py-3 px-6"
+          className="w-full sm:w-auto py-2 px-4 text-sm sm:text-base"
           onClick={handleImportClick}
         />
       </div>
       {isImporting && (
         <div className="mb-4 p-4 bg-gray-100 rounded-md">
-          <p className="mb-2">Select a CSV file to import:</p>
+          <p className="mb-2 text-sm sm:text-base">Select a CSV file to import:</p>
           <input
             type="file"
             accept=".csv"
@@ -78,7 +78,7 @@ const CustomAudiences = () => {
           />
           <button
             onClick={handleUpload}
-            className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+            className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 text-sm sm:text-base"
           >
             Upload CSV
           </button>
@@ -92,43 +92,44 @@ const CustomAudiences = () => {
             {currentAudiences.map((audience) => (
               <div
                 key={audience.id}
-                className="flex items-center justify-between bg-gray-50 p-4 rounded-lg"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-4 rounded-lg space-y-3 sm:space-y-0"
               >
                 <div className="flex items-center">
                   <Users className="text-[#00ADEF] mr-3" size={24} />
                   <div>
-                    <h3 className="font-semibold text-lg text-[#0D0E32]">
+                    <h3 className="font-semibold text-base sm:text-lg text-[#0D0E32]">
                       {audience.name}
                     </h3>
-                    <p className="text-gray-600">{audience.count} participants</p>
+                    <p className="text-gray-600 text-sm">{audience.count} participants</p>
                   </div>
                 </div>
                 <Button
                   outline
                   name="Export CSV"
+                  className="w-full sm:w-auto py-1 px-3 text-sm"
                   style={{ backgroundColor: "white" }}
                   onClick={() => exportAudienceAsCSV(audience.id)}
                 />
               </div>
             ))}
             {customAudiences.length > audiencesPerPage && (
-              <div className="flex justify-center items-center mt-8 space-x-4">
+              <div className="flex justify-center items-center mt-6 space-x-2 sm:space-x-4">
                 <button
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-full bg-[#00ADEF] text-white disabled:bg-gray-300"
+                  className="p-1 sm:p-2 rounded-full bg-[#00ADEF] text-white disabled:bg-gray-300"
                 >
-                  <ChevronLeft size={24} />
+                  <ChevronLeft size={20} />
                 </button>
-                <span className="text-lg font-semibold">
+                <span className="text-sm sm:text-base font-semibold">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-full bg-[#00ADEF] text-white disabled:bg-gray-300"
+                  className="p-1 sm:p-2 rounded-full bg-[#00ADEF] text-white disabled:bg-gray-300"
                 >
-                  <ChevronRight size={24} />
+                  <ChevronRight size={20} />
                 </button>
               </div>
             )}

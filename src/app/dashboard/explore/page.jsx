@@ -105,32 +105,32 @@ const Explore = () => {
   }
 
   return (
-    <div className="min-h-screen px-4 py-12 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        <div className="flex items-center justify-between mb-6">
-        <Link href="/" passHref>
+    <div className="min-h-screen px-4 py-8 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-row items-center justify-between mb-6">
+          <Link href="/" passHref>
             <Image 
               src={VerxioLogo} 
               alt="Verxio Logo" 
-              className="h-13 cursor-pointer" 
+              className="h-8 sm:h-10 cursor-pointer" 
             />
           </Link>
 
           <Button
-          //  onClick={"/dashboard/create-campaign?route=detail"}
             name="Create Campaign"
+            className="text-sm sm:text-base px-2 sm:px-4 py-1 sm:py-2"
           />
         </div>
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">Filter Campaigns</h2>
-          <div className="flex space-x-4">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold mb-2">Filter Campaigns</h2>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <select
               value={filter.reward}
               onChange={(e) => {
                 setFilter({ ...filter, reward: e.target.value });
                 setCurrentPage(1);
               }}
-              className="border rounded p-2"
+              className="border rounded p-2 w-full sm:w-auto"
             >
               <option value="">Rewards</option>
               <option value="NFT Drop">NFT Drop</option>
@@ -145,7 +145,7 @@ const Explore = () => {
                 setFilter({ ...filter, action: e.target.value });
                 setCurrentPage(1);
               }}
-              className="border rounded p-2"
+              className="border rounded p-2 w-full sm:w-auto"
             >
               <option value="">Actions</option>
               <option value="Swap Token">Swap Token</option>
@@ -162,7 +162,7 @@ const Explore = () => {
                 setFilter({ ...filter, status: e.target.value });
                 setCurrentPage(1);
               }}
-              className="border rounded p-2"
+              className="border rounded p-2 w-full sm:w-auto"
             >
               <option value="">Status</option>
               <option value="Active">Active</option>

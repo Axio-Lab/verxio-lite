@@ -90,7 +90,7 @@ const CampaignTypeAndActions = ({
 
   const handleSave = (data) => {
     console.log("Saving action data:", data);
-    updateActionData(currentAction.name, data); // Update this line
+    updateActionData(currentAction.name, data);
     closeModal();
     toast.success("Action data saved successfully!");
   };
@@ -100,19 +100,19 @@ const CampaignTypeAndActions = ({
       <Toaster position="top-right" />
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {actions[campaignType].map((action) => (
             <div
               key={action.name}
               onClick={() => handleActionToggle(action)}
-              className={`flex items-center p-4 rounded-lg cursor-pointer ${
+              className={`flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer transition-colors duration-200 ${
                 selectedActions.includes(action.name)
-                  ? "bg-green-200"
-                  : "bg-gray-200"
+                  ? "bg-green-200 hover:bg-green-300"
+                  : "bg-gray-200 hover:bg-gray-300"
               }`}
             >
               {action.icon}
-              <span className="ml-2">{action.name}</span>
+              <span className="mt-2 text-center text-sm sm:text-base">{action.name}</span>
             </div>
           ))}
         </div>
@@ -120,7 +120,6 @@ const CampaignTypeAndActions = ({
 
       <div className="flex items-center justify-between my-6">
         <Button onClick={() => console.log(values)} name={"Previous"} />
-
         <Button onClick={() => console.log(values)} name={"Continue"} />
       </div>
 
@@ -154,15 +153,14 @@ const CampaignTypeAndActions = ({
       >
         {currentAction && (
           <div className="p-4">
-            {/* <h2 className="text-2xl font-bold mb-4">{currentAction.name}</h2> */}
             {currentAction.component &&
               React.createElement(currentAction.component, {
                 onSave: handleSave,
-                initialData: actionData[currentAction.name], // Add this line
+                initialData: actionData[currentAction.name],
               })}
             <button
               onClick={closeModal}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300"
             >
               Close
             </button>

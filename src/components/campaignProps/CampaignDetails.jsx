@@ -81,26 +81,26 @@ const CampaignDetails = () => {
   });
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8">
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <Formik
         onSubmit={() => {}}
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
         {({ values, setFieldValue }) => (
-          <Form className="space-y-8">
-            <div className="bg-white shadow-md rounded-lg p-6">
-              <div className="space-y-6">
+          <Form className="space-y-8 sm:space-y-12">
+            <div className="bg-white shadow-md rounded-lg p-6 sm:p-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <label
                     htmlFor="title"
-                    className="font-medium text-lg text-gray-700 mb-2 block"
+                    className="font-medium text-base sm:text-lg text-gray-700 mb-2 block"
                   >
                     Campaign Title
                   </label>
                   <Field
                     id="title"
-                    className="border outline-none bg-transparent font-normal text-[16px] rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+                    className="border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
                     name="title"
                     value={values.title}
                     placeholder="Enter campaign name"
@@ -113,7 +113,7 @@ const CampaignDetails = () => {
                 <div>
                   <label
                     htmlFor="description"
-                    className="font-medium text-lg text-gray-700 mb-2 block"
+                    className="font-medium text-base sm:text-lg text-gray-700 mb-2 block"
                   >
                     Campaign Description
                   </label>
@@ -124,15 +124,15 @@ const CampaignDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                  <label className="block text-base sm:text-lg font-medium text-gray-700 mb-2">
                     Campaign Banner
                   </label>
                   <div
-                    className="border-2 border-dashed border-indigo-300 rounded-lg p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
+                    className="border-2 border-dashed border-indigo-300 rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
                     onClick={() => fileInputRef.current.click()}
                   >
                     {selectedImage ? (
-                      <div className="relative w-full h-48">
+                      <div className="relative w-full h-32 sm:h-48">
                         <Image
                           src={selectedImage}
                           alt="Campaign Banner"
@@ -143,11 +143,11 @@ const CampaignDetails = () => {
                       </div>
                     ) : (
                       <>
-                        <FiUploadCloud className="w-12 h-12 text-[#00ADEF] mb-4" />
-                        <p className="text-[#00ADEF] font-medium">
+                        <FiUploadCloud className="w-10 h-10 sm:w-12 sm:h-12 text-[#00ADEF] mb-4" />
+                        <p className="text-[#00ADEF] font-medium text-sm sm:text-base">
                           Click to upload campaign banner
                         </p>
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-xs sm:text-sm text-gray-500 mt-2">
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </>
@@ -162,9 +162,9 @@ const CampaignDetails = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="font-medium text-lg text-gray-700 mb-2 block">
+                    <label className="font-medium text-base sm:text-lg text-gray-700 mb-2 block">
                       Campaign Start Date
                     </label>
                     <DatePicker
@@ -180,7 +180,7 @@ const CampaignDetails = () => {
                     />
                   </div>
                   <div>
-                    <label className="font-medium text-lg text-gray-700 mb-2 block">
+                    <label className="font-medium text-base sm:text-lg text-gray-700 mb-2 block">
                       Campaign End Date
                     </label>
                     <DatePicker
@@ -198,11 +198,12 @@ const CampaignDetails = () => {
                 </div>
               </div>
 
-              <div className="w-full my-6">
+              <div className="w-full mt-8 sm:mt-10">
                 <Button
                   href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
                   onClick={() => dispatch(setDetails(values))}
+                  className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                 />
               </div>
             </div>

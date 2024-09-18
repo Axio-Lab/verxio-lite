@@ -33,11 +33,10 @@ const Layout = ({ children }) => {
   const [activeButton, setActiveButton] = useState(pathname);
 
   const navItems = [
-    { icon: <Compass />, label: "Explore", href: "/dashboard/explore" },
-    {
-      icon: <Briefcase />,
-      label: "Campaigns",
-      href: "/dashboard/manage-campaign",
+    { 
+      icon: <Compass />, 
+      label: "Explore", 
+      href: "/dashboard/explore" 
     },
     {
       icon: <PlusCircle />,
@@ -45,18 +44,26 @@ const Layout = ({ children }) => {
       href: "/dashboard/create-campaign?route=detail",
     },
     {
-      icon: <LayoutDashboard />,
-      label: "Leaderboard",
-      href: "/dashboard/leaderboard",
+      icon: <Briefcase />,
+      label: "Campaigns",
+      href: "/dashboard/manage-campaign",
     },
-    { icon: <User />, label: "Profile", href: "/dashboard/profile" },
+    { 
+      icon: <User />, 
+      label: "Profile", 
+      href: "/dashboard/profile" },
+    // {
+    //   icon: <LayoutDashboard />,
+    //   label: "Leaderboard",
+    //   href: "/dashboard/leaderboard",
+    // },
   ];
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div className="flex flex-col h-screen bg-gray-100">
+          <div className="flex flex-col h-screen bg-[#dde9ed]-100">
             <main className="flex-1 p-4 overflow-y-auto">{children}</main>
             <nav className="w-full max-w-full overflow-x-auto bg-white border-t border-gray-200">
               <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

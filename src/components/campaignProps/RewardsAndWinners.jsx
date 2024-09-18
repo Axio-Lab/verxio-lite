@@ -91,7 +91,7 @@ const RewardsAndWinners = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-lg shadow-md">
+    <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-lg shadow-md">
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -100,59 +100,59 @@ const RewardsAndWinners = () => {
         }}
       >
         {({ values, setFieldValue }) => (
-          <Form className="space-y-8">
-            <div className="mb-8">
+          <Form className="space-y-6 sm:space-y-8">
+            <div className="mb-6 sm:mb-8">
               <h3 className="text-xl font-semibold mb-4 text-gray-700">
                 Available Rewards
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {availableRewards.map((reward) => (
                   <div
                     key={reward.value}
                     onClick={() => handleRewardToggle(reward.value, setFieldValue)}
-                    className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                    className={`flex items-center p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
                       values.title === reward.value
                         ? "bg-blue-200 shadow-md transform scale-105"
                         : "bg-white hover:bg-gray-100"
                     }`}
                   >
                     {reward.icon}
-                    <span className="ml-2 font-medium">{reward.name}</span>
+                    <span className="ml-2 font-medium text-sm sm:text-base">{reward.name}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6 sm:mb-8">
               <h3 className="text-xl font-semibold mb-4 text-gray-700">
                 Number of Winners
               </h3>
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 <button
                   type="button"
                   onClick={() => decrementWinners(setFieldValue, values)}
-                  className="bg-gray-100 p-3 rounded-l-lg hover:bg-gray-200 transition-colors duration-200"
+                  className="bg-gray-100 p-2 sm:p-3 rounded-l-lg hover:bg-gray-200 transition-colors duration-200"
                 >
-                  <MinusCircle />
+                  <MinusCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
                 <Field
                   type="number"
                   name="numberOfWinners"
                   value={values.numberOfWinners}
                   onChange={(event) => handleWinnersChange(event, setFieldValue)}
-                  className="w-20 text-center p-2 border-t border-b border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="w-16 sm:w-20 text-center p-2 border-t border-b border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg"
                   min="1"
                 />
                 <button
                   type="button"
                   onClick={() => incrementWinners(setFieldValue, values)}
-                  className="bg-gray-100 p-3 rounded-r-lg hover:bg-gray-200 transition-colors duration-200"
+                  className="bg-gray-100 p-2 sm:p-3 rounded-r-lg hover:bg-gray-200 transition-colors duration-200"
                 >
-                  <PlusCircle />
+                  <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
               </div>
             </div>
             {(values.title === "token" || values.title === "verxioxp") && (
-              <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Reward Details
                 </h3>
@@ -203,9 +203,9 @@ const RewardsAndWinners = () => {
               </div>
             )}
 
-            <div className="flex items-center justify-between my-6">
-              <Button onClick={() => console.log(values)} name={"Previous"} />
-              <Button type="submit" name={"Continue"} />
+            <div className="flex items-center justify-between mt-6">
+              <Button onClick={() => console.log(values)} name={"Previous"} className="w-[48%]" />
+              <Button type="submit" name={"Continue"} className="w-[48%]" />
             </div>
           </Form>
         )}

@@ -1,4 +1,5 @@
 "use client";
+import React, { useState, useMemo } from "react";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -7,7 +8,6 @@ import {
   Compass,
 } from "lucide-react";
 import NavButton from "@/components/NavButton";
-import { useMemo } from "react";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -19,17 +19,26 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
+import { usePathname } from "next/navigation";
 
 const Layout = ({ children }) => {
   const network = WalletAdapterNetwork.Devnet;
-
-  // You can also provide a custom RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })],
     [network]
   );
+
+  const pathname = usePathname();
+  const [activeButton, setActiveButton] = useState(pathname);
+
+  const navItems = [
+    { icon: <Compass />, label: "Explore", href: "/dashboard/explore" },
+    { icon: <Briefcase />, label: "Campaigns", href: "/dashboard/manage-campaign" },
+    { icon: <PlusCircle />, label: "Create", href: "/dashboard/create-campaign?route=detail" },
+    { icon: <LayoutDashboard />, label: "Leaderboard", href: "/dashboard/leaderboard" },
+    { icon: <User />, label: "Profile", href: "/dashboard/profile" },
+  ];
 
   return (
     <ConnectionProvider endpoint={endpoint}>
@@ -37,14 +46,19 @@ const Layout = ({ children }) => {
         <WalletModalProvider>
           <div className="flex flex-col h-screen bg-gray-100">
             <main className="flex-1 p-4 overflow-y-auto">{children}</main>
-            <nav className="w-full max-w-full overflow-x-auto bg-white border-t border- gray-200">
+            <nav className="w-full max-w-full overflow-x-auto bg-white border-t border-gray-200">
               <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
-                  <NavButton icon={<Compass />} label="Explore" href={"/dashboard/explore"}/>
-                  <NavButton icon={<Briefcase />} label="Campaigns" href={"/dashboard/manage-campaign"}/>
-                  <NavButton icon={<PlusCircle />} label="Create" href={"/dashboard/create-campaign"}/>
-                  <NavButton icon={<LayoutDashboard />} label="Leaderboard" href={"/dashboard/leaderboard"} />
-                  <NavButton icon={<User />} label="Profile" href={"/dashboard/profile"} />
+                  {navItems.map((item, index) => (
+                    <NavButton
+                      key={index}
+                      icon={item.icon}
+                      label={item.label}
+                      href={item.href}
+                      isActive={activeButton === item.href}
+                      onClick={() => setActiveButton(item.href)}
+                    />
+                  ))}
                 </div>
               </div>
             </nav>
@@ -54,4 +68,5 @@ const Layout = ({ children }) => {
     </ConnectionProvider>
   );
 };
+
 export default Layout;

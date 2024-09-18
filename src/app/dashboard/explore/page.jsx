@@ -109,7 +109,7 @@ const Explore = () => {
         <div className="flex items-center justify-between mb-6">
           <Image src={VerxioLogo} alt="Verxio Logo" className="h-13" />
 
-          <Button href={"/dashboard/create-campaign"} name="Create Campaign" />
+          <Button href={"/dashboard/create-campaign?route=detail"} name="Create Campaign" />
         </div>
         <div className="mb-4">
           <h2 className="text-xl font-bold">Filter Campaigns</h2>

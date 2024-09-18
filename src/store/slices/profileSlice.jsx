@@ -16,7 +16,7 @@ export const createProfile = createAsyncThunk(
   "profile/newProfile",
   async ({ id }) => {
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `${apiBaseURL}/profile/${id}`
       );
       return response.data;

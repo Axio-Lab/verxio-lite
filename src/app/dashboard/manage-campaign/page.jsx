@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Button from "@/components/button";
+import Button from "@/components/Button";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
 
 const MyCampaigns = () => {
@@ -45,7 +45,10 @@ const MyCampaigns = () => {
             <h1 className="mb-6 text-3xl font-bold text-center text-[#0D0E32] sm:text-base">
               My Campaigns
             </h1>
-            <Button href={"/dashboard/create-campaign"} name="Create Campaign" />
+            <Button
+              href={"/dashboard/create-campaign"}
+              name="Create Campaign"
+            />
           </div>
           <div className="space-y-6">
             {campaigns.map((campaign) => (

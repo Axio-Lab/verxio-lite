@@ -1,6 +1,6 @@
 "use client";
-import TabButton from "@/components/TabButton";
 import React, { useState } from "react";
+import TabButton from "@/components/TabButton";
 import { useSearchParams } from "next/navigation";
 import CampaignDetails from "@/components/campaignProps/CampaignDetails";
 import CampaignPreview from "@/components/campaignProps/CampaignPreview";
@@ -9,13 +9,13 @@ import CampaignTypeAndActions from "@/components/campaignProps/CampaignTypeAndAc
 
 const CreateCampaign = () => {
   const searchParams = useSearchParams();
-  const route = searchParams.get("route") || "details";
+  const route = searchParams.get("route") || "detail";
 
   const [campaignData, setCampaignData] = useState({
     type: "Onchain",
     selectedActions: [],
     selectedRewards: [],
-    numWinners: 1,
+    // numWinners: 1,
     actionData: {},
   });
 
@@ -41,9 +41,9 @@ const CreateCampaign = () => {
     }));
   };
 
-  const setNumWinners = (value) => {
-    setCampaignData((prev) => ({ ...prev, numWinners: value }));
-  };
+  // const setNumWinners = (value) => {
+  //   setCampaignData((prev) => ({ ...prev, numWinners: value }));
+  // };
 
   const updateActionData = (actionName, data) => {
     setCampaignData((prev) => ({
@@ -58,8 +58,10 @@ const CreateCampaign = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-6 text-center">Create Your Campaign</h1>
-        
+        <h1 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-6 text-center">
+          Create Your Campaign
+        </h1>
+
         <div className="bg-white shadow-xl rounded-xl overflow-hidden">
           <div className="flex flex-wrap justify-center gap-2 p-4 bg-indigo-50">
             <TabButton
@@ -100,14 +102,10 @@ const CreateCampaign = () => {
               <RewardsAndWinners
                 selectedRewards={campaignData.selectedRewards}
                 toggleReward={toggleReward}
-                numWinners={campaignData.numWinners}
-                setNumWinners={setNumWinners}
               />
             )}
             {route === "preview" && (
-              <CampaignPreview
-                campaignData={campaignData}
-              />
+              <CampaignPreview campaignData={campaignData} />
             )}
           </div>
         </div>

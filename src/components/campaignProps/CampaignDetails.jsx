@@ -5,10 +5,12 @@ import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import React, { useState, useRef } from "react";
 import "react-markdown-editor-lite/lib/index.css";
+import Button from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from 'dayjs';
-import { FiUploadCloud } from "react-icons/fi"
+import dayjs from "dayjs";
+import { FiUploadCloud } from "react-icons/fi";
+import { setDetails } from "@/store/slices/statesSlice";
 
 const CampaignDetails = () => {
   const fileInputRef = useRef(null);
@@ -89,7 +91,10 @@ const CampaignDetails = () => {
             <div className="bg-white shadow-md rounded-lg p-6">
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="title" className="font-medium text-lg text-gray-700 mb-2 block">
+                  <label
+                    htmlFor="title"
+                    className="font-medium text-lg text-gray-700 mb-2 block"
+                  >
                     Campaign Title
                   </label>
                   <Field
@@ -105,7 +110,10 @@ const CampaignDetails = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="description" className="font-medium text-lg text-gray-700 mb-2 block">
+                  <label
+                    htmlFor="description"
+                    className="font-medium text-lg text-gray-700 mb-2 block"
+                  >
                     Campaign Description
                   </label>
                   <Tiptap
@@ -118,7 +126,7 @@ const CampaignDetails = () => {
                   <label className="block text-lg font-medium text-gray-700 mb-2">
                     Campaign Banner
                   </label>
-                  <div 
+                  <div
                     className="border-2 border-dashed border-indigo-300 rounded-lg p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
                     onClick={() => fileInputRef.current.click()}
                   >
@@ -135,8 +143,12 @@ const CampaignDetails = () => {
                     ) : (
                       <>
                         <FiUploadCloud className="w-12 h-12 text-[#00ADEF] mb-4" />
-                        <p className="text-[#00ADEF] font-medium">Click to upload campaign banner</p>
-                        <p className="text-sm text-gray-500 mt-2">PNG, JPG, GIF up to 10MB</p>
+                        <p className="text-[#00ADEF] font-medium">
+                          Click to upload campaign banner
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          PNG, JPG, GIF up to 10MB
+                        </p>
                       </>
                     )}
                     <input
@@ -183,6 +195,14 @@ const CampaignDetails = () => {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div className="w-full my-6">
+                <Button
+                  // href="/dashboard/create-campaign?route=action"
+                  name={"Continue"}
+                  onClick={() => dispatch(setDetails(values))}
+                />
               </div>
             </div>
           </Form>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Button from "@/components/Button";
+import React, { useState } from "react";
+import { Button } from "@/components";
 import {
   Users,
   PlusCircle,
@@ -13,12 +13,36 @@ import { Formik, Form, Field } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 
 const availableRewards = [
-  { name: "Whitelist Spot", value: "whitelist", icon: <Users className="text-blue-500" /> },
-  { name: "NFT Drop", value: "nftdrop", icon: <ImagePlay className="text-purple-500" /> },
-  { name: "Token", value: "token", icon:  <Coins className="text-yellow-500" /> },
-  { name: "Airdrop", value: "airdrop", icon: <PlusCircle className="text-green-500" /> },
-  { name: "Merch Drop", value: "merchdrop", icon: <ShoppingBasket className="text-red-500" /> },
-  { name: "Verxio XP", value: "verxioxp", icon: <CheckCircle className="text-indigo-500" /> },
+  {
+    name: "Whitelist Spot",
+    value: "whitelist",
+    icon: <Users className="text-blue-500" />,
+  },
+  {
+    name: "NFT Drop",
+    value: "nftdrop",
+    icon: <ImagePlay className="text-purple-500" />,
+  },
+  {
+    name: "Token",
+    value: "token",
+    icon: <Coins className="text-yellow-500" />,
+  },
+  {
+    name: "Airdrop",
+    value: "airdrop",
+    icon: <PlusCircle className="text-green-500" />,
+  },
+  {
+    name: "Merch Drop",
+    value: "merchdrop",
+    icon: <ShoppingBasket className="text-red-500" />,
+  },
+  {
+    name: "Verxio XP",
+    value: "verxioxp",
+    icon: <CheckCircle className="text-indigo-500" />,
+  },
 ];
 
 const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
@@ -67,7 +91,7 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
   const handleRewardToggle = (rewardName) => {
     // Update the selected reward to be the clicked reward
     setSelectedReward(rewardName);
-  
+
     // Reset solAmount and xpAmount based on the reward type
     if (rewardName === "Token") {
       setSolAmount("");
@@ -155,9 +179,11 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
                     </label>
                     <Field
                       type="number"
-                      id="solAmount"                   
+                      id="solAmount"
                       value={values.solAmount}
-                      onChange={(e) => setFieldValue("solAmount", event.target.value)}
+                      onChange={(e) =>
+                        setFieldValue("solAmount", event.target.value)
+                      }
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="0.01"
@@ -180,7 +206,9 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
                       type="number"
                       id="xpAmount"
                       value={values.xpAmount}
-                      onChange={(event) => setFieldValue("xpAmount", event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue("xpAmount", event.target.value)
+                      }
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="1"

@@ -63,7 +63,12 @@ const platformIcons = {
 };
 
 const CampaignPreview = ({ campaignData }) => {
+  if (!campaignData) {
+    return <div>No campaign data available.</div>;
+  }
+
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
@@ -95,7 +100,7 @@ const CampaignPreview = ({ campaignData }) => {
         <h3 className="text-2xl font-semibold mb-4 text-indigo-700">
           Campaign Name
         </h3>
-        <p className="text-xl font-medium text-gray-800">{campaignData.name}</p>
+        <p className="text-xl font-medium text-gray-800">{campaignData.name || "N/A"}</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-md p-6 mb-8">
@@ -104,7 +109,7 @@ const CampaignPreview = ({ campaignData }) => {
         </h3>
         <div className="prose max-w-none">
           <MdEditor
-            value={campaignData.description}
+            value={campaignData.description || ""}
             renderHTML={(text) => mdParser.render(text)}
             config={{
               view: { menu: false, md: false, html: true },
@@ -125,13 +130,13 @@ const CampaignPreview = ({ campaignData }) => {
         <StatCard
           icon={Activity}
           title="Campaign Type"
-          value={campaignData.type}
+          value={campaignData.type || "N/A"}
           color="bg-blue-100 text-blue-800"
         />
         <StatCard
           icon={Award}
           title="Number of Winners"
-          value={campaignData.numWinners}
+          value={campaignData.numWinners || "N/A"}
           color="bg-green-100 text-green-800"
         />
         <StatCard
@@ -149,19 +154,19 @@ const CampaignPreview = ({ campaignData }) => {
           Selected Actions
         </h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          {campaignData.selectedActions.map((action) => (
+          {(campaignData.selectedActions || []).map((action) => (
             <ActionRewardBadge
               key={action}
               text={action}
-              IconComponent={actionIcons[action].icon}
-              color={actionIcons[action].color}
+              IconComponent={actionIcons[action]?.icon || Zap}
+              color={actionIcons[action]?.color || "text-gray-500"}
             />
           ))}
         </div>
         <div className="space-y-4 mt-6">
-          {campaignData.selectedActions.map(
+          {(campaignData.selectedActions || []).map(
             (action) =>
-              campaignData.actionData[action] && (
+              campaignData.actionData?.[action] && (
                 <ActionDataCard
                   key={action}
                   action={action}
@@ -177,20 +182,14 @@ const CampaignPreview = ({ campaignData }) => {
           Selected Rewards
         </h3>
         <div className="flex flex-wrap gap-2">
-          {campaignData.selectedRewards.map((reward) =>
-            rewardIcons[reward] ? (
-              <ActionRewardBadge
-                key={reward}
-                text={reward}
-                IconComponent={rewardIcons[reward].icon}
-                color={rewardIcons[reward].color}
-              />
-            ) : (
-              <span key={reward} className="text-red-500">
-                Unknown reward: {reward}
-              </span>
-            )
-          )}
+          {(campaignData.selectedRewards || []).map((reward) => (
+            <ActionRewardBadge
+              key={reward}
+              text={reward}
+              IconComponent={rewardIcons[reward]?.icon || Gift}
+              color={rewardIcons[reward]?.color || "text-gray-500"}
+            />
+          ))}
         </div>
       </div>
 

@@ -7,7 +7,7 @@ import {
   User,
   Compass,
 } from "lucide-react";
-import { NavButton } from "@/components";
+import NavButton  from "@/components/NavButton";
 import {
   ConnectionProvider,
   WalletProvider,

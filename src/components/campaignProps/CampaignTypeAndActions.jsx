@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { Button } from "@/components";
+import Button  from "@/components/Button";
 import {
   Flame,
   ShoppingCart,

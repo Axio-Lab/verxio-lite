@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { TabButton } from "@/components";
+import TabButton  from "@/components/TabButton";
 import { useSearchParams } from "next/navigation";
 import CampaignDetails from "@/components/campaignProps/CampaignDetails";
 import CampaignPreview from "@/components/campaignProps/CampaignPreview";

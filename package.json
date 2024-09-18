@@ -1,8 +1,7 @@
 {
-  "name": "verxio_lite",
+  "name": "verxio_protocol",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Ads creator for web3 developers and brands",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

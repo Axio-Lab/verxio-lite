@@ -21,8 +21,6 @@ import CompressTokenAction from "../campaignActions/CompressTokenAction";
 import DecompressTokenAction from "../campaignActions/DecompressTokenAction";
 import PollAction from "../campaignActions/CreatePoll";
 
-const campaignTypes = [{ name: "Onchain" }, { name: "Offchain" }];
-
 const actions = {
   Onchain: [
     {
@@ -49,20 +47,8 @@ const actions = {
       name: "Create Poll",
       icon: <BarChart2 className="text-green-500" />,
       component: PollAction,
-    }, // Update this line
+    }, 
     { name: "Submit Url", icon: <Share className="text-yellow-400" /> },
-  ],
-  Offchain: [
-    { name: "Share on Twitter", icon: <Share className="text-blue-400" /> },
-    {
-      name: "Join Discord",
-      icon: <MessageCircle className="text-indigo-500" />,
-    },
-    { name: "Refer a friend", icon: <UserPlus className="text-green-500" /> },
-    {
-      name: "Complete a survey",
-      icon: <ClipboardList className="text-orange-500" />,
-    },
   ],
 };
 
@@ -113,28 +99,6 @@ const CampaignTypeAndActions = ({
     <>
       <Toaster position="top-right" />
       <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Campaign Type</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {campaignTypes.map((type) => (
-            <button
-              key={type.name}
-              type="button"
-              // onClick={() => {
-              //   setCampaignType(type.name);
-              //   selectedActions.forEach(action => toggleAction(action));
-              // }}
-              className={`p-4 text-center rounded-lg flex items-center justify-center ${
-                campaignType === type.name
-                  ? "bg-[#00ADEF] text-[#FCFCFC]"
-                  : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {type.name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
         <div className="grid grid-cols-3 gap-4">
           {actions[campaignType].map((action) => (
@@ -155,9 +119,9 @@ const CampaignTypeAndActions = ({
       </div>
 
       <div className="flex items-center justify-between my-6">
-        <Button href="/dashboard/create-campaign?route=detail" name={"Prev"} />
+        <Button onClick={() => console.log(values)} name={"Previous"} />
 
-        <Button href="/dashboard/create-campaign?route=reward" name={"Next"} />
+        <Button onClick={() => console.log(values)} name={"Continue"} />
       </div>
 
       <Modal

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, PlusCircle, CheckCircle, MinusCircle, ImagePlay, ShoppingBasket, Coins } from 'lucide-react';
+import Button from '@/components/button'; // Make sure to import the Button component
 
 const availableRewards = [
   { name: 'Whitelist Spot', icon: <Users className="text-blue-500" /> },
@@ -10,7 +11,7 @@ const availableRewards = [
   { name: 'Verxio XP', icon: <CheckCircle className="text-indigo-500" /> }
 ];
 
-const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWinners }) => {
+const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWinners, values }) => {
   const [localNumWinners, setLocalNumWinners] = useState(numWinners);
   const [solAmount, setSolAmount] = useState('');
   const [xpAmount, setXpAmount] = useState('');
@@ -134,8 +135,39 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWi
           )}
         </div>
       )}
+      <div className="flex items-center justify-between my-6">
+      <Button
+          name={"Previous"}
+          onClick={() => console.log(values)}
+        />
+
+        <Button
+          name={"Continue"}
+          onClick={() => console.log(values)}
+        />
+      </div>
     </div>
+    
   );
 };
 
 export default RewardsAndWinners;
+
+
+<div className="flex items-center justify-between my-6">
+              {/* <Button
+                href="/dashboard/create-campaign?route=action"
+                name={"Prev"}
+              />
+
+              <Button
+                href="/dashboard/create-campaign?route=preview"
+                name={"Next"}
+              /> */}
+
+              <Button
+                // href="/dashboard/create-campaign?route=action"
+                name={"Continue"}
+                onClick={() => console.log(values)}
+              />
+            </div>

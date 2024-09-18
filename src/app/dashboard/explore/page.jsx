@@ -1,5 +1,6 @@
-"use client"
-import Image from 'next/image';
+"use client";
+import Image from "next/image";
+import Link from 'next/link';
 import React, { useState, useMemo } from "react";
 import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
@@ -76,11 +77,26 @@ const Explore = () => {
 
   const NoRecordsFound = () => (
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
-      <svg className="w-16 h-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg
+        className="w-16 h-16 text-gray-400 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">No Campaigns Found</h3>
-      <p className="text-gray-600 text-center">We couldn't find any campaigns matching your current filters. Try adjusting your search criteria.</p>
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        No Campaigns Found
+      </h3>
+      <p className="text-gray-600 text-center">
+        We couldn't find any campaigns matching your current filters. Try
+        adjusting your search criteria.
+      </p>
     </div>
   );
 
@@ -92,7 +108,13 @@ const Explore = () => {
     <div className="min-h-screen px-4 py-12 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
       <div className="mx-auto">
         <div className="flex items-center justify-between mb-6">
-        <Image src={VerxioLogo} alt="Verxio Logo" className="h-13"  />
+        <Link href="/" passHref>
+            <Image 
+              src={VerxioLogo} 
+              alt="Verxio Logo" 
+              className="h-13 cursor-pointer" 
+            />
+          </Link>
 
           <Button href={"/dashboard/create-campaign?route=detail"} name="Create Campaign" />
         </div>
@@ -174,7 +196,9 @@ const Explore = () => {
               Page {currentPage} of {totalPages}
             </span>
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
               className="p-2 rounded-full bg-[#00ADEF] text-white disabled:bg-gray-300"
             >

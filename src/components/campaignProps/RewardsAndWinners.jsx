@@ -10,7 +10,7 @@ import {
   Coins,
 } from "lucide-react";
 import { Formik, Form, Field } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const availableRewards = [
   {
@@ -45,70 +45,59 @@ const availableRewards = [
   },
 ];
 
-const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
-  const [solAmount, setSolAmount] = useState("");
-  const [xpAmount, setXpAmount] = useState("");
-  const [selectedReward, setSelectedReward] = useState("");
+const RewardsAndWinners = () => {
   const rewards = useSelector((state) => state.generalStates.rewards);
 
   const initialValues = {
-    title: selectedReward || rewards?.availableReward || "",
-    numberOfWinners: rewards?.localNumWinners || 0,
-    winnersCount: rewards?.numWinners || 0,
+    title: rewards?.availableReward || "",
+    numberOfWinners: rewards?.localNumWinners || 1,
+    winnersCount: rewards?.numWinners || 1,
     solAmount: rewards?.solAmount || 0,
     xpAmount: rewards?.xpAmount || 0,
   };
 
-  const incrementWinners = (setFieldValue) => {
-    const newValue = values.localNumWinners + 1;
-    setFieldValue("localNumWinners", newValue);
-    setFieldValue("numWinners", newValue);
+  const incrementWinners = (setFieldValue, values) => {
+    const newValue = values.numberOfWinners + 1;
+    setFieldValue("numberOfWinners", newValue);
+    setFieldValue("winnersCount", newValue);
   };
 
-  const decrementWinners = (setFieldValue) => {
-    const newValue = Math.max(1, values.localNumWinners - 1);
-    setFieldValue("localNumWinners", newValue);
-    setFieldValue("numWinners", newValue);
+  const decrementWinners = (setFieldValue, values) => {
+    const newValue = Math.max(1, values.numberOfWinners - 1);
+    setFieldValue("numberOfWinners", newValue);
+    setFieldValue("winnersCount", newValue);
   };
 
   const handleWinnersChange = (e, setFieldValue) => {
     const value = parseInt(e.target.value, 10);
     const newValue = isNaN(value) ? 1 : Math.max(1, value);
-    setFieldValue("localNumWinners", newValue);
-    setFieldValue("numWinners", newValue);
+    setFieldValue("numberOfWinners", newValue);
+    setFieldValue("winnersCount", newValue);
   };
 
-  // const handleRewardToggle = (rewardName) => {
-  //   toggleReward(rewardName);
-  //   if (rewardName === "Token" && !selectedRewards.includes("Token")) {
-  //     setSolAmount("");
-  //   }
-  //   if (rewardName === "Verxio XP" && !selectedRewards.includes("Verxio XP")) {
-  //     setXpAmount("");
-  //   }
-  // };
+  const handleRewardToggle = (rewardValue, setFieldValue) => {
+    setFieldValue("title", rewardValue);
 
-  const handleRewardToggle = (rewardName) => {
-    // Update the selected reward to be the clicked reward
-    setSelectedReward(rewardName);
-
-    // Reset solAmount and xpAmount based on the reward type
-    if (rewardName === "Token") {
-      setSolAmount("");
-    } else if (rewardName === "Verxio XP") {
-      setXpAmount("");
+    if (rewardValue === "token") {
+      setFieldValue("solAmount", 0);
+      setFieldValue("xpAmount", 0);
+    } else if (rewardValue === "verxioxp") {
+      setFieldValue("solAmount", 0);
+      setFieldValue("xpAmount", 0);
     } else {
-      setSolAmount("");
-      setXpAmount("");
+      setFieldValue("solAmount", 0);
+      setFieldValue("xpAmount", 0);
     }
   };
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-lg shadow-md">
       <Formik
-        onSubmit={() => {}}
-        // validationSchema={validationSchema}
         initialValues={initialValues}
+        onSubmit={(values) => {
+          console.log(values);
+          // Handle form submission here
+        }}
       >
         {({ values, setFieldValue }) => (
           <Form className="space-y-8">
@@ -119,10 +108,10 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {availableRewards.map((reward) => (
                   <div
-                    key={reward.name}
-                    onClick={() => handleRewardToggle(reward.name)}
+                    key={reward.value}
+                    onClick={() => handleRewardToggle(reward.value, setFieldValue)}
                     className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                      selectedRewards.includes(reward.name)
+                      values.title === reward.value
                         ? "bg-blue-200 shadow-md transform scale-105"
                         : "bg-white hover:bg-gray-100"
                     }`}
@@ -140,36 +129,34 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => decrementWinners(setFieldValue)}
+                  onClick={() => decrementWinners(setFieldValue, values)}
                   className="bg-gray-100 p-3 rounded-l-lg hover:bg-gray-200 transition-colors duration-200"
                 >
                   <MinusCircle />
                 </button>
                 <Field
                   type="number"
-                  value={values.localNumWinners}
-                  onChange={(event) =>
-                    handleWinnersChange(event, setFieldValue)
-                  }
+                  name="numberOfWinners"
+                  value={values.numberOfWinners}
+                  onChange={(event) => handleWinnersChange(event, setFieldValue)}
                   className="w-20 text-center p-2 border-t border-b border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   min="1"
                 />
                 <button
                   type="button"
-                  onClick={() => incrementWinners(setFieldValue)}
+                  onClick={() => incrementWinners(setFieldValue, values)}
                   className="bg-gray-100 p-3 rounded-r-lg hover:bg-gray-200 transition-colors duration-200"
                 >
                   <PlusCircle />
                 </button>
               </div>
             </div>
-            {(selectedRewards.includes("Token") ||
-              selectedRewards.includes("Verxio XP")) && (
+            {(values.title === "token" || values.title === "verxioxp") && (
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Reward Details
                 </h3>
-                {selectedRewards.includes("Token") && (
+                {values.title === "token" && (
                   <div className="mb-4">
                     <label
                       htmlFor="solAmount"
@@ -180,21 +167,18 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
                     <Field
                       type="number"
                       id="solAmount"
-                      value={values.solAmount}
-                      onChange={(e) =>
-                        setFieldValue("solAmount", event.target.value)
-                      }
+                      name="solAmount"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="0.01"
                     />
                     <p className="text-sm text-gray-600 mt-1">
                       The SOL amount will be split equally between{" "}
-                      {localNumWinners} winner{localNumWinners > 1 ? "s" : ""}.
+                      {values.numberOfWinners} winner{values.numberOfWinners > 1 ? "s" : ""}.
                     </p>
                   </div>
                 )}
-                {selectedRewards.includes("Verxio XP") && (
+                {values.title === "verxioxp" && (
                   <div className="mb-4">
                     <label
                       htmlFor="xpAmount"
@@ -205,17 +189,14 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
                     <Field
                       type="number"
                       id="xpAmount"
-                      value={values.xpAmount}
-                      onChange={(event) =>
-                        setFieldValue("xpAmount", event.target.value)
-                      }
+                      name="xpAmount"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="1"
                     />
                     <p className="text-sm text-gray-600 mt-1">
                       The Verxio XP amount will be split equally between{" "}
-                      {localNumWinners} winner{localNumWinners > 1 ? "s" : ""}.
+                      {values.numberOfWinners} winner{values.numberOfWinners > 1 ? "s" : ""}.
                     </p>
                   </div>
                 )}
@@ -223,21 +204,8 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward }) => {
             )}
 
             <div className="flex items-center justify-between my-6">
-              {/* <Button
-                href="/dashboard/create-campaign?route=action"
-                name={"Prev"}
-              />
-
-              <Button
-                href="/dashboard/create-campaign?route=preview"
-                name={"Next"}
-              /> */}
-
-              <Button
-                // href="/dashboard/create-campaign?route=action"
-                name={"Continue"}
-                onClick={() => console.log(values)}
-              />
+              <Button onClick={() => console.log(values)} name={"Previous"} />
+              <Button type="submit" name={"Continue"} />
             </div>
           </Form>
         )}

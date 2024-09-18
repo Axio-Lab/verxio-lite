@@ -46,7 +46,7 @@ const MyCampaigns = () => {
               My Campaigns
             </h1>
             <Button
-              href={"/dashboard/create-campaign"}
+              href={"/dashboard/create-campaign?route=detail"}
               name="Create Campaign"
             />
           </div>

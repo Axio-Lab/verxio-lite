@@ -46,7 +46,7 @@ const Explore = () => {
       status: "Active",
       participants: 700,
       winners: 20,
-      action: "Share URL",
+      action: "Submit Url",
       reward: "Merch Drop",
     },
     // Add more campaign objects here
@@ -117,7 +117,7 @@ const Explore = () => {
           </Link>
 
           <Button
-            href={"/dashboard/create-campaign?route=detail"}
+          //  onClick={"/dashboard/create-campaign?route=detail"}
             name="Create Campaign"
           />
         </div>

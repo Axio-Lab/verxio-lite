@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { TabButton } from "@/components";
+import { TabButton } from "@/components/TabButton";
 import { useSearchParams } from "next/navigation";
 import CampaignDetails from "@/components/campaignProps/CampaignDetails";
 import CampaignPreview from "@/components/campaignProps/CampaignPreview";
 import RewardsAndWinners from "@/components/campaignProps/RewardsAndWinners";
 import CampaignTypeAndActions from "@/components/campaignProps/CampaignTypeAndActions";
 
-const CreateCampaign = () => {
+const Page = () => {
   const searchParams = useSearchParams();
   const route = searchParams.get("route") || "detail";
 
@@ -94,4 +94,4 @@ const CreateCampaign = () => {
   );
 };
 
-export default CreateCampaign;
+export default Page;

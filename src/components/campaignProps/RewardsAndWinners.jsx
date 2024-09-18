@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@/components";
+import { Button } from "@/components/Button";
 import {
   Users,
   PlusCircle,

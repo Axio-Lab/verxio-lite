@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
-const TabButton = ({ name, href, isActive, className }) => (
+export const TabButton = ({ name, href, isActive, className }) => (
   <Link
     href={href}
     className={twMerge(
@@ -18,5 +18,3 @@ const TabButton = ({ name, href, isActive, className }) => (
     )}
   </Link>
 );
-
-export default TabButton;

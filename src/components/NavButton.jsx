@@ -19,4 +19,4 @@ const NavButton = ({ icon, label, href, isActive, onClick }) => {
   );
 };
 
-export default NavButton;
+export default NavButton; 

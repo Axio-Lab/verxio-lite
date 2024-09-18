@@ -1,4 +1,3 @@
-
 import CampaignInfo from './CampaignInfo';
 
 export default function CampaignPage() {

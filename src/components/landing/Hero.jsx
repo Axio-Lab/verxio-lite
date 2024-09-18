@@ -5,8 +5,8 @@ import Button from '@/components/button'
 export default function Hero() {
   const [animatedText, setAnimatedText] = useState('')
   const fullTexts = [
-    "ads creators for web3 developers and brands",
-    "incentivize users with token, merch, and more"
+    "ads creator for web3 developers and brands.",
+    "incentivize users with token, merch, and more."
   ]
   const [textIndex, setTextIndex] = useState(0)
 

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import TabButton from "@/components/TabButton";
+import { TabButton } from "@/components";
 import { useSearchParams } from "next/navigation";
 import CampaignDetails from "@/components/campaignProps/CampaignDetails";
 import CampaignPreview from "@/components/campaignProps/CampaignPreview";
@@ -14,8 +14,6 @@ const CreateCampaign = () => {
   const [campaignData, setCampaignData] = useState({
     type: "Onchain",
     selectedActions: [],
-    selectedRewards: [],
-    // numWinners: 1,
     actionData: {},
   });
 
@@ -31,19 +29,6 @@ const CreateCampaign = () => {
         : [...prev.selectedActions, action],
     }));
   };
-
-  const toggleReward = (reward) => {
-    setCampaignData((prev) => ({
-      ...prev,
-      selectedRewards: prev.selectedRewards.includes(reward)
-        ? prev.selectedRewards.filter((r) => r !== reward)
-        : [...prev.selectedRewards, reward],
-    }));
-  };
-
-  // const setNumWinners = (value) => {
-  //   setCampaignData((prev) => ({ ...prev, numWinners: value }));
-  // };
 
   const updateActionData = (actionName, data) => {
     setCampaignData((prev) => ({
@@ -98,12 +83,7 @@ const CreateCampaign = () => {
                 actionData={campaignData.actionData}
               />
             )}
-            {route === "reward" && (
-              <RewardsAndWinners
-                selectedRewards={campaignData.selectedRewards}
-                toggleReward={toggleReward}
-              />
-            )}
+            {route === "reward" && <RewardsAndWinners />}
             {route === "preview" && (
               <CampaignPreview campaignData={campaignData} />
             )}

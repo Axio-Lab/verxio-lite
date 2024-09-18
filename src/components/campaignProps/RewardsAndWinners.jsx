@@ -11,7 +11,9 @@ const availableRewards = [
   { name: 'Verxio XP', icon: <CheckCircle className="text-indigo-500" /> }
 ];
 
-const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWinners, values }) => {
+const RewardsAndWinners = ({ toggleReward, numWinners, setNumWinners, values }) => {
+  const [selectedRewards, setSelectedRewards] = useState([]);
+
   const [localNumWinners, setLocalNumWinners] = useState(numWinners);
   const [solAmount, setSolAmount] = useState('');
   const [xpAmount, setXpAmount] = useState('');
@@ -40,6 +42,11 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWi
   };
 
   const handleRewardToggle = (rewardName) => {
+    setSelectedRewards(prev => 
+      prev.includes(rewardName) 
+        ? prev.filter(name => name !== rewardName)
+        : [...prev, rewardName]
+    );
     toggleReward(rewardName);
     if (rewardName === 'Token' && !selectedRewards.includes('Token')) {
       setSolAmount('');
@@ -59,7 +66,7 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWi
               key={reward.name} 
               onClick={() => handleRewardToggle(reward.name)}
               className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                selectedRewards.includes(reward.name) 
+                selectedRewards?.includes(reward.name) 
                   ? 'bg-blue-200 shadow-md transform scale-105' 
                   : 'bg-white hover:bg-gray-100'
               }`}
@@ -152,22 +159,3 @@ const RewardsAndWinners = ({ selectedRewards, toggleReward, numWinners, setNumWi
 };
 
 export default RewardsAndWinners;
-
-
-<div className="flex items-center justify-between my-6">
-              {/* <Button
-                href="/dashboard/create-campaign?route=action"
-                name={"Prev"}
-              />
-
-              <Button
-                href="/dashboard/create-campaign?route=preview"
-                name={"Next"}
-              /> */}
-
-              <Button
-                // href="/dashboard/create-campaign?route=action"
-                name={"Continue"}
-                onClick={() => console.log(values)}
-              />
-            </div>

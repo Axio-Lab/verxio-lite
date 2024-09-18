@@ -7,7 +7,7 @@ import {
   User,
   Compass,
 } from "lucide-react";
-import NavButton from "@/components/NavButton";
+import { NavButton } from "@/components";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -34,9 +34,21 @@ const Layout = ({ children }) => {
 
   const navItems = [
     { icon: <Compass />, label: "Explore", href: "/dashboard/explore" },
-    { icon: <Briefcase />, label: "Campaigns", href: "/dashboard/manage-campaign" },
-    { icon: <PlusCircle />, label: "Create", href: "/dashboard/create-campaign?route=detail" },
-    { icon: <LayoutDashboard />, label: "Leaderboard", href: "/dashboard/leaderboard" },
+    {
+      icon: <Briefcase />,
+      label: "Campaigns",
+      href: "/dashboard/manage-campaign",
+    },
+    {
+      icon: <PlusCircle />,
+      label: "Create",
+      href: "/dashboard/create-campaign?route=detail",
+    },
+    {
+      icon: <LayoutDashboard />,
+      label: "Leaderboard",
+      href: "/dashboard/leaderboard",
+    },
     { icon: <User />, label: "Profile", href: "/dashboard/profile" },
   ];
 

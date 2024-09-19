@@ -4,13 +4,10 @@ import { Button } from "@/components/Button";
 
 const CustomAudiences = () => {
   const [customAudiences, setCustomAudiences] = useState([    
-    { id: 1, name: "Summer Swap Participants", count: 1234 },
-    { id: 2, name: "NFT Collectors", count: 567 },
-    { id: 3, name: "DeFi Enthusiasts", count: 890 },
-    { id: 4, name: "Crypto Traders", count: 2345 },
-    { id: 5, name: "Metaverse Explorers", count: 678 },
-    { id: 6, name: "Token Holders", count: 1567 },
-    { id: 7, name: "Blockchain Developers", count: 456 },
+    // { id: 1, name: "Summer Swap Participants", count: 1234 },
+    // { id: 2, name: "NFT Collectors", count: 567 },
+    // { id: 3, name: "DeFi Enthusiasts", count: 890 },
+    // { id: 4, name: "Crypto Traders", count: 2345 },
   ]);
 
   const [isImporting, setIsImporting] = useState(false);

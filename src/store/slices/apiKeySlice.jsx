@@ -14,6 +14,11 @@ const initialState = {
     error: null,
     data: {},
   },
+  verify: {
+    status: "idle",
+    error: null,
+    data: {},
+  },
 };
 
 export const createAPIKey = createAsyncThunk(
@@ -37,6 +42,25 @@ export const invalidateAPIKey = createAsyncThunk(
   async ({ id }) => {
     try {
       const response = await axios.patch(`${apiBaseURL}/api-key/${id}`);
+      return response.data;
+    } catch (err) {
+      console.log(err.response.data);
+      if (!err.response) {
+        throw err.message;
+      }
+      return err.response.data;
+    }
+  }
+);
+
+export const verifyUser = createAsyncThunk(
+  "profile/verifyProfile",
+  async ({ data }) => {
+    try {
+      const response = await axios.post(
+        `${apiBaseURL}/profile/verify-user`,
+        data
+      );
       return response.data;
     } catch (err) {
       console.log(err.response.data);
@@ -95,6 +119,28 @@ const apiKeySlice = createSlice({
       .addCase(invalidateAPIKey.rejected, (state, action) => {
         state.invalidateKey.error = action.payload;
         state.invalidateKey.status = "failed";
+      })
+
+      // Verify a new user
+      .addCase(verifyUser.pending, (state) => {
+        state.verify.status = "loading";
+        state.verify.error = null;
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        if (
+          // action.payload === "Success" ||
+          action.payload.success === true
+        ) {
+          state.verify.data = action.payload;
+          state.verify.status = "succeeded";
+        } else {
+          state.verify.status = "failed";
+          state.verify.error = action.payload;
+        }
+      })
+      .addCase(verifyUser.rejected, (state, action) => {
+        state.verify.error = action.payload;
+        state.verify.status = "failed";
       })
 
       //purge all state

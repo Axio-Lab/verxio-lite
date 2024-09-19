@@ -8,9 +8,11 @@ import NotificationSection from "@/components/profileProps/NotificationSection";
 import CustomAudiences from "@/components/profileProps/CustomAudiences";
 import ApiSection from "@/components/profileProps/ApiKey";
 import { createProfile } from "@/store/slices/profileSlice";
+import { verifyUser } from "@/store/slices/apiKeySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserId, setUserProfile } from "@/store/slices/statesSlice";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { VerifyAUser } from "@/components/modals/verifyUser";
 
 const NoWalletConnected = () => (
   <div className="flex items-center justify-center min-h-screen bg-[#FBFBFE]">
@@ -49,9 +51,12 @@ const NoWalletConnected = () => (
 );
 
 const Page = () => {
-  const [isVerified, setIsVerified] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const userProfile = useSelector((state) => state.generalStates.userProfile);
   const { publicKey, disconnect } = useWallet();
+  const [isClient, setIsClient] = useState(false);
+  const [requestUrl, setRequestUrl] = useState("");
+  const [isVerified, setIsVerified] = useState(userProfile.isVerified);
+  const [activateVerification, setActivateVerification] = useState(false);
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the platform!", read: false },
     { message: "New feature available: Custom Audiences", read: true },
@@ -70,8 +75,6 @@ const Page = () => {
     userId = publicKey?.toString();
   }
 
-  const userProfile = useSelector((state) => state.generalStates.userProfile);
-
   const createNewProfile = async () => {
     try {
       const response = await dispatch(createProfile({ id: userId }));
@@ -81,6 +84,27 @@ const Page = () => {
         dispatch(setUserProfile(response.payload.profile));
         console.log(response);
       } else {
+        toast.error(response.payload.message);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const VerifyNewUser = async () => {
+    try {
+      const response = await dispatch(
+        verifyUser({ data: { userId: userProfile._id } })
+      );
+      if (response.payload.success === true) {
+        // toast.success(response.payload.message);
+        // dispatch(setUserId(response.payload.profile._id));
+        // dispatch(setUserProfile(response.payload.profile));
+        console.log(response);
+        setRequestUrl(response.payload.requestUrl);
+        setActivateVerification(true);
+      } else { 
         toast.error(response.payload.message);
         console.log(response);
       }
@@ -152,7 +176,7 @@ const Page = () => {
                       </div>
                     ) : (
                       <button
-                        onClick={() => setIsVerified(true)}
+                        onClick={() => VerifyNewUser()}
                         className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF] hover:border hover:border-gray transition duration-300"
                       >
                         Verify
@@ -201,6 +225,7 @@ const Page = () => {
           <CustomAudiences />
         </div>
       </div>
+      {activateVerification && <VerifyAUser requestUrl={requestUrl} />}
     </>
   );
 };

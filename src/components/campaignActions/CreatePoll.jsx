@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BarChart2 } from 'lucide-react';
 
 const PollAction = ({ onSave, initialData }) => {
   const [options, setOptions] = useState(initialData?.options || ['', '']);
@@ -44,19 +45,11 @@ const PollAction = ({ onSave, initialData }) => {
 
   return (
     <div className="space-y-4">
-      {/* <h3 className="text-xl font-semibold mb-4">Create Poll</h3>
       <div>
-        <label htmlFor="question" className="block mb-2">Poll Question:</label>
-        <input
-          type="text"
-          id="question"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="Enter your poll question"
-        />
-      </div> */}
-      <div>
+      <h3 className="text-lg font-semibold mb-4 flex items-center">
+        <BarChart2 className="mr-2 text-green-500" />
+        Burn Token Details</h3>
+
         <label className="block mb-2">Poll Options:</label>
         {options.map((option, index) => (
           <div key={index} className="flex items-center mb-2">

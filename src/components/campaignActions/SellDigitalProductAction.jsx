@@ -17,12 +17,6 @@ const SellDigitalProductAction = ({ onSave }) => {
       <h3 className="text-lg font-semibold mb-4 flex items-center">
         <ShoppingCart className="mr-2 text-purple-500" />
         Sell Digital Product Details</h3>
-      <input
-        className="w-full p-2 mb-2 border rounded"
-        type="file"
-        accept="image/*"
-        onChange={(e) => setProductImage(e.target.files[0])}
-      />
       <div className="flex items-center mb-2">
         <input
           className="w-full p-2 mr-2 border rounded"

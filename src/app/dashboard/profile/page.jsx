@@ -53,14 +53,9 @@ const Page = () => {
   const [isClient, setIsClient] = useState(false);
   const { publicKey, disconnect } = useWallet();
   const [notifications, setNotifications] = useState([
-    { message: "Welcome to the platform!", read: false },
-    { message: "New feature available: Custom Audiences", read: true },
-    { message: "New feature available: Custom Audiences", read: true },
-    { message: "New feature available: Custom Audiences", read: false },
-    { message: "New feature available: Custom Audiences", read: true },
-    { message: "New feature available: Custom Audiences", read: false },
-    { message: "New feature available: Custom Audiences", read: true },
-    // Add more notifications as needed
+    { message: "Welcome to the Verxio!", read: true },
+    { message: "Verify your account to get started", read: false },
+    { message: "Verify your account and particpate to earn upto 500 Verxio XP credits and SOl rewards.", read: false },
   ]);
 
   const dispatch = useDispatch();

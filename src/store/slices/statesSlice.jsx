@@ -10,8 +10,8 @@ const initialState = {
   preview: {},
   userProfile: {},
   selectedProductImage: {},
-  tokenMintAddress: "",
-  tokenAmount: "",
+  tokenMint: {},
+  digitalProduct: {},
 };
 
 const statesSlice = createSlice({
@@ -21,14 +21,14 @@ const statesSlice = createSlice({
     setUserProfile: (state, action) => {
       state.userProfile = action.payload;
     },
+    setDigitalProduct: (state, action) => {
+      state.digitalProduct = action.payload;
+    },
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
-    setTokenMintAddress: (state, action) => {
-      state.tokenMintAddress = action.payload;
-    },
-    setTokenAmount: (state, action) => {
-      state.tokenAmount = action.payload;
+    setTokenMint: (state, action) => {
+      state.tokenMint = action.payload;
     },
     setActionType: (state, action) => {
       state.actionType = action.payload;
@@ -63,10 +63,10 @@ export const {
   setRewards,
   setPreview,
   setUserApiKey,
+  setTokenMint,
   setActionType,
   setUserProfile,
+  setDigitalProduct,
   setSelectedProductImage,
-  setTokenMintAddress,
-  setTokenAmount,
 } = statesSlice.actions;
 export default statesSlice.reducer;

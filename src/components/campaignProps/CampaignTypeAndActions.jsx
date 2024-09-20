@@ -113,7 +113,9 @@ const CampaignTypeAndActions = ({
   };
 
   const tokenAmount = useSelector((state) => state.generalStates.tokenAmount);
-  const tokenMintAddress = useSelector((state) => state.generalStates.tokenMintAddress);
+  const tokenMintAddress = useSelector(
+    (state) => state.generalStates.tokenMintAddress
+  );
 
   const initialValues = {
     selectedcampaignType: actionType?.selectedcampaignType || "onchain",
@@ -121,7 +123,7 @@ const CampaignTypeAndActions = ({
     actions: {
       url: tokenMintAddress,
       amount: tokenAmount,
-    }
+    },
   };
 
   const validationSchema = Yup.object().shape({
@@ -208,12 +210,19 @@ const CampaignTypeAndActions = ({
                 onSave: handleSave,
                 initialData: actionData[currentAction.name],
               })}
-            <button
+
+            {/* <Button
+              name={"Close"}
               onClick={closeModal}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300"
-            >
-              Close
-            </button>
+              shade={"border border-red-600"}
+              className={"bg-red-600 border border-red-600 text-white max-w-[100px] mt-4"}
+            /> */}
+            <Button
+              name={"Close"}
+              onClick={closeModal}
+              shade={"border border-red-600"}
+              className={"bg-white border border-red-600 text-red-600 max-w-[100px] mt-4"}
+            />
           </div>
         )}
       </Modal>

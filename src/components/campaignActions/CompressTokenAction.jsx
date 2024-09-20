@@ -1,56 +1,84 @@
+import * as Yup from "yup";
 import { Minimize } from "lucide-react";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import {
-  setTokenMintAddress,
-  setTokenAmount,
-} from "@/store/slices/statesSlice";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/Button";
+import { Formik, Form, Field } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { setTokenMint } from "@/store/slices/statesSlice";
 
 const CompressTokenAction = () => {
-  const [tokenMint, setTokenMint] = useState("");
-  const [minBurnAmount, setMinBurnAmount] = useState("");
-
   const dispatch = useDispatch();
+  const tokenMint = useSelector((state) => state.generalStates.tokenMint);
 
-  const handleSave = () => {
-    if (!tokenMint || !minBurnAmount) {
-      toast.error("Either fields cannot be empty.");
-      return;
-    }
-
-    dispatch(setTokenMintAddress(tokenMint));
-    dispatch(setTokenAmount(minBurnAmount));
-    toast.success("Saved successful");
+  const initialValues = {
+    tokenMintAmount: tokenMint?.tokenMintAmount || "",
+    tokenMintAddress: tokenMint?.tokenMintAddress || "",
   };
+
+  const validationSchema = Yup.object().shape({
+    tokenMintAmount: Yup.number().required("Token amount is required"),
+    tokenMintAddress: Yup.number().required("Token address is required"),
+  });
 
   return (
     <>
-      <div className="p-4 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
-          <Minimize className="mr-2 text-indigo-500" />
-          Compress Token Details
-        </h3>
-        <input
-          className="w-full p-2 mb-2 border rounded outline-none"
-          placeholder="Token mint address"
-          value={tokenMint}
-          onChange={(e) => setTokenMint(e.target.value)}
-        />
-        <input
-          className="w-full p-2 mb-2 border rounded outline-none"
-          type="number"
-          placeholder="Minimum burn amount"
-          value={minBurnAmount}
-          onChange={(e) => setMinBurnAmount(e.target.value)}
-        />
-        <Button
-          name={"Save"}
-          onClick={() => handleSave()}
-          className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
-        />
-      </div>
+      <Formik
+        onSubmit={() => {}}
+        validationSchema={validationSchema}
+        initialValues={initialValues}
+      >
+        {({ values, setFieldValue, errors, touched, dirty }) => (
+          <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
+            <h3 className="text-lg font-semibold mb-4 flex items-center">
+              <Minimize className="mr-2 text-indigo-500" />
+              Compress Token Details
+            </h3>
+
+            <Field
+              type="text"
+              id="tokenAddress"
+              className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
+                errors.tokenMintAddress && touched.tokenMintAddress
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-primary"
+              } focus:ring-1 focus:ring-primary outline-none`}
+              name="tokenAddress"
+              value={values.tokenMintAddress}
+              placeholder="Token mint address"
+              onChange={(event) => {
+                setFieldValue("tokenMintAddress", event.target.value);
+              }}
+            />
+
+            <Field
+              id="tokenAmount"
+              className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
+                errors.tokenMintAmount && touched.tokenMintAmount
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-primary"
+              } focus:ring-1 focus:ring-primary outline-none`}
+              name="tokenAmount"
+              value={values.tokenMintAmount}
+              placeholder="Minimum burn amount"
+              onChange={(event) => {
+                setFieldValue("tokenMintAmount", event.target.value);
+              }}
+            />
+
+            <Button
+              name={"Save"}
+              type="button"
+              onClick={() => {
+                if (dirty) {
+                  console.log(values);
+                  dispatch(setTokenMint(values));
+                  toast.success("Saved successful");
+                }
+              }}
+            />
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };

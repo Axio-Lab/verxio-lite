@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart2 } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { BarChart2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { Button } from "@/components/Button";
 
 const PollAction = ({ onSave, initialData }) => {
-  const [options, setOptions] = useState(initialData?.options || ['', '']);
-  const [question, setQuestion] = useState(initialData?.question || '');
+  const [options, setOptions] = useState(initialData?.options || ["", ""]);
+  const [question, setQuestion] = useState(initialData?.question || "");
 
   useEffect(() => {
     if (options.length < 2) {
-      setOptions(prev => [...prev, '']);
+      setOptions((prev) => [...prev, ""]);
     }
   }, [options]);
 
@@ -19,7 +21,7 @@ const PollAction = ({ onSave, initialData }) => {
 
   const addOption = () => {
     if (options.length < 5) {
-      setOptions([...options, '']);
+      setOptions([...options, ""]);
     }
   };
 
@@ -31,13 +33,13 @@ const PollAction = ({ onSave, initialData }) => {
   };
 
   const handleSave = () => {
-    const filteredOptions = options.filter(option => option.trim() !== '');
+    const filteredOptions = options.filter((option) => option.trim() !== "");
     if (filteredOptions.length < 2) {
-      alert('Please provide at least two non-empty options.');
+      toast("Please provide at least two non-empty options.");
       return;
     }
-    if (question.trim() === '') {
-      alert('Please provide a question for the poll.');
+    if (question.trim() === "") {
+      toast("Please provide a question for the poll.");
       return;
     }
     onSave({ question, options: filteredOptions });
@@ -46,9 +48,10 @@ const PollAction = ({ onSave, initialData }) => {
   return (
     <div className="space-y-4">
       <div>
-      <h3 className="text-lg font-semibold mb-4 flex items-center">
-        <BarChart2 className="mr-2 text-green-500" />
-        Burn Token Details</h3>
+        <h3 className="text-lg font-semibold mb-4 flex items-center">
+          <BarChart2 className="mr-2 text-green-500" />
+          Burn Token Details
+        </h3>
 
         <label className="block mb-2">Poll Options:</label>
         {options.map((option, index) => (
@@ -57,7 +60,7 @@ const PollAction = ({ onSave, initialData }) => {
               type="text"
               value={option}
               onChange={(e) => handleOptionChange(index, e.target.value)}
-              className="flex-grow p-2 border rounded mr-2"
+              className="flex-grow p-2 border rounded mr-2 outline-none"
               placeholder={`Option ${index + 1}`}
             />
             {options.length > 2 && (
@@ -71,20 +74,20 @@ const PollAction = ({ onSave, initialData }) => {
           </div>
         ))}
         {options.length < 5 && (
-          <button
+          <Button
+            name={"Add Option"}
+            outline
             onClick={addOption}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Add Option
-          </button>
+            style={{ backgroundColor: "white" }}
+            className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
+          />
         )}
       </div>
-      <button 
+      <Button
+        name={"Save"}
         onClick={handleSave}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Save Poll
-      </button>
+        className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
+      />
     </div>
   );
 };

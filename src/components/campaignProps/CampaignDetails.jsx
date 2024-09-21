@@ -75,7 +75,9 @@ const CampaignDetails = () => {
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Campaign name is required"),
+    title: Yup.string().required("Campaign name is required"),
+    bannerImg: Yup.string().required("Campaign banner is required"),
+    description: Yup.string().required("Campaign description is required"),
     startDate: Yup.date().required("Start date is required").nullable(),
     endDate: Yup.date().required("End date is required").nullable(),
   });
@@ -87,7 +89,7 @@ const CampaignDetails = () => {
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
-        {({ values, setFieldValue }) => (
+        {({ values, setFieldValue, errors, touched, isValid, dirty }) => (
           <Form className="space-y-8 sm:space-y-12">
             <div className="bg-white shadow-md rounded-lg p-6 sm:p-8">
               <div className="space-y-6 sm:space-y-8">
@@ -100,7 +102,12 @@ const CampaignDetails = () => {
                   </label>
                   <Field
                     id="title"
-                    className="border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+                    className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
+                      errors.title && touched.title
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-gray-300 focus:border-primary"
+                    } focus:ring-1 focus:ring-primary outline-none`}
+                    // className="border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
                     name="title"
                     value={values.title}
                     placeholder="Enter campaign name"
@@ -202,7 +209,12 @@ const CampaignDetails = () => {
                 <Button
                   href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
-                  onClick={() => dispatch(setDetails(values))}
+                  onClick={() => {
+                    if (dirty && isValid) {
+                      console.log(values);
+                      dispatch(setDetails(values));
+                    }
+                  }}
                   className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                 />
               </div>

@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserId, setUserProfile } from "@/store/slices/statesSlice";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { VerifyAUser } from "@/components/modals/verifyUser";
+import LoadingSpinner from "@/components/componentLoader";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const NoWalletConnected = () => (
   <div className="flex items-center justify-center min-h-screen bg-[#FBFBFE]">
@@ -53,6 +55,7 @@ const NoWalletConnected = () => (
 const Page = () => {
   const userProfile = useSelector((state) => state.generalStates.userProfile);
   const { publicKey, disconnect } = useWallet();
+  const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [requestUrl, setRequestUrl] = useState("");
   const [isVerified, setIsVerified] = useState(userProfile.isVerified);
@@ -60,8 +63,13 @@ const Page = () => {
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the Verxio!", read: true },
     { message: "Verify your account to get started", read: false },
-    { message: "Verify your account and particpate to earn upto 500 Verxio XP credits and SOl rewards.", read: false },
+    {
+      message:
+        "Verify your account and particpate to earn upto 500 Verxio XP credits and SOl rewards.",
+      read: false,
+    },
   ]);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   const dispatch = useDispatch();
   let userId = "";
@@ -77,7 +85,7 @@ const Page = () => {
         toast.success(response.payload.message);
         dispatch(setUserId(response.payload.profile._id));
         dispatch(setUserProfile(response.payload.profile));
-        console.log(response);
+        // console.log(response);
       } else {
         toast.error(response.payload.message);
         console.log(response);
@@ -89,20 +97,41 @@ const Page = () => {
 
   const VerifyNewUser = async () => {
     try {
+      setLoading(true);
       const response = await dispatch(
         verifyUser({ data: { userId: userProfile._id } })
       );
-      if (response.payload.success === true) {
-        // toast.success(response.payload.message);
-        // dispatch(setUserId(response.payload.profile._id));
-        // dispatch(setUserProfile(response.payload.profile));
-        console.log(response);
+      if (response.payload) {
         setRequestUrl(response.payload.requestUrl);
         setActivateVerification(true);
-      } else { 
+        setLoading(false);
+        // console.log(response);
+      } else {
         toast.error(response.payload.message);
-        console.log(response);
+        // console.log(response);
       }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const VerifyNewUserOnSmallDevice = async () => {
+    try {
+      setLoading(true);
+      const response = await dispatch(
+        verifyUser({ data: { userId: userProfile._id } })
+      );
+      if (response.payload) {
+        const url = response.payload.requestUrl;
+        // window.location.href = url;
+        window.open(url, "_blank");
+        console.log(response, "Request made!!");
+      } else {
+        toast.error(response.payload.message);
+        // console.log(response);
+      }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -159,25 +188,49 @@ const Page = () => {
               </div>
               <div className="md:flex">
                 <div className="md:flex-shrink-0 p-8 bg-[#00ADEF] text-white">
-                  <div className="relative mb-4">
-                    <img
-                      className="h-48 w-48 rounded-full object-cover border-4 border-white shadow-lg"
-                      src={generateAvatar(publicKey.toBase58())}
-                      alt="Profile"
-                    />
-                    {isVerified ? (
-                      <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                        Verified
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => VerifyNewUser()}
-                        className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF] hover:border hover:border-gray transition duration-300"
-                      >
-                        Verify
-                      </button>
-                    )}
-                  </div>
+                  {isSmallScreen ? (
+                    // verify button on small screens
+                    <div className="relative mb-4">
+                      <img
+                        className="h-48 w-48 rounded-full object-cover border-4 border-white shadow-lg"
+                        src={generateAvatar(publicKey.toBase58())}
+                        alt="Profile"
+                      />
+                      {isVerified === true ? (
+                        <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                          Verified
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => VerifyNewUserOnSmallDevice()}
+                          className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF] hover:border hover:border-gray transition duration-300"
+                        >
+                          Verify
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    // Verify Button on Big screens
+                    <div className="relative mb-4">
+                      <img
+                        className="h-48 w-48 rounded-full object-cover border-4 border-white shadow-lg"
+                        src={generateAvatar(publicKey.toBase58())}
+                        alt="Profile"
+                      />
+                      {isVerified === true ? (
+                        <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                          Verified
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => VerifyNewUser()}
+                          className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF] hover:border hover:border-gray transition duration-300"
+                        >
+                          Verify
+                        </button>
+                      )}
+                    </div>
+                  )}
                   <h1 className="text-2xl font-bold text-center mb-2">
                     {`${publicKey.toBase58().slice(0, 6)}...${publicKey
                       .toBase58()
@@ -220,7 +273,13 @@ const Page = () => {
           <CustomAudiences />
         </div>
       </div>
-      {activateVerification && <VerifyAUser requestUrl={requestUrl} />}
+      {activateVerification && (
+        <VerifyAUser
+          requestUrl={requestUrl}
+          closeModal={setActivateVerification}
+        />
+      )}
+      {loading && <LoadingSpinner />}
     </>
   );
 };

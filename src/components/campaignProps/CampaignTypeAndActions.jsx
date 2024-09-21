@@ -16,13 +16,14 @@ import {
   BarChart2,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 
 // Import your existing action components
 import BurnTokenAction from "../campaignActions/BurnTokenAction";
 import SellDigitalProductAction from "../campaignActions/SellDigitalProductAction";
 import CompressTokenAction from "../campaignActions/CompressTokenAction";
 import DecompressTokenAction from "../campaignActions/DecompressTokenAction";
+import SubmitTokenUrlAction from "../campaignActions/SubmitUrlAction";
 import PollAction from "../campaignActions/CreatePoll";
 import { setActionType } from "@/store/slices/statesSlice";
 
@@ -62,6 +63,7 @@ const actions = {
       name: "Submit Url",
       value: "submiturl",
       icon: <Share className="text-yellow-400" />,
+      component: SubmitTokenUrlAction,
     },
   ],
 };

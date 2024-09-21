@@ -1,37 +1,37 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/Button'
+"use client";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/Button";
 
 export default function Hero() {
-  const [animatedText, setAnimatedText] = useState('')
+  const [animatedText, setAnimatedText] = useState("");
   const fullTexts = [
     "ads creator for web3 developers and brands.",
-    "incentivize users with token, merch, and more."
-  ]
-  const [textIndex, setTextIndex] = useState(0)
+    "incentivize users with token, merch, and more.",
+  ];
+  const [textIndex, setTextIndex] = useState(0);
 
   useEffect(() => {
-    let i = 0
-    let isDeleting = false
+    let i = 0;
+    let isDeleting = false;
     const typingEffect = setInterval(() => {
-      const currentText = fullTexts[textIndex]
+      const currentText = fullTexts[textIndex];
       if (!isDeleting && i < currentText.length) {
-        setAnimatedText(currentText.substring(0, i + 1))
-        i++
+        setAnimatedText(currentText.substring(0, i + 1));
+        i++;
       } else if (isDeleting && i > 0) {
-        setAnimatedText(currentText.substring(0, i - 1))
-        i--
+        setAnimatedText(currentText.substring(0, i - 1));
+        i--;
       } else {
-        isDeleting = !isDeleting
+        isDeleting = !isDeleting;
         if (!isDeleting) {
-          setTextIndex((prevIndex) => (prevIndex + 1) % fullTexts.length)
-          i = 0
+          setTextIndex((prevIndex) => (prevIndex + 1) % fullTexts.length);
+          i = 0;
         }
       }
-    }, 100)
+    }, 100);
 
-    return () => clearInterval(typingEffect)
-  }, [textIndex])
+    return () => clearInterval(typingEffect);
+  }, [textIndex]);
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden px-4">
@@ -49,17 +49,23 @@ export default function Hero() {
           <span className="animate-blink">|</span>
         </h2>
         <p className="text-xl mb-12 text-gray-300">
-          Automatically run viral sweepstakes, raffles, giveaways, <br className="hidden md:inline" />
+          Automatically run viral sweepstakes, raffles, giveaways,{" "}
+          <br className="hidden md:inline" />
           and loyalty schemes, offering rewards.
         </p>
-        <div className="flex justify-center">
-          <Button 
-            href="/dashboard/explore" 
+        <div className="flex justify-center space-x-4">
+          <Button
+            href="https://documenter.getpostman.com/view/22416364/2sA3kaCeiH"
+            name="Read Docs"
+            className="text-lg font-bold px-8 py-3 bg-white text-blue-600 hover:bg-gray-100"
+          />
+          <Button
+            href="/dashboard/explore"
             name="Launch App"
-            className="text-lg font-bold px-8 py-3 "
+            className="text-lg font-bold px-8 py-3"
           />
         </div>
       </div>
     </section>
-  )
+  );
 }

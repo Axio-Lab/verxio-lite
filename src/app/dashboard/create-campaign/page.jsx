@@ -6,6 +6,7 @@ import CampaignDetails from "@/components/campaignProps/CampaignDetails";
 import CampaignPreview from "@/components/campaignProps/CampaignPreview";
 import RewardsAndWinners from "@/components/campaignProps/RewardsAndWinners";
 import CampaignTypeAndActions from "@/components/campaignProps/CampaignTypeAndActions";
+import { useSelector } from "react-redux";
 
 const Page = () => {
   const searchParams = useSearchParams();

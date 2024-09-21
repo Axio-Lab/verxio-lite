@@ -16,9 +16,7 @@ export const createProfile = createAsyncThunk(
   "profile/newProfile",
   async ({ id }) => {
     try {
-      const response = await axios.post(
-        `${apiBaseURL}/profile/${id}`
-      );
+      const response = await axios.post(`${apiBaseURL}/profile/${id}`);
       return response.data;
     } catch (err) {
       console.log(err.response.data);
@@ -58,6 +56,7 @@ const profileSlice = createSlice({
         state.profile.status = "failed";
       })
 
+     
       //purge all state
       .addCase(PURGE, () => {
         return initialState;

@@ -4,11 +4,14 @@ import { PURGE } from "redux-persist";
 const initialState = {
   userId: "",
   userApiKey: "",
-  rewards: {},
   details: {},
+  actionType: {},
+  rewards: {},
   preview: {},
   userProfile: {},
   selectedProductImage: {},
+  tokenMint: {},
+  digitalProduct: {},
 };
 
 const statesSlice = createSlice({
@@ -18,8 +21,17 @@ const statesSlice = createSlice({
     setUserProfile: (state, action) => {
       state.userProfile = action.payload;
     },
+    setDigitalProduct: (state, action) => {
+      state.digitalProduct = action.payload;
+    },
     setUserId: (state, action) => {
       state.userId = action.payload;
+    },
+    setTokenMint: (state, action) => {
+      state.tokenMint = action.payload;
+    },
+    setActionType: (state, action) => {
+      state.actionType = action.payload;
     },
     setUserApiKey: (state, action) => {
       state.userApiKey = action.payload;
@@ -48,10 +60,13 @@ export const statesActions = statesSlice.actions;
 export const {
   setUserId,
   setDetails,
-  setUserApiKey,
-  setUserProfile,
   setRewards,
   setPreview,
+  setUserApiKey,
+  setTokenMint,
+  setActionType,
+  setUserProfile,
+  setDigitalProduct,
   setSelectedProductImage,
 } = statesSlice.actions;
 export default statesSlice.reducer;

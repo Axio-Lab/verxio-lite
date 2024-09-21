@@ -53,11 +53,16 @@ export default function Hero() {
           <br className="hidden md:inline" />
           and loyalty schemes, offering rewards.
         </p>
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-4">
+          <Button
+            href="https://documenter.getpostman.com/view/22416364/2sA3kaCeiH"
+            name="Read Docs"
+            className="text-lg font-bold px-8 py-3 bg-white text-blue-600 hover:bg-gray-100"
+          />
           <Button
             href="/dashboard/explore"
             name="Launch App"
-            className="text-lg font-bold px-8 py-3 "
+            className="text-lg font-bold px-8 py-3"
           />
         </div>
       </div>

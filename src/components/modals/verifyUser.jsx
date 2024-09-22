@@ -1,11 +1,21 @@
 "use client";
 import Image from "next/image";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { Button } from "../Button";
+import { useEffect } from "react";
+
 // import { useSelector } from "react-redux";
 
 export const VerifyAUser = ({ requestUrl, closeModal }) => {
   // const userProfile = useSelector((state) => state.generalStates.userProfile);
   // const { isVerified } = userProfile;
   // console.log(isVerified, userProfile, "Verification status");
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  // console.log(requestUrl, "request url");
+
+  useEffect(() => {
+    console.log(requestUrl, "request url");
+  }, [requestUrl]);
 
   return (
     <div
@@ -22,6 +32,15 @@ export const VerifyAUser = ({ requestUrl, closeModal }) => {
               requestUrl
             )}`}
           />
+
+          {isSmallScreen && (
+            <Button
+              name="Verify in reclaim app"
+              href={`${requestUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          )}
         </div>
       </div>
     </div>

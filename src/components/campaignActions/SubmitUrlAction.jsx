@@ -15,7 +15,7 @@ const SubmitTokenUrlAction = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    tokenURL: Yup.number().required("Token Url is required"),
+    tokenURL: Yup.string().required("A Url is required"),
   });
 
   return (

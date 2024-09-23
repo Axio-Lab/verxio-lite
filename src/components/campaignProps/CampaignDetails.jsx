@@ -210,10 +210,10 @@ const CampaignDetails = () => {
                   href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
                   onClick={() => {
-                    if (dirty && isValid) {
-                      console.log(values);
-                      dispatch(setDetails(values));
-                    }
+                    // if (dirty && isValid) {
+                    console.log(values);
+                    dispatch(setDetails(values));
+                    // }
                   }}
                   className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                 />

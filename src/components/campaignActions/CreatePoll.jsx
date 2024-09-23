@@ -64,12 +64,12 @@ const PollAction = ({ onSave, initialData }) => {
               placeholder={`Option ${index + 1}`}
             />
             {options.length > 2 && (
-              <button
+              <Button
+                name={"Remove"}
                 onClick={() => removeOption(index)}
-                className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Remove
-              </button>
+                shade={"border border-red-600"}
+                className={"bg-red-600 border border-red-600 text-white"}
+              />
             )}
           </div>
         ))}

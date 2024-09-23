@@ -90,7 +90,7 @@ const RewardsAndWinners = () => {
     const newValue = Math.max(1, Number(value));
     setFieldValue("numberOfWinners", newValue);
   };
-  
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-lg shadow-md">
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
@@ -228,7 +228,9 @@ const RewardsAndWinners = () => {
                 type="submit"
                 href="/dashboard/create-campaign?route=preview"
                 name={"Continue"}
-                onClick={() => dispatch(setRewards(values))}
+                onClick={() => {
+                  dispatch(setRewards(values));
+                }}
                 className="w-[48%]"
               />
             </div>

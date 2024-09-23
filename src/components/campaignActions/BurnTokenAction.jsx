@@ -70,7 +70,6 @@ const BurnTokenAction = () => {
               type="button"
               onClick={() => {
                 if (dirty) {
-                  console.log(values);
                   dispatch(setTokenMint(values));
                   toast.success("Saved successful");
                 }

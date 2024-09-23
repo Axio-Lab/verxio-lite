@@ -17,32 +17,32 @@ import { setRewards } from "@/store/slices/statesSlice";
 const availableRewards = [
   {
     name: "Whitelist Spot",
-    value: "whitelist",
+    value: "Whitelist-Spot",
     icon: <Users className="text-blue-500" />,
   },
   {
     name: "NFT Drop",
-    value: "nftdrop",
+    value: "NFT-Drop",
     icon: <ImagePlay className="text-purple-500" />,
   },
   {
     name: "Token",
-    value: "token",
+    value: "Token",
     icon: <Coins className="text-yellow-500" />,
   },
   {
     name: "Airdrop",
-    value: "airdrop",
+    value: "Airdrop",
     icon: <PlusCircle className="text-green-500" />,
   },
   {
     name: "Merch Drop",
-    value: "merchdrop",
+    value: "Merch-Drop",
     icon: <ShoppingBasket className="text-red-500" />,
   },
   {
     name: "Verxio XP",
-    value: "verxioxp",
+    value: "Verxio-XP",
     icon: <CheckCircle className="text-indigo-500" />,
   },
 ];
@@ -52,7 +52,7 @@ const RewardsAndWinners = () => {
   const rewards = useSelector((state) => state.generalStates.rewards);
 
   const initialValues = {
-    selectedReward: rewards?.availableReward || "",
+    selectedReward: rewards?.selectedReward || "",
     numberOfWinners: rewards?.numberOfWinners || 0,
     solAmount: rewards?.solAmount || 0,
     xpAmount: rewards?.xpAmount || 0,
@@ -68,9 +68,9 @@ const RewardsAndWinners = () => {
   const handleRewardToggle = (rewardValue, setFieldValue) => {
     setFieldValue("selectedReward", rewardValue);
 
-    if (rewardValue === "token") {
+    if (rewardValue === "Token") {
       setFieldValue("solAmount", 0);
-    } else if (rewardValue === "verxioxp") {
+    } else if (rewardValue === "Verxio-XP") {
       setFieldValue("xpAmount", 0);
     }
   };
@@ -163,13 +163,13 @@ const RewardsAndWinners = () => {
                 </div>
               ) : null}
             </div>
-            {(values.selectedReward === "token" ||
-              values.selectedReward === "verxioxp") && (
+            {(values.selectedReward === "Token" ||
+              values.selectedReward === "Verxio-XP") && (
               <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Reward Details
                 </h3>
-                {values.selectedReward === "token" && (
+                {values.selectedReward === "Token" && (
                   <div className="mb-4">
                     <label
                       htmlFor="solAmount"
@@ -192,7 +192,7 @@ const RewardsAndWinners = () => {
                     </p>
                   </div>
                 )}
-                {values.selectedReward === "verxioxp" && (
+                {values.selectedReward === "Verxio-XP" && (
                   <div className="mb-4">
                     <label
                       htmlFor="xpAmount"

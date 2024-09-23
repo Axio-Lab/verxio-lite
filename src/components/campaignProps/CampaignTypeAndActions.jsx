@@ -36,12 +36,6 @@ const actions = {
       component: BurnTokenAction,
     },
     {
-      name: "Sell Digital Product",
-      value: "Sell-Product",
-      icon: <ShoppingCart className="text-purple-500" />,
-      component: SellDigitalProductAction,
-    },
-    {
       name: "Compress Token",
       value: "Compress-Token",
       icon: <Minimize className="text-indigo-500" />,
@@ -58,6 +52,12 @@ const actions = {
       value: "Poll",
       icon: <BarChart2 className="text-green-500" />,
       component: PollAction,
+    },
+    {
+      name: "Sell Digital Product",
+      value: "Sell-Product",
+      icon: <ShoppingCart className="text-purple-500" />,
+      component: SellDigitalProductAction,
     },
     {
       name: "Submit Url",
@@ -115,7 +115,6 @@ const CampaignTypeAndActions = ({
   };
 
   const initialValues = {
-    // selectedcampaignType: actionType?.selectedcampaignType || "onchain",
     selectedActionType: actionType?.selectedActionType || "",
   };
 
@@ -129,7 +128,7 @@ const CampaignTypeAndActions = ({
     <>
       <Toaster position="top-right" />
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
-        {({ values, errors, touched, setFieldValue }) => (
+        {({ values, setFieldValue }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>

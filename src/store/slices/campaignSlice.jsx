@@ -1,10 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PURGE } from "redux-persist";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+
 const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const initialState = {
-  newCampaign: {
+  campaign: {
     status: "idle",
     error: null,
     data: {},
@@ -13,11 +14,18 @@ const initialState = {
 
 export const createCampaign = createAsyncThunk(
   "campaign/createNewCampaign",
-  async ({ campaignType, data }) => {
+  async ({ campaignType, data, userApiKey }) => {
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `${userApiKey}`, // Use the passed userApiKey
+    };
+
     try {
       const response = await axios.post(
         `${apiBaseURL}/campaign?campaignType=${campaignType}`,
-        data
+        data,
+        { headers }
       );
       return response.data;
     } catch (err) {
@@ -30,31 +38,32 @@ export const createCampaign = createAsyncThunk(
   }
 );
 
-const apiKeySlice = createSlice({
+const campaignSlice = createSlice({
   name: "campaign",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      //create campaign
       .addCase(createCampaign.pending, (state) => {
-        state.newCampaign.status = "loading";
-        state.newCampaign.error = null;
+        state.campaign.status = "loading";
+        state.campaign.error = null;
       })
       .addCase(createCampaign.fulfilled, (state, action) => {
         if (
           // action.payload === "Success" ||
           action.payload.success === true
         ) {
-          state.newCampaign.data = action.payload;
-          state.newCampaign.status = "succeeded";
+          state.campaign.data = action.payload;
+          state.campaign.status = "succeeded";
         } else {
-          state.newCampaign.status = "failed";
-          state.newCampaign.error = action.payload;
+          state.campaign.status = "failed";
+          state.campaign.error = action.payload;
         }
       })
       .addCase(createCampaign.rejected, (state, action) => {
-        state.newCampaign.error = action.payload;
-        state.newCampaign.status = "failed";
+        state.campaign.error = action.payload;
+        state.campaign.status = "failed";
       })
 
       //purge all state
@@ -64,6 +73,6 @@ const apiKeySlice = createSlice({
   },
 });
 
-export const productActions = apiKeySlice.actions;
-export const {} = apiKeySlice.actions;
-export default apiKeySlice.reducer;
+export const campaignActions = campaignSlice.actions;
+export const {} = campaignSlice.actions;
+export default campaignSlice.reducer;

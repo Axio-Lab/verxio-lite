@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 // import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
 // import MdEditor from "react-markdown-editor-lite";
 // import { FaExchangeAlt } from "react-icons/fa";
 // import { SiExpertsexchange } from "react-icons/si";
 // import { GiWaveCrest } from "react-icons/gi";
+import { toast, Toaster } from "react-hot-toast";
 import { Button } from "@/components/Button";
 import {
   Repeat,
@@ -31,7 +32,8 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { createCampaign } from "@/store/slices/profileSlice";
+import { createCampaign } from "@/store/slices/campaignSlice";
+// import { FiShield } from "react-icons/fi";
 // import { setRewards } from "@/store/slices/statesSlice";
 
 // const mdParser = new MarkdownIt();
@@ -69,8 +71,8 @@ const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
-  
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const details = useSelector((state) => state.generalStates.details);
   const rewards = useSelector((state) => state.generalStates.rewards);
   const actionType = useSelector((state) => state.generalStates.actionType);
@@ -78,14 +80,14 @@ const CampaignPreview = ({ campaignData }) => {
   const digitalProduct = useSelector(
     (state) => state.generalStates.digitalProduct
   );
+  const userApiKey = useSelector((state) => state.generalStates.userApiKey);
 
+  const { selectedActionType } = actionType;
   const { title, description, bannerImg, startDate, endDate } = details;
   const { selectedReward, numberOfWinners, solAmount, xpAmount } = rewards;
-  const { selectedActionType } = actionType;
+  const { tokenMintAmount, tokenMintAddress, tokenURL } = tokenMint;
   const { productAmount, productQuantity, productFile, isCustomAmount } =
-    tokenMint;
-  const { tokenMintAmount, tokenMintAddress, tokenURL } = digitalProduct;
-
+    digitalProduct;
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";
@@ -109,91 +111,170 @@ const CampaignPreview = ({ campaignData }) => {
 
   const { status, color } = getCampaignStatus();
 
-
   const createANewCampaign = async (values) => {
     try {
+      setLoading(true);
+      const constructDynamicInputResponse = () => {
+        const fields = {};
+        switch (selectedActionType) {
+          case "Burn-Token":
+          case "Compress-Token":
+          case "Decompress-Token":
+            fields.address = tokenMintAddress;
+            fields.minAmount = parseInt(tokenMintAmount);
+            break;
+
+          case "Poll":
+            fields.options = values.options;
+            if (!Array.isArray(fields.options) || fields.options.length === 0) {
+              toast("Options must be a non-empty array for Poll action type.");
+            }
+            break;
+
+          case "Submit-Url":
+            fields.url = values.url;
+            if (!fields.url) {
+              toast.error(
+                "URL must be a non-empty string for Submit-Url action type."
+              );
+            }
+            break;
+
+          case "Sell-Product":
+            fields.product = productFile;
+            fields.amount = parseInt(productAmount, 10);
+            fields.quantity = parseInt(productQuantity, 10);
+            if (typeof fields.product !== "string" || !fields.product) {
+              toast.error(
+                "Product must be a non-empty string for Sell-Product action type."
+              );
+            }
+            if (isNaN(fields.amount) || isNaN(fields.quantity)) {
+              toast.error(
+                "Amount and quantity must be numbers for Sell-Product action type."
+              );
+            }
+            break;
+
+          default:
+            toast.error("Invalid action type.");
+        }
+        return fields;
+      };
+
+      const fields = constructDynamicInputResponse();
+
+      const rewardInfo = {
+        type: selectedReward,
+        noOfPeople: numberOfWinners,
+      };
+
+      if (selectedReward === "Token") {
+        rewardInfo.amount = parseInt(solAmount, 10);
+        if (isNaN(rewardInfo.amount)) {
+          toast.error("Amount must be a number for the selected reward type.");
+        }
+      } else if (selectedReward === "Verxio-XP") {
+        rewardInfo.amount = parseInt(xpAmount, 10);
+        if (isNaN(rewardInfo.amount)) {
+          toast.error("Amount must be a number for the selected reward type.");
+        }
+      }
+
       const response = await dispatch(
         createCampaign({
+          campaignType: selectedActionType,
           data: {
-            firstName: values.firstName,
-            lastName: values.lastName,
-            email: values.email,
-            bio: values.bio,
-            interests: values.interests,
-            socials: values.socials,
+            campaignInfo: {
+              title: title,
+              start: startDate,
+              end: endDate,
+              description: "detailed description of my campaign",
+              banner: bannerImg,
+            },
+            action: {
+              fields: fields,
+            },
+            rewardInfo: rewardInfo,
           },
-          action: selectedActionType,
+          userApiKey,
         })
       );
       if (response.payload.success === true) {
         toast.success(response.payload.message);
+        setLoading(false);
         console.log(response);
       } else {
         toast.error(response.payload.message);
         console.log(response);
       }
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-100 p-4 sm:p-6 rounded-xl">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-        <h2 className="text-3xl font-bold text-indigo-800 mb-2 sm:mb-0">
-          Campaign Preview
-        </h2>
-        <StatusBadge status={status} color={color} />
-      </div>
+    <>
+      <Toaster position="top-right" />
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 p-4 sm:p-6 rounded-xl">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <h2 className="text-3xl font-bold text-indigo-800 mb-2 sm:mb-0">
+            Campaign Preview
+          </h2>
+          <StatusBadge status={status} color={color} />
+        </div>
 
-      <div className="space-y-6">
-        <PreviewSection title="Campaign Name" content={title || "N/A"} />
+        <div className="space-y-6">
+          <PreviewSection title="Campaign Name" content={title || "N/A"} />
 
-        <PreviewSection
-          title="Campaign Description"
-          content={description || "N/A"}
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <StatCard
-            icon={Activity}
-            title="Campaign Type"
-            value={campaignData.type || "N/A"}
-            color="bg-blue-100 text-blue-800"
+          <PreviewSection
+            title="Campaign Description"
+            content={description || "N/A"}
           />
-          <StatCard
-            icon={Award}
-            title="Number of Winners"
-            value={numberOfWinners || "N/A"}
-            color="bg-green-100 text-green-800"
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <StatCard
+              icon={Activity}
+              title="Campaign Type"
+              value={campaignData.type || "N/A"}
+              color="bg-blue-100 text-blue-800"
+            />
+            <StatCard
+              icon={Award}
+              title="Number of Winners"
+              value={numberOfWinners || "N/A"}
+              color="bg-green-100 text-green-800"
+            />
+            <StatCard
+              icon={Clock}
+              title="Duration"
+              value={`${startDate} - ${endDate}`}
+              color="bg-amber-50 text-black"
+            />
+          </div>
+
+          <PreviewSection
+            title="Campaign Action"
+            content={selectedActionType || "N/A"}
           />
-          <StatCard
-            icon={Clock}
-            title="Duration"
-            value={`${startDate} - ${endDate}`}
-            color="bg-amber-50 text-black"
+
+          <PreviewSection
+            title="Campaign Reward"
+            content={selectedReward || "N/A"}
           />
         </div>
 
-        <PreviewSection
-          title="Campaign Action"
-          content={selectedActionType || "N/A"}
-        />
-
-        <PreviewSection
-          title="Campaign Reward"
-          content={selectedReward || "N/A"}
-        />
+        <div className="mt-8">
+          <Button
+            onClick={() => createANewCampaign()}
+            name={"Create Campaign"}
+            className="w-full sm:w-auto"
+            isLoading={loading}
+          />
+        </div>
       </div>
-
-      <div className="mt-8">
-        <Button
-          onClick={() => console.log(data)}
-          name={"Create Campaign"}
-          className="w-full sm:w-auto"
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

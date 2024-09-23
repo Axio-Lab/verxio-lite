@@ -15,7 +15,6 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { VerifyAUser } from "@/components/modals/verifyUser";
 import LoadingSpinner from "@/components/componentLoader";
 import useMediaQuery from "@/hooks/useMediaQuery";
-
 const NoWalletConnected = () => (
   <div className="flex items-center justify-center min-h-screen bg-[#FBFBFE]">
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md max-w-lg w-full">
@@ -116,26 +115,26 @@ const Page = () => {
     }
   };
 
-  const VerifyNewUserOnSmallDevice = async () => {
-    try {
-      setLoading(true);
-      const response = await dispatch(
-        verifyUser({ data: { userId: userProfile._id } })
-      );
-      if (response.payload) {
-        const url = response.payload.requestUrl;
-        // window.location.href = url;
-        window.open(url, "_blank");
-        console.log(response, "Request made!!");
-      } else {
-        toast.error(response.payload.message);
-        // console.log(response);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const VerifyNewUserOnSmallDevice = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await dispatch(
+  //       verifyUser({ data: { userId: userProfile._id } })
+  //     );
+  //     if (response.payload) {
+  //       const url = response.payload.requestUrl;
+  //       // window.location.href = url;
+  //       window.open(url, "_blank");
+  //       console.log(response, "Request made!!");
+  //     } else {
+  //       toast.error(response.payload.message);
+  //       // console.log(response);
+  //     }
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     if (userId) {
@@ -202,7 +201,7 @@ const Page = () => {
                         </div>
                       ) : (
                         <button
-                          onClick={() => VerifyNewUserOnSmallDevice()}
+                          onClick={() => VerifyNewUser()}
                           className="absolute -bottom-2 -right-2 bg-[#0D0E32] text-[#dcdded] text-xs font-bold px-2 py-1 rounded-full shadow-md hover:bg-[#00ADEF] hover:border hover:border-gray transition duration-300"
                         >
                           Verify

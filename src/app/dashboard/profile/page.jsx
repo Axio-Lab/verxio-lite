@@ -84,7 +84,7 @@ const Page = () => {
         toast.success(response.payload.message);
         dispatch(setUserId(response.payload.profile._id));
         dispatch(setUserProfile(response.payload.profile));
-        // console.log(response);
+        console.log(response.payload.profile);
       } else {
         toast.error(response.payload.message);
         console.log(response);

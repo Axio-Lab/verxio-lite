@@ -9,6 +9,7 @@ import { setTokenMint } from "@/store/slices/statesSlice";
 const BurnTokenAction = () => {
   const dispatch = useDispatch();
   const tokenMint = useSelector((state) => state.generalStates.tokenMint);
+  
 
   const initialValues = {
     tokenMintAmount: tokenMint?.tokenMintAmount || "",

@@ -15,12 +15,13 @@ const SellDigitalProductAction = () => {
 
   const dispatch = useDispatch();
 
-  const handleImageChange = async (event, setFieldValue) => {
+  const handleFileChange = async (event, setFieldValue) => {
     const file = event.target.files[0];
     if (!file) return;
 
     setSelectedImage(URL.createObjectURL(file));
     await getImageDataUrl(file, setFieldValue);
+    toast.success("File upload successful");
   };
 
   const getImageDataUrl = async (file, setFieldValue) => {
@@ -55,6 +56,10 @@ const SellDigitalProductAction = () => {
       .required("Product amount is required")
       .min(1, "Product amount must be at least 1")
       .typeError("Product amount must be a valid number"),
+    productQuantity: Yup.number().required(
+      "Product productQuantity is required"
+    ),
+    productFile: Yup.string().required("Product file is required"),
   });
 
   const initialValues = {
@@ -160,7 +165,7 @@ const SellDigitalProductAction = () => {
                   ref={fileInputRef}
                   type="file"
                   hidden
-                  onChange={(e) => handleImageChange(e, setFieldValue)}
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
                   accept="image/*,.pdf,.docx,.zip"
                 />
               </div>
@@ -169,7 +174,6 @@ const SellDigitalProductAction = () => {
               name={"Save"}
               onClick={() => {
                 if (dirty) {
-                  // console.log(values);
                   dispatch(setDigitalProduct(values));
                   toast.success("Saved successful");
                 }

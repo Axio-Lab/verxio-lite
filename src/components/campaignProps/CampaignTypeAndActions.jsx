@@ -31,37 +31,37 @@ const actions = {
   Onchain: [
     {
       name: "Burn Token",
-      value: "burntoken",
+      value: "Burn-Token",
       icon: <Flame className="text-red-500" />,
       component: BurnTokenAction,
     },
     {
-      name: "Sell Digital Product",
-      value: "selldigitalmarket",
-      icon: <ShoppingCart className="text-purple-500" />,
-      component: SellDigitalProductAction,
-    },
-    {
       name: "Compress Token",
-      value: "compresstoken",
+      value: "Compress-Token",
       icon: <Minimize className="text-indigo-500" />,
       component: CompressTokenAction,
     },
     {
       name: "Decompress Token",
-      value: "decompresstoken",
+      value: "Decompress-Token",
       icon: <Maximize className="text-pink-500" />,
       component: DecompressTokenAction,
     },
     {
       name: "Create Poll",
-      value: "createpoll",
+      value: "Poll",
       icon: <BarChart2 className="text-green-500" />,
       component: PollAction,
     },
     {
+      name: "Sell Digital Product",
+      value: "Sell-Product",
+      icon: <ShoppingCart className="text-purple-500" />,
+      component: SellDigitalProductAction,
+    },
+    {
       name: "Submit Url",
-      value: "submiturl",
+      value: "Submit-Url",
       icon: <Share className="text-yellow-400" />,
       component: SubmitTokenUrlAction,
     },
@@ -90,7 +90,7 @@ const CampaignTypeAndActions = ({
     } else {
       toggleAction(action.name);
       toast.success(`${action.name} selected`);
-      setFieldValue("selectedActionType", action.name);
+      setFieldValue("selectedActionType", action.value);
       if (campaignType === "Onchain" && action.name !== "Submit Url") {
         openModal(action);
       }
@@ -114,18 +114,8 @@ const CampaignTypeAndActions = ({
     toast.success("Action data saved successfully!");
   };
 
-  const tokenAmount = useSelector((state) => state.generalStates.tokenAmount);
-  const tokenMintAddress = useSelector(
-    (state) => state.generalStates.tokenMintAddress
-  );
-
   const initialValues = {
-    selectedcampaignType: actionType?.selectedcampaignType || "onchain",
     selectedActionType: actionType?.selectedActionType || "",
-    actions: {
-      url: tokenMintAddress,
-      amount: tokenAmount,
-    },
   };
 
   const validationSchema = Yup.object().shape({
@@ -138,7 +128,7 @@ const CampaignTypeAndActions = ({
     <>
       <Toaster position="top-right" />
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
-        {({ values, errors, touched, setFieldValue }) => (
+        {({ values, setFieldValue }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
@@ -165,13 +155,12 @@ const CampaignTypeAndActions = ({
             <div className="flex items-center justify-between my-6">
               <Button
                 href="/dashboard/create-campaign?route=detail"
-                onClick={() => dispatch(setActionType(values))}
                 name={"Previous"}
               />
               <Button
                 href="/dashboard/create-campaign?route=reward"
+                onClick={() => dispatch(setActionType(values))}
                 name={"Continue"}
-                onClick={() => console.log(values)}
               />
             </div>
           </Form>
@@ -223,7 +212,9 @@ const CampaignTypeAndActions = ({
               name={"Close"}
               onClick={closeModal}
               shade={"border border-red-600"}
-              className={"bg-white border border-red-600 text-red-600 max-w-[100px] mt-4"}
+              className={
+                "bg-white border border-red-600 text-red-600 max-w-[100px] mt-4"
+              }
             />
           </div>
         )}

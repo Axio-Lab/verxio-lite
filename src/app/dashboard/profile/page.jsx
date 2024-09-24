@@ -57,7 +57,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [requestUrl, setRequestUrl] = useState("");
-  const [isVerified, setIsVerified] = useState(userProfile.isVerified);
+  // const [isVerified, setIsVerified] = useState(userProfile.isVerified);
   const [activateVerification, setActivateVerification] = useState(false);
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the Verxio!", read: true },
@@ -69,6 +69,8 @@ const Page = () => {
     },
   ]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
+  // console.log(userProfile, "verification status");
 
   const dispatch = useDispatch();
   let userId = "";
@@ -174,7 +176,7 @@ const Page = () => {
                         src={generateAvatar(publicKey.toBase58())}
                         alt="Profile"
                       />
-                      {isVerified === true ? (
+                      {userProfile.isVerified === true ? (
                         <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                           Verified
                         </div>
@@ -195,7 +197,7 @@ const Page = () => {
                         src={generateAvatar(publicKey.toBase58())}
                         alt="Profile"
                       />
-                      {isVerified === true ? (
+                      {userProfile.isVerified === true ? (
                         <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                           Verified
                         </div>

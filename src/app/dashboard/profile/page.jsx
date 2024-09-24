@@ -115,27 +115,6 @@ const Page = () => {
     }
   };
 
-  // const VerifyNewUserOnSmallDevice = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await dispatch(
-  //       verifyUser({ data: { userId: userProfile._id } })
-  //     );
-  //     if (response.payload) {
-  //       const url = response.payload.requestUrl;
-  //       // window.location.href = url;
-  //       window.open(url, "_blank");
-  //       console.log(response, "Request made!!");
-  //     } else {
-  //       toast.error(response.payload.message);
-  //       // console.log(response);
-  //     }
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   useEffect(() => {
     if (userId) {
       createNewProfile();

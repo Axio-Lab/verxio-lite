@@ -173,11 +173,13 @@ const CampaignPreview = ({ campaignData }) => {
         rewardInfo.amount = parseInt(solAmount, 10);
         if (isNaN(rewardInfo.amount)) {
           toast.error("Amount must be a number for the selected reward type.");
+          return;
         }
       } else if (selectedReward === "Verxio-XP") {
         rewardInfo.amount = parseInt(xpAmount, 10);
         if (isNaN(rewardInfo.amount)) {
           toast.error("Amount must be a number for the selected reward type.");
+          return;
         }
       }
 

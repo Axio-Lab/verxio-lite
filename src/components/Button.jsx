@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
-import LoadingSpinner from "../components/loadingSpinner";
+// import Image from "next/image";
+import LoadingSpinner from "./loadingSpinner";
 
-const Button = ({
+export const Button = ({
   href,
   small,
   large,
@@ -80,4 +80,3 @@ const Button = ({
   );
 };
 
-export default Button;

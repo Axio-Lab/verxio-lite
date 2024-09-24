@@ -1,70 +1,97 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import { Repeat, Droplet, Coins, Flame, ShoppingCart, Share, MessageCircle, UserPlus, ClipboardList, Minimize, Maximize } from 'lucide-react';
-import { toast, Toaster } from 'react-hot-toast';
+import React, { useState } from "react";
+import Modal from "react-modal";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/Button";
+import * as Yup from "yup";
+
+import {
+  Flame,
+  ShoppingCart,
+  Share,
+  // MessageCircle,
+  // UserPlus,
+  // ClipboardList,
+  Minimize,
+  Maximize,
+  BarChart2,
+} from "lucide-react";
+import { toast, Toaster } from "react-hot-toast";
+import { Formik, Form } from "formik";
 
 // Import your existing action components
-import SwapTokenAction from '../campaignActions/SwapTokenAction';
-// import ProvideLiquidityAction from '../campaignActions/ProvideLiquidityAction';
-import StakeTokenAction from '../campaignActions/StakeTokenAction';
-import BurnTokenAction from '../campaignActions/BurnTokenAction';
-import SellDigitalProductAction from '../campaignActions/SellDigitalProductAction';
-import CompressTokenAction from '../campaignActions/CompressTokenAction';
-import DecompressTokenAction from '../campaignActions/DecompressTokenAction';
-
-const campaignTypes = [
-  { name: 'Onchain'},
-  { name: 'Offchain' }
-];
+import BurnTokenAction from "../campaignActions/BurnTokenAction";
+import SellDigitalProductAction from "../campaignActions/SellDigitalProductAction";
+import CompressTokenAction from "../campaignActions/CompressTokenAction";
+import DecompressTokenAction from "../campaignActions/DecompressTokenAction";
+import SubmitTokenUrlAction from "../campaignActions/SubmitUrlAction";
+import PollAction from "../campaignActions/CreatePoll";
+import { setActionType } from "@/store/slices/statesSlice";
 
 const actions = {
   Onchain: [
-    { name: 'Burn token', icon: <Flame className="text-red-500" />, component: BurnTokenAction },
-    { name: 'Sell digital product', icon: <ShoppingCart className="text-purple-500" />, component: SellDigitalProductAction },
-    { name: 'Compress token', icon: <Minimize className="text-indigo-500" />, component: CompressTokenAction },
-    { name: 'Decompress token', icon: <Maximize className="text-pink-500" />, component: DecompressTokenAction },
-    { name: 'Swap token', icon: <Repeat className="text-blue-500" />, component: SwapTokenAction },
-    // { name: 'Provide liquidity', icon: <Droplet className="text-green-500" />, component: ProvideLiquidityAction },
-    { name: 'Stake token', icon: <Coins className="text-yellow-500" />, component: StakeTokenAction }
+    {
+      name: "Burn Token",
+      value: "Burn-Token",
+      icon: <Flame className="text-red-500" />,
+      component: BurnTokenAction,
+    },
+    {
+      name: "Compress Token",
+      value: "Compress-Token",
+      icon: <Minimize className="text-indigo-500" />,
+      component: CompressTokenAction,
+    },
+    {
+      name: "Decompress Token",
+      value: "Decompress-Token",
+      icon: <Maximize className="text-pink-500" />,
+      component: DecompressTokenAction,
+    },
+    {
+      name: "Create Poll",
+      value: "Poll",
+      icon: <BarChart2 className="text-green-500" />,
+      component: PollAction,
+    },
+    {
+      name: "Sell Digital Product",
+      value: "Sell-Product",
+      icon: <ShoppingCart className="text-purple-500" />,
+      component: SellDigitalProductAction,
+    },
+    {
+      name: "Submit Url",
+      value: "Submit-Url",
+      icon: <Share className="text-yellow-400" />,
+      component: SubmitTokenUrlAction,
+    },
   ],
-  Offchain: [
-    { name: 'Share on Twitter', icon: <Share className="text-blue-400" />},
-    { name: 'Join Discord', icon: <MessageCircle className="text-indigo-500" /> },
-    { name: 'Refer a friend', icon: <UserPlus className="text-green-500" /> },
-    { name: 'Complete a survey', icon: <ClipboardList className="text-orange-500" /> }
-  ]
 };
 
-const CampaignTypeAndActions = ({ 
-  campaignType, 
-  setCampaignType, 
-  selectedActions, 
-  toggleAction, 
-  updateActionData, 
-  actionData 
+const CampaignTypeAndActions = ({
+  campaignType,
+  selectedActions,
+  toggleAction,
+  updateActionData,
+  actionData,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState(null);
+  const dispatch = useDispatch();
+  const actionType = useSelector((state) => state.generalStates.actionType);
 
-  const handleActionToggle = (action) => {
+  const handleActionToggle = (action, setFieldValue) => {
     if (selectedActions.includes(action.name)) {
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
-    } 
-    else if (action.name === 'Swap token') {
-      toast.error('Swap token action is not yet live!');
-      setCurrentAction(null)
-    }
-    else if (action.name === 'Stake token') {
-      toast.error('Stake tokens action is yet live!');
-      setCurrentAction(null)
-    }
-    else if (selectedActions.length > 0) {
-      toast.error('An action is already selected. Please deselect it first.');
+      setFieldValue("selectedActionType", "");
+    } else if (selectedActions.length > 0) {
+      toast.error("An action is already selected. Please deselect it first.");
     } else {
       toggleAction(action.name);
       toast.success(`${action.name} selected`);
-      if (campaignType === 'Onchain') {
+      setFieldValue("selectedActionType", action.value);
+      if (campaignType === "Onchain" && action.name !== "Submit Url") {
         openModal(action);
       }
     }
@@ -81,52 +108,64 @@ const CampaignTypeAndActions = ({
   };
 
   const handleSave = (data) => {
-    console.log('Saving action data:', data);
-    updateActionData(currentAction.name, data); // Update this line
+    console.log("Saving action data:", data);
+    updateActionData(currentAction.name, data);
     closeModal();
-    toast.success('Action data saved successfully!');
+    toast.success("Action data saved successfully!");
   };
+
+  const initialValues = {
+    selectedActionType: actionType?.selectedActionType || "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    selectedcampaignType: Yup.string().required(
+      "Please select an action type."
+    ),
+  });
 
   return (
     <>
       <Toaster position="top-right" />
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Campaign Type</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {campaignTypes.map(type => (
-            <button
-              key={type.name}
-              type="button"
-              onClick={() => {
-                setCampaignType(type.name);
-                selectedActions.forEach(action => toggleAction(action));
-              }}
-              className={`p-4 text-center rounded-lg flex items-center justify-center ${
-                campaignType === type.name ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
-              }`}
-            >
-              {type.name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
-        <div className="grid grid-cols-3 gap-4">
-          {actions[campaignType].map((action) => (
-            <div 
-              key={action.name}
-              onClick={() => handleActionToggle(action)}
-              className={`flex items-center p-4 rounded-lg cursor-pointer ${
-                selectedActions.includes(action.name) ? 'bg-green-200' : 'bg-gray-200'
-              }`}
-            >
-              {action.icon}
-              <span className="ml-2">{action.name}</span>
+      <Formik initialValues={initialValues} validationSchema={validationSchema}>
+        {({ values, setFieldValue }) => (
+          <Form className="space-y-6 sm:space-y-8">
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {actions[campaignType].map((action) => (
+                  <div
+                    key={action.name}
+                    onClick={() => handleActionToggle(action, setFieldValue)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer transition-colors duration-200 ${
+                      selectedActions.includes(action.name)
+                        ? "bg-green-200 hover:bg-green-300"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    {action.icon}
+                    <span className="mt-2 text-center text-sm sm:text-base">
+                      {action.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
+
+            <div className="flex items-center justify-between my-6">
+              <Button
+                href="/dashboard/create-campaign?route=detail"
+                name={"Previous"}
+              />
+              <Button
+                href="/dashboard/create-campaign?route=reward"
+                onClick={() => dispatch(setActionType(values))}
+                name={"Continue"}
+              />
+            </div>
+          </Form>
+        )}
+      </Formik>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -135,39 +174,48 @@ const CampaignTypeAndActions = ({
         overlayClassName="Overlay"
         style={{
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
             zIndex: 1000,
           },
           content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '20px',
-            maxWidth: '500px',
-            width: '90%',
-            maxHeight: '80vh',
-            overflow: 'auto',
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            border: "none",
+            borderRadius: "8px",
+            padding: "20px",
+            maxWidth: "500px",
+            width: "90%",
+            maxHeight: "80vh",
+            overflow: "auto",
           },
         }}
       >
         {currentAction && (
           <div className="p-4">
-            {/* <h2 className="text-2xl font-bold mb-4">{currentAction.name}</h2> */}
-            {currentAction.component && React.createElement(currentAction.component, { 
-              onSave: handleSave,
-              initialData: actionData[currentAction.name] // Add this line
-            })}
-            <button 
+            {currentAction.component &&
+              React.createElement(currentAction.component, {
+                onSave: handleSave,
+                initialData: actionData[currentAction.name],
+              })}
+
+            {/* <Button
+              name={"Close"}
               onClick={closeModal}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Close
-            </button>
+              shade={"border border-red-600"}
+              className={"bg-red-600 border border-red-600 text-white max-w-[100px] mt-4"}
+            /> */}
+            <Button
+              name={"Close"}
+              onClick={closeModal}
+              shade={"border border-red-600"}
+              className={
+                "bg-white border border-red-600 text-red-600 max-w-[100px] mt-4"
+              }
+            />
           </div>
         )}
       </Modal>

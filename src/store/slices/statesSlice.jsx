@@ -2,17 +2,16 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 const initialState = {
-  start: {},
-  details: {},
-  summary: {},
-  userProfile: {},
   userId: "",
-  edit: false,
-  totalCampaignPoint: {},
-  choosePoint: 0,
-  actionModal: false,
+  userApiKey: "",
+  details: {},
+  actionType: {},
+  rewards: {},
+  preview: {},
+  userProfile: {},
   selectedProductImage: {},
-  userCollectionNFTOBJ: {}
+  tokenMint: {},
+  digitalProduct: {},
 };
 
 const statesSlice = createSlice({
@@ -22,38 +21,32 @@ const statesSlice = createSlice({
     setUserProfile: (state, action) => {
       state.userProfile = action.payload;
     },
+    setDigitalProduct: (state, action) => {
+      state.digitalProduct = action.payload;
+    },
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
-    setEdit: (state, action) => {
-      state.edit = action.payload;
+    setTokenMint: (state, action) => {
+      state.tokenMint = action.payload;
     },
-    setCloseActionModal: (state, action) => {
-      state.actionModal = action.payload;
+    setActionType: (state, action) => {
+      state.actionType = action.payload;
     },
-    setStart: (state, action) => {
-      // state.start = action.payload;
-      state.start = { ...state.start, ...action.payload };
-      // console.log(state, action.payload, "bhbkk");
+    setUserApiKey: (state, action) => {
+      state.userApiKey = action.payload;
+    },
+    setRewards: (state, action) => {
+      state.rewards = action.payload;
     },
     setDetails: (state, action) => {
       state.details = action.payload;
-      // state.details = { ...state.details, ...action.payload };
     },
-    setTotalCampaignPoint: (state, action) => {
-      state.totalCampaignPoint = action.payload;
-    },
-    setSummary: (state, action) => {
-      state.summary = action.payload;
-    },
-    setChoosePoint: (state, action) => {
-      state.choosePoint = action.payload;
+    setPreview: (state, action) => {
+      state.preview = action.payload;
     },
     setSelectedProductImage: (state, action) => {
       state.selectedProductImage = action.payload;
-    },
-    setUserCollectionNFTOBJ: (state, action) => {
-      state.userCollectionNFTOBJ = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,15 +59,14 @@ const statesSlice = createSlice({
 export const statesActions = statesSlice.actions;
 export const {
   setUserId,
-  setUserProfile,
-  setEdit,
-  setStart,
   setDetails,
-  setTotalCampaignPoint,
-  setSummary,
-  setChoosePoint,
-  setCloseActionModal,
+  setRewards,
+  setPreview,
+  setUserApiKey,
+  setTokenMint,
+  setActionType,
+  setUserProfile,
+  setDigitalProduct,
   setSelectedProductImage,
-  setUserCollectionNFTOBJ
 } = statesSlice.actions;
 export default statesSlice.reducer;

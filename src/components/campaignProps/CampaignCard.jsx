@@ -9,8 +9,9 @@ import {
   Clock,
   Trophy,
   PlusCircle,
-  Droplet,
-  Coins,
+  Minimize,
+  Maximize,
+  BarChart2,
   Flame,
   ShoppingCart,
   Share,
@@ -18,28 +19,26 @@ import {
   UserPlus,
   ClipboardList,
   CheckCircle,
-  Repeat,
+  PackageOpen,
 } from "lucide-react";
 
 const availableRewards = [
-  { name: "Whitelist spots", icon: <Users className="text-blue-500" /> },
-  { name: "NFT drops", icon: <Gift className="text-purple-500" /> },
-  { name: "Tokens", icon: <Trophy className="text-yellow-500" /> },
-  { name: "Airdrops", icon: <PlusCircle className="text-green-500" /> },
-  { name: "Merch drop", icon: <Gift className="text-red-500" /> },
-  { name: "Verxio credit", icon: <CheckCircle className="text-indigo-500" /> },
+  { name: "Whitelist Spot", icon: <Users className="text-blue-500" /> },
+  { name: "NFT Drop", icon: <Gift className="text-purple-500" /> },
+  { name: "Token", icon: <Trophy className="text-yellow-500" /> },
+  { name: "Airdrop", icon: <PlusCircle className="text-green-500" /> },
+  { name: "Merch Drop", icon: <PackageOpen className="text-red-500" /> },
+  { name: "Verxio Credit", icon: <CheckCircle className="text-indigo-500" /> },
 ];
 
 const actions = {
   Onchain: [
-    { name: "Swap tokens", icon: <Repeat className="text-blue-500" /> },
-    { name: "Provide liquidity", icon: <Droplet className="text-green-500" /> },
-    { name: "Stake tokens", icon: <Coins className="text-yellow-500" /> },
-    { name: "Burn tokens", icon: <Flame className="text-red-500" /> },
-    {
-      name: "Sell digital product",
-      icon: <ShoppingCart className="text-purple-500" />,
-    },
+    { name: "Burn Token", icon: <Flame className="text-red-500" /> },
+    { name: "Sell Digital Product", icon: <ShoppingCart className="text-purple-500" />},
+    { name: 'Compress Token', icon: <Minimize className="text-indigo-500" />},
+    { name: 'Decompress Token', icon: <Maximize className="text-pink-500" />},
+    { name: 'Create Poll', icon: <BarChart2 className="text-green-500" /> }, 
+    { name: 'Submit Url', icon: <Share className="text-yellow-400" />},
   ],
   Offchain: [
     { name: "Share on Twitter", icon: <Share className="text-blue-400" /> },
@@ -74,7 +73,7 @@ const CampaignCard = ({ campaign }) => {
   )?.icon || <Clock className="text-gray-500" />;
 
   return (
-    <Link href={`/`}>
+    <Link href={`/dashboard/manage-campaign/${campaign.id}`}>
       <div className="bg-[#FBFBFE] rounded-lg shadow hover:shadow-sm transition-all duration-300 p-6 mb-4 relative overflow-hidden border border-[##DCE0EF]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-800">{campaign.title}</h2>
@@ -82,7 +81,7 @@ const CampaignCard = ({ campaign }) => {
             className={`px-3 py-1 rounded-full text-sm font-semibold ${
               campaign.status === "Active"
                 ? "bg-green-100 text-green-800"
-                : campaign.status === "Completed"
+                : campaign.status === "Upcoming"
                 ? "bg-blue-100 text-blue-800"
                 : "bg-red-100 text-red-800"
             }`}

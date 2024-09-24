@@ -73,8 +73,7 @@ const CampaignPreview = ({ campaignData }) => {
   }
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const userApiKey = useSelector((state) => state.generalStates.userApiKey);
-  
+  const userApiKey = useSelector((state) => state.generalStates.userApiKey);  
   const selectedActionType = useSelector((state) => state.generalStates?.actionType?.selectedActionType);
   const title = useSelector((state) => state.generalStates?.details?.title);
   const description = useSelector((state) => state.generalStates?.details?.description);

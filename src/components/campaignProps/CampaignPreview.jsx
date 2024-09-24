@@ -234,7 +234,7 @@ const CampaignPreview = ({ campaignData }) => {
 
         <div className="space-y-6">
           <PreviewSection title="Campaign Name" content={title || "N/A"} />
-          {console.log(description)}
+
           <PreviewSection title="Campaign Description">
             <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: mdParser.render(description || "N/A") }} />
           </PreviewSection>

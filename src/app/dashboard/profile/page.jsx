@@ -57,7 +57,6 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [requestUrl, setRequestUrl] = useState("");
-  // const [isVerified, setIsVerified] = useState(userProfile.isVerified);
   const [activateVerification, setActivateVerification] = useState(false);
   const [notifications, setNotifications] = useState([
     { message: "Welcome to the Verxio!", read: true },
@@ -69,8 +68,6 @@ const Page = () => {
     },
   ]);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
-  // console.log(userProfile, "verification status");
 
   const dispatch = useDispatch();
   let userId = "";
@@ -86,7 +83,6 @@ const Page = () => {
         toast.success(response.payload.message);
         dispatch(setUserId(response.payload.profile._id));
         dispatch(setUserProfile(response.payload.profile));
-        console.log(response.payload.profile);
       } else {
         toast.error(response.payload.message);
         console.log(response);
@@ -106,10 +102,8 @@ const Page = () => {
         setRequestUrl(response.payload.requestUrl);
         setActivateVerification(true);
         setLoading(false);
-        // console.log(response);
       } else {
         toast.error(response.payload.message);
-        // console.log(response);
       }
       setLoading(false);
     } catch (error) {
@@ -177,9 +171,6 @@ const Page = () => {
                         alt="Profile"
                       />
                       {userProfile.isVerified === true ? (
-                        // <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                        //   Verified
-                        // </div>
                         <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
                             Verified
                           </div>
@@ -201,7 +192,12 @@ const Page = () => {
                         alt="Profile"
                       />
                       {userProfile.isVerified === true ? (
-                        <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
+                        <div
+                          className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+                          style={{
+                            textShadow: "0px 1px 2px rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
                           Verified
                         </div>
                       ) : (
@@ -237,7 +233,7 @@ const Page = () => {
                     <StatCard
                       icon={BarChart2}
                       title="Campaigns"
-                      value="42"
+                      value={`${userProfile?.campaigns?? 0}`}
                       unit="Participated"
                     />
                   </div>

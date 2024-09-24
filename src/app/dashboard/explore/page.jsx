@@ -7,8 +7,10 @@ import CampaignPage from "@/components/CampaignPage";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 const Explore = () => {
+  const router = useRouter();
   const [campaigns] = useState([
     // {
     //   id: 1,
@@ -112,13 +114,14 @@ const Explore = () => {
             <Image 
               src={VerxioLogo} 
               alt="Verxio Logo" 
-              className="h-8 sm:h-10 cursor-pointer" 
+              className="h-8 sm:h-14 cursor-pointer" 
             />
           </Link>
 
           <Button
             name="Create Campaign"
             className="text-sm sm:text-base px-2 sm:px-4 py-1 sm:py-2"
+            onClick={() => router.push("/dashboard/create-campaign?route=detail")}
           />
         </div>
         <div className="mb-6">

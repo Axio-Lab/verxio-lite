@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-// import MarkdownIt from "markdown-it";
+import React, { useState, useEffect, useMemo } from "react";
+import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
-// import MdEditor from "react-markdown-editor-lite";
+import MdEditor from "react-markdown-editor-lite";
 // import { FaExchangeAlt } from "react-icons/fa";
 // import { SiExpertsexchange } from "react-icons/si";
 // import { GiWaveCrest } from "react-icons/gi";
@@ -36,7 +36,6 @@ import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
 // import { setRewards } from "@/store/slices/statesSlice";
 
-// const mdParser = new MarkdownIt();
 
 // const actionIcons = {
 //   "Swap token": { icon: Repeat, color: "text-blue-500" },
@@ -67,27 +66,33 @@ import { createCampaign } from "@/store/slices/campaignSlice";
 //   Kamino: { icon: GiWaveCrest, color: "text-green-500" },
 // };
 
+
 const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const details = useSelector((state) => state.generalStates.details);
-  const rewards = useSelector((state) => state.generalStates.rewards);
-  const actionType = useSelector((state) => state.generalStates.actionType);
-  const tokenMint = useSelector((state) => state.generalStates.tokenMint);
-  const digitalProduct = useSelector(
-    (state) => state.generalStates.digitalProduct
-  );
+  const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
-
-  const { selectedActionType } = actionType;
-  const { title, description, bannerImg, startDate, endDate } = details;
-  const { selectedReward, numberOfWinners, solAmount, xpAmount } = rewards;
-  const { tokenMintAmount, tokenMintAddress, tokenURL } = tokenMint;
-  const { productAmount, productQuantity, productFile, isCustomAmount } =
-    digitalProduct;
+  
+  const selectedActionType = useSelector((state) => state.generalStates?.actionType?.selectedActionType);
+  const title = useSelector((state) => state.generalStates?.details?.title);
+  const description = useSelector((state) => state.generalStates?.details?.description);
+  const bannerImg = useSelector((state) => state.generalStates?.details?.bannerImg);
+  const startDate = useSelector((state) => state.generalStates?.details?.startDate);
+  const endDate = useSelector((state) => state.generalStates?.details?.endDate);
+  const selectedReward = useSelector((state) => state.generalStates?.rewards?.selectedReward);
+  const numberOfWinners = useSelector((state) => state.generalStates?.rewards?.numberOfWinners);
+  const solAmount = useSelector((state) => state.generalStates?.rewards?.solAmount);
+  const xpAmount = useSelector((state) => state.generalStates?.rewards?.xpAmount);
+  const tokenMintAmount = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAmount);
+  const tokenMintAddress = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAddress);
+  const tokenURL = useSelector((state) => state.generalStates?.tokenMint?.tokenURL);
+  const productAmount = useSelector((state) => state.generalStates?.digitalProduct?.productAmount);
+  const productQuantity = useSelector((state) => state.generalStates?.digitalProduct?.productQuantity);
+  const productFile = useSelector((state) => state.generalStates?.digitalProduct?.productFile);
+  const isCustomAmount = useSelector((state) => state.generalStates?.digitalProduct?.isCustomAmount);
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";
@@ -230,10 +235,9 @@ const CampaignPreview = ({ campaignData }) => {
         <div className="space-y-6">
           <PreviewSection title="Campaign Name" content={title || "N/A"} />
 
-          <PreviewSection
-            title="Campaign Description"
-            content={description || "N/A"}
-          />
+          <PreviewSection title="Campaign Description">
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: mdParser.render(description || "N/A") }} />
+          </PreviewSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <StatCard
@@ -296,44 +300,44 @@ const StatCard = ({ icon: Icon, title, value, color }) => (
   </div>
 );
 
-// const ActionRewardBadge = ({ text, IconComponent, color }) => (
-//   <div
-//     className={`inline-flex items-center bg-indigo-100 ${color} rounded-full px-3 py-1`}
-//   >
-//     <IconComponent size={16} className="mr-2" />
-//     <span className="text-sm font-medium">{text}</span>
-//   </div>
-// );
+const ActionRewardBadge = ({ text, IconComponent, color }) => (
+  <div
+    className={`inline-flex items-center bg-indigo-100 ${color} rounded-full px-3 py-1`}
+  >
+    <IconComponent size={16} className="mr-2" />
+    <span className="text-sm font-medium">{text}</span>
+  </div>
+);
 
-// const ActionDataCard = ({ action, data }) => {
-//   const PlatformIcon = platformIcons[data.platform]?.icon || Coins;
-//   const platformColor = platformIcons[data.platform]?.color || "text-gray-500";
+const ActionDataCard = ({ action, data }) => {
+  const PlatformIcon = platformIcons[data.platform]?.icon || Coins;
+  const platformColor = platformIcons[data.platform]?.color || "text-gray-500";
 
-//   return (
-//     <div className="bg-white rounded-lg p-4 shadow-sm">
-//       <div className="flex items-center justify-between mb-3">
-//         <h4 className="text-lg font-semibold text-indigo-700">{action}</h4>
-//         <div className="flex items-center">
-//           <PlatformIcon className={`mr-2 ${platformColor}`} size={20} />
-//           <span className={`font-medium ${platformColor}`}>
-//             {data.platform}
-//           </span>
-//         </div>
-//       </div>
-//       <div className="grid grid-cols-2 gap-3">
-//         {Object.entries(data).map(
-//           ([key, value]) =>
-//             key !== "platform" && (
-//               <div key={key} className="bg-gray-50 p-2 rounded-md">
-//                 <span className="font-medium text-gray-700">{key}: </span>
-//                 <span className="text-gray-900">{value}</span>
-//               </div>
-//             )
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+    <div className="bg-white rounded-lg p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-lg font-semibold text-indigo-700">{action}</h4>
+        <div className="flex items-center">
+          <PlatformIcon className={`mr-2 ${platformColor}`} size={20} />
+          <span className={`font-medium ${platformColor}`}>
+            {data.platform}
+          </span>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {Object.entries(data).map(
+          ([key, value]) =>
+            key !== "platform" && (
+              <div key={key} className="bg-gray-50 p-2 rounded-md">
+                <span className="font-medium text-gray-700">{key}: </span>
+                <span className="text-gray-900">{value}</span>
+              </div>
+            )
+        )}
+      </div>
+    </div>
+  );
+};
 
 const PreviewSection = ({ title, children, content }) => (
   <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">

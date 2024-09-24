@@ -73,21 +73,25 @@ const CampaignPreview = ({ campaignData }) => {
   }
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const details = useSelector((state) => state.generalStates.details);
-  const rewards = useSelector((state) => state.generalStates.rewards);
-  const actionType = useSelector((state) => state.generalStates.actionType);
-  const tokenMint = useSelector((state) => state.generalStates.tokenMint);
-  const digitalProduct = useSelector(
-    (state) => state.generalStates.digitalProduct
-  );
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
-
-  const { selectedActionType } = actionType;
-  const { title, description, bannerImg, startDate, endDate } = details;
-  const { selectedReward, numberOfWinners, solAmount, xpAmount } = rewards;
-  const { tokenMintAmount, tokenMintAddress, tokenURL } = tokenMint;
-  const { productAmount, productQuantity, productFile, isCustomAmount } =
-    digitalProduct;
+  
+  const selectedActionType = useSelector((state) => state.generalStates?.actionType?.selectedActionType);
+  const title = useSelector((state) => state.generalStates?.details?.title);
+  const description = useSelector((state) => state.generalStates?.details?.description);
+  const bannerImg = useSelector((state) => state.generalStates?.details?.bannerImg);
+  const startDate = useSelector((state) => state.generalStates?.details?.startDate);
+  const endDate = useSelector((state) => state.generalStates?.details?.endDate);
+  const selectedReward = useSelector((state) => state.generalStates?.rewards?.selectedReward);
+  const numberOfWinners = useSelector((state) => state.generalStates?.rewards?.numberOfWinners);
+  const solAmount = useSelector((state) => state.generalStates?.rewards?.solAmount);
+  const xpAmount = useSelector((state) => state.generalStates?.rewards?.xpAmount);
+  const tokenMintAmount = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAmount);
+  const tokenMintAddress = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAddress);
+  const tokenURL = useSelector((state) => state.generalStates?.tokenMint?.tokenURL);
+  const productAmount = useSelector((state) => state.generalStates?.digitalProduct?.productAmount);
+  const productQuantity = useSelector((state) => state.generalStates?.digitalProduct?.productQuantity);
+  const productFile = useSelector((state) => state.generalStates?.digitalProduct?.productFile);
+  const isCustomAmount = useSelector((state) => state.generalStates?.digitalProduct?.isCustomAmount);
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";

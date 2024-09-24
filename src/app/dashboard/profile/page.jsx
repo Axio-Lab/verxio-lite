@@ -86,7 +86,7 @@ const Page = () => {
         toast.success(response.payload.message);
         dispatch(setUserId(response.payload.profile._id));
         dispatch(setUserProfile(response.payload.profile));
-        console.log(response.payload.profile);
+        // console.log(response.payload.profile);
       } else {
         toast.error(response.payload.message);
         console.log(response);
@@ -180,9 +180,14 @@ const Page = () => {
                         // <div className="absolute -bottom-2 -right-2 bg-green-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                         //   Verified
                         // </div>
-                        <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
-                            Verified
-                          </div>
+                        <div
+                          className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+                          style={{
+                            textShadow: "0px 1px 2px rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
+                          Verified
+                        </div>
                       ) : (
                         <button
                           onClick={() => VerifyNewUser()}
@@ -201,7 +206,12 @@ const Page = () => {
                         alt="Profile"
                       />
                       {userProfile.isVerified === true ? (
-                        <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
+                        <div
+                          className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+                          style={{
+                            textShadow: "0px 1px 2px rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
                           Verified
                         </div>
                       ) : (

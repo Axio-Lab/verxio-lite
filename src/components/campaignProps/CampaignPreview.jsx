@@ -156,6 +156,7 @@ const CampaignPreview = ({ campaignData }) => {
         toast.error(
           "Please generate an api key on your profile in order to create a campaign"
         );
+        setLoading(false);
         return;
       }
 
@@ -235,25 +236,20 @@ const CampaignPreview = ({ campaignData }) => {
       }
 
       const requestBody = {
-        data: {
-          campaignInfo: {
-            title: title,
-            start: startDate,
-            end: endDate,
-            description: "Here's a detailed description of my campaign",
-            // description: description,
-            banner: bannerImg,
-          },
-          action: { fields },
-          rewardInfo,
+        campaignInfo: {
+          title: title,
+          start: startDate,
+          end: endDate,
+          description: description,
+          banner: bannerImg,
         },
+        action: { fields },
+        rewardInfo,
       };
-      console.log(requestBody, "data here!!!");
-      const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
 
-      // const url = `${apiBaseURL}/campaign?campaignType=${encodeURIComponent(
-      //   selectedActionType
-      // )}`;
+      console.log(requestBody, "data here!!")
+
+      const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
 
       // Set up the headers
       const headers = {

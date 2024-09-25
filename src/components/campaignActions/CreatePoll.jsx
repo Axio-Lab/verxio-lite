@@ -56,7 +56,6 @@ const PollAction = () => {
     }
     dispatch(setPollsOption(filteredOptions));
     toast.success("Saved successful");
-
   };
 
   return (
@@ -70,7 +69,7 @@ const PollAction = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 flex items-center">
               <BarChart2 className="mr-2 text-green-500" />
-              Burn Token Details
+              Create Poll Details
             </h3>
 
             <label className="block mb-2">Poll Options:</label>

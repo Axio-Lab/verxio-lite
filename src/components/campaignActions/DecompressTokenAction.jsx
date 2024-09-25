@@ -11,13 +11,13 @@ const DecompressTokenAction = () => {
   const tokenMint = useSelector((state) => state.generalStates.tokenMint);
 
   const initialValues = {
-    tokenMintAmount: tokenMint?.tokenMintAmount || "",
+    tokenMintAmount: tokenMint?.tokenMintAmount || 0,
     tokenMintAddress: tokenMint?.tokenMintAddress || "",
   };
 
   const validationSchema = Yup.object().shape({
     tokenMintAmount: Yup.number().required("Token amount is required"),
-    tokenMintAddress: Yup.number().required("Token address is required"),
+    tokenMintAddress: Yup.string().required("Token address is required"),
   });
 
   return (
@@ -52,6 +52,7 @@ const DecompressTokenAction = () => {
 
             <Field
               id="tokenAmount"
+              type="number"
               className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
                 errors.tokenMintAmount && touched.tokenMintAmount
                   ? "border-red-500 focus:border-red-500"
@@ -69,7 +70,7 @@ const DecompressTokenAction = () => {
               name={"Save"}
               type="button"
               onClick={() => {
-                if (dirty) {
+                if (dirty && touched) {
                   dispatch(setTokenMint(values));
                   toast.success("Saved successful");
                 }

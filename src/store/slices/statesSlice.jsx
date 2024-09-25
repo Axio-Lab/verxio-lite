@@ -1,4 +1,4 @@
-import { createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 const initialState = {
@@ -52,6 +52,17 @@ const statesSlice = createSlice({
     setSelectedProductImage: (state, action) => {
       state.selectedProductImage = action.payload;
     },
+
+    // Action for reseting the redux state after create campaign submission
+    resetCreateCampaignFormData: (state) => {
+      state.details = initialState.details;
+      state.actionType = initialState.actionType;
+      state.rewards = initialState.rewards;
+      state.preview = initialState.preview;
+      state.tokenMint = initialState.tokenMint;
+      state.digitalProduct = initialState.digitalProduct;
+      state.pollsOption = initialState.pollsOption;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, () => {
@@ -73,5 +84,6 @@ export const {
   setPollsOption,
   setDigitalProduct,
   setSelectedProductImage,
+  resetCreateCampaignFormData,
 } = statesSlice.actions;
 export default statesSlice.reducer;

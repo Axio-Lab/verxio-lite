@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import MarkdownIt from "markdown-it";
+import { PURGE } from "redux-persist";
 import "react-markdown-editor-lite/lib/index.css";
 import MdEditor from "react-markdown-editor-lite";
 // import { FaExchangeAlt } from "react-icons/fa";
@@ -33,6 +34,9 @@ import {
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
+
+
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
 // import { setRewards } from "@/store/slices/statesSlice";
@@ -72,7 +76,7 @@ const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
@@ -247,7 +251,7 @@ const CampaignPreview = ({ campaignData }) => {
         rewardInfo,
       };
 
-      console.log(requestBody, "data here!!")
+      console.log(requestBody, "data here!!");
 
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
 
@@ -262,6 +266,7 @@ const CampaignPreview = ({ campaignData }) => {
 
       if (response.data.success === true) {
         toast.success(response.data.message);
+        dispatch(resetCreateCampaignFormData())
       } else {
         toast.error(response.data.message);
       }

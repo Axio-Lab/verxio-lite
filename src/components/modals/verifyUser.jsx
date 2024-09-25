@@ -16,8 +16,8 @@ export const VerifyAUser = ({ requestUrl, closeModal }) => {
       onClick={() => closeModal(false)}
       className="bg-[#000]/40 fixed inset-0 z-50 flex justify-center items-center p-4"
     >
-      <div 
-        onClick={(e) => e.stopPropagation()} 
+      <div
+        onClick={(e) => e.stopPropagation()}
         className="bg-white flex flex-col items-center gap-5 relative p-6 rounded-lg w-full max-w-[400px]"
       >
         <div className="flex items-center gap-6 flex-col text-center w-full">

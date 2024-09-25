@@ -32,10 +32,10 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { createCampaign } from "@/store/slices/campaignSlice";
+import axios from "axios";
+// import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
 // import { setRewards } from "@/store/slices/statesSlice";
-
 
 // const actionIcons = {
 //   "Swap token": { icon: Repeat, color: "text-blue-500" },
@@ -66,33 +66,65 @@ import { createCampaign } from "@/store/slices/campaignSlice";
 //   Kamino: { icon: GiWaveCrest, color: "text-green-500" },
 // };
 
+const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
-  
-  const selectedActionType = useSelector((state) => state.generalStates?.actionType?.selectedActionType);
+
+  const selectedActionType = useSelector(
+    (state) => state.generalStates?.actionType?.selectedActionType
+  );
   const title = useSelector((state) => state.generalStates?.details?.title);
-  const description = useSelector((state) => state.generalStates?.details?.description);
-  const bannerImg = useSelector((state) => state.generalStates?.details?.bannerImg);
-  const startDate = useSelector((state) => state.generalStates?.details?.startDate);
+  const description = useSelector(
+    (state) => state.generalStates?.details?.description
+  );
+  const bannerImg = useSelector(
+    (state) => state.generalStates?.details?.bannerImg
+  );
+  const startDate = useSelector(
+    (state) => state.generalStates?.details?.startDate
+  );
   const endDate = useSelector((state) => state.generalStates?.details?.endDate);
-  const selectedReward = useSelector((state) => state.generalStates?.rewards?.selectedReward);
-  const numberOfWinners = useSelector((state) => state.generalStates?.rewards?.numberOfWinners);
-  const solAmount = useSelector((state) => state.generalStates?.rewards?.solAmount);
-  const xpAmount = useSelector((state) => state.generalStates?.rewards?.xpAmount);
-  const tokenMintAmount = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAmount);
-  const tokenMintAddress = useSelector((state) => state.generalStates?.tokenMint?.tokenMintAddress);
-  const tokenURL = useSelector((state) => state.generalStates?.tokenMint?.tokenURL);
-  const productAmount = useSelector((state) => state.generalStates?.digitalProduct?.productAmount);
-  const productQuantity = useSelector((state) => state.generalStates?.digitalProduct?.productQuantity);
-  const productFile = useSelector((state) => state.generalStates?.digitalProduct?.productFile);
-  const isCustomAmount = useSelector((state) => state.generalStates?.digitalProduct?.isCustomAmount);
+  const selectedReward = useSelector(
+    (state) => state.generalStates?.rewards?.selectedReward
+  );
+  const numberOfWinners = useSelector(
+    (state) => state.generalStates?.rewards?.numberOfWinners
+  );
+  const solAmount = useSelector(
+    (state) => state.generalStates?.rewards?.solAmount
+  );
+  const xpAmount = useSelector(
+    (state) => state.generalStates?.rewards?.xpAmount
+  );
+  const tokenMintAmount = useSelector(
+    (state) => state.generalStates?.tokenMint?.tokenMintAmount
+  );
+  const tokenMintAddress = useSelector(
+    (state) => state.generalStates?.tokenMint?.tokenMintAddress
+  );
+  const tokenURL = useSelector(
+    (state) => state.generalStates?.tokenMint?.tokenURL
+  );
+  const productAmount = useSelector(
+    (state) => state.generalStates?.digitalProduct?.productAmount
+  );
+  const productQuantity = useSelector(
+    (state) => state.generalStates?.digitalProduct?.productQuantity
+  );
+  const productFile = useSelector(
+    (state) => state.generalStates?.digitalProduct?.productFile
+  );
+  const isCustomAmount = useSelector(
+    (state) => state.generalStates?.digitalProduct?.isCustomAmount
+  );
+  const pollsOption = useSelector((state) => state.generalStates.pollsOption);
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";
@@ -116,9 +148,17 @@ const CampaignPreview = ({ campaignData }) => {
 
   const { status, color } = getCampaignStatus();
 
-  const createANewCampaign = async (values) => {
+  const createANewCampaign = async () => {
     try {
       setLoading(true);
+
+      if (!userApiKey) {
+        toast.error(
+          "Please generate an api key on your profile in order to create a campaign"
+        );
+        return;
+      }
+
       const constructDynamicInputResponse = () => {
         const fields = {};
         switch (selectedActionType) {
@@ -130,9 +170,10 @@ const CampaignPreview = ({ campaignData }) => {
             break;
 
           case "Poll":
-            fields.options = values.options;
+            fields.options = pollsOption;
             if (!Array.isArray(fields.options) || fields.options.length === 0) {
               toast("Options must be a non-empty array for Poll action type.");
+              return null;
             }
             break;
 
@@ -142,6 +183,7 @@ const CampaignPreview = ({ campaignData }) => {
               toast.error(
                 "URL must be a non-empty string for Submit-Url action type."
               );
+              return null;
             }
             break;
 
@@ -153,21 +195,25 @@ const CampaignPreview = ({ campaignData }) => {
               toast.error(
                 "Product must be a non-empty string for Sell-Product action type."
               );
+              return null;
             }
             if (isNaN(fields.amount) || isNaN(fields.quantity)) {
               toast.error(
                 "Amount and quantity must be numbers for Sell-Product action type."
               );
+              return null;
             }
             break;
 
           default:
             toast.error("Invalid action type.");
+            return null;
         }
         return fields;
       };
 
       const fields = constructDynamicInputResponse();
+      if (!fields) return; // Early exit if validation fails
 
       const rewardInfo = {
         type: selectedReward,
@@ -188,36 +234,45 @@ const CampaignPreview = ({ campaignData }) => {
         }
       }
 
-      const response = await dispatch(
-        createCampaign({
-          campaignType: selectedActionType,
-          data: {
-            campaignInfo: {
-              title: title,
-              start: startDate,
-              end: endDate,
-              description: "detailed description of my campaign",
-              banner: bannerImg,
-            },
-            action: {
-              fields: fields,
-            },
-            rewardInfo: rewardInfo,
+      const requestBody = {
+        data: {
+          campaignInfo: {
+            title: title,
+            start: startDate,
+            end: endDate,
+            description: "Here's a detailed description of my campaign",
+            // description: description,
+            banner: bannerImg,
           },
-          userApiKey,
-        })
-      );
-      if (response.payload.success === true) {
-        toast.success(response.payload.message);
-        setLoading(false);
-        console.log(response);
+          action: { fields },
+          rewardInfo,
+        },
+      };
+      console.log(requestBody, "data here!!!");
+      const url = `${apiBaseURL}/campaign?campaignType=${encodeURIComponent(
+        selectedActionType
+      )}`;
+
+      // Set up the headers
+      const headers = {
+        "X-API-Key": `${userApiKey}`,
+        "Content-Type": "application/json",
+      };
+
+      // Make the API call using Axios
+      const response = await axios.post(url, requestBody, { headers });
+
+      if (response.data.success === true) {
+        toast.success(response.data.message);
       } else {
-        toast.error(response.payload.message);
-        console.log(response);
+        toast.error(response.data.message);
       }
+
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error creating campaign:", error);
+      toast.error(error.message);
+      setLoading(false);
     }
   };
 
@@ -236,7 +291,12 @@ const CampaignPreview = ({ campaignData }) => {
           <PreviewSection title="Campaign Name" content={title || "N/A"} />
 
           <PreviewSection title="Campaign Description">
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: mdParser.render(description || "N/A") }} />
+            <div
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: mdParser.render(description || "N/A"),
+              }}
+            />
           </PreviewSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

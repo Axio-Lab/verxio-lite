@@ -1,94 +1,124 @@
-import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import { BarChart2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/Button";
+import { Formik, Form, Field } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { setPollsOption } from "@/store/slices/statesSlice";
 
-const PollAction = ({ onSave, initialData }) => {
-  const [options, setOptions] = useState(initialData?.options || ["", ""]);
-  const [question, setQuestion] = useState(initialData?.question || "");
+const PollAction = () => {
+  const dispatch = useDispatch();
+  const pollsOption = useSelector((state) => state.generalStates.pollsOption);
 
-  useEffect(() => {
-    if (options.length < 2) {
-      setOptions((prev) => [...prev, ""]);
-    }
-  }, [options]);
+  const initialValues = {
+    optionsArray: pollsOption?.optionsArray || ["", ""],
+  };
 
-  const handleOptionChange = (index, value) => {
-    const newOptions = [...options];
+  const validationSchema = Yup.object().shape({
+    optionsArray: Yup.array()
+      .of(
+        Yup.string()
+          .trim()
+          .min(1, "Option cannot be empty")
+          .required("Option is required")
+      )
+      .min(2, "At least two options are required")
+      .required("Poll options are required"),
+  });
+
+  const handleOptionChange = (index, value, setFieldValue, values) => {
+    const newOptions = [...values.optionsArray];
     newOptions[index] = value;
-    setOptions(newOptions);
+    setFieldValue("optionsArray", newOptions);
   };
 
-  const addOption = () => {
-    if (options.length < 5) {
-      setOptions([...options, ""]);
+  const addOption = (setFieldValue, values) => {
+    if (values.optionsArray.length < 5) {
+      const newOptions = [...values.optionsArray, ""];
+      setFieldValue("optionsArray", newOptions);
     }
   };
 
-  const removeOption = (index) => {
-    if (options.length > 2) {
-      const newOptions = options.filter((_, i) => i !== index);
-      setOptions(newOptions);
+  const removeOption = (index, setFieldValue, values) => {
+    if (values.optionsArray.length > 2) {
+      const newOptions = values.optionsArray.filter((_, i) => i !== index);
+      setFieldValue("optionsArray", newOptions);
     }
   };
 
-  const handleSave = () => {
-    const filteredOptions = options.filter((option) => option.trim() !== "");
+  const handleSave = (values) => {
+    const filteredOptions = values.optionsArray.filter(
+      (option) => option.trim() !== ""
+    );
     if (filteredOptions.length < 2) {
       toast("Please provide at least two non-empty options.");
       return;
     }
-    if (question.trim() === "") {
-      toast("Please provide a question for the poll.");
-      return;
-    }
-    onSave({ question, options: filteredOptions });
+    dispatch(setPollsOption(filteredOptions));
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
-          <BarChart2 className="mr-2 text-green-500" />
-          Burn Token Details
-        </h3>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={() => {}}
+    >
+      {({ values, setFieldValue }) => (
+        <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center">
+              <BarChart2 className="mr-2 text-green-500" />
+              Burn Token Details
+            </h3>
 
-        <label className="block mb-2">Poll Options:</label>
-        {options.map((option, index) => (
-          <div key={index} className="flex items-center mb-2">
-            <input
-              type="text"
-              value={option}
-              onChange={(e) => handleOptionChange(index, e.target.value)}
-              className="flex-grow p-2 border rounded mr-2 outline-none"
-              placeholder={`Option ${index + 1}`}
-            />
-            {options.length > 2 && (
+            <label className="block mb-2">Poll Options:</label>
+            {values.optionsArray.map((option, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <Field
+                  type="text"
+                  name={`optionsArray[${index}]`}
+                  value={option}
+                  onChange={(e) =>
+                    handleOptionChange(
+                      index,
+                      e.target.value,
+                      setFieldValue,
+                      values
+                    )
+                  }
+                  className="flex-grow p-2 border rounded mr-2 outline-none"
+                  placeholder={`Option ${index + 1}`}
+                />
+                {values.optionsArray.length > 2 && (
+                  <Button
+                    name={"Remove"}
+                    onClick={() => removeOption(index, setFieldValue, values)}
+                    shade={"border border-red-600"}
+                    className={"bg-red-600 border border-red-600 text-white"}
+                  />
+                )}
+              </div>
+            ))}
+            {values.optionsArray.length < 5 && (
               <Button
-                name={"Remove"}
-                onClick={() => removeOption(index)}
-                shade={"border border-red-600"}
-                className={"bg-red-600 border border-red-600 text-white"}
+                name={"Add Option"}
+                outline
+                onClick={() => addOption(setFieldValue, values)}
+                style={{ backgroundColor: "white" }}
+                className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
               />
             )}
           </div>
-        ))}
-        {options.length < 5 && (
           <Button
-            name={"Add Option"}
-            outline
-            onClick={addOption}
-            style={{ backgroundColor: "white" }}
+            name={"Save"}
+            onClick={() => {
+              handleSave(values);
+            }}
             className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
           />
-        )}
-      </div>
-      <Button
-        name={"Save"}
-        onClick={handleSave}
-        className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
-      />
-    </div>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

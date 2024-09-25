@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button";
 import React, { useState, useEffect } from "react";
-import { Key, Copy, Trash2, Loader } from "lucide-react"; 
+import { Key, Copy, Trash2, Loader } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { setUserApiKey } from "@/store/slices/statesSlice";
 import { createAPIKey, invalidateAPIKey } from "@/store/slices/apiKeySlice";
@@ -10,7 +10,7 @@ const ApiSection = () => {
   const dispatch = useDispatch();
   const [createdDate, setCreatedDate] = useState("");
   const [loadingCreateApi, setLoadingCreateApi] = useState(false);
-  const [loadingDeleteApi, setLoadingDeleteApi] = useState(false); 
+  const [loadingDeleteApi, setLoadingDeleteApi] = useState(false);
   const userId = useSelector((state) => state.generalStates.userId);
   const [generatedAPIKey, setGeneratedAPIKey] = useState(null);
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
@@ -18,7 +18,7 @@ const ApiSection = () => {
   useEffect(() => {
     if (userApiKey) {
       setGeneratedAPIKey(userApiKey);
-      setCreatedDate(new Date().toISOString().split("T")[0]); 
+      setCreatedDate(new Date().toISOString().split("T")[0]);
     }
   }, [userApiKey]);
 
@@ -36,8 +36,8 @@ const ApiSection = () => {
       setLoadingCreateApi(true);
       const response = await dispatch(createAPIKey({ id: userId }));
       if (response.payload.success === true) {
-        console.log(response.payload.message);
-        toast.success('ApiKey generated successfully');
+        // console.log(response.payload.message);
+        toast.success("ApiKey generated successfully");
         dispatch(setUserApiKey(response.payload.data));
         setGeneratedAPIKey(response.payload.data);
         setCreatedDate(new Date().toISOString().split("T")[0]);
@@ -73,8 +73,12 @@ const ApiSection = () => {
   const NoApiKeyFound = () => (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg">
       <Key className="w-12 h-12 text-gray-400 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">No API Key Found</h3>
-      <p className="text-gray-600 text-center mb-4">You haven't generated an API key yet.</p>
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        No API Key Found
+      </h3>
+      <p className="text-gray-600 text-center mb-4">
+        You haven't generated an API key yet.
+      </p>
       <Button
         onClick={createNewApiKey}
         className="py-2 px-4"

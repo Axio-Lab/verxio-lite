@@ -12,6 +12,7 @@ const initialState = {
   selectedProductImage: {},
   tokenMint: {},
   digitalProduct: {},
+  pollsOption: [],
 };
 
 const statesSlice = createSlice({
@@ -35,6 +36,9 @@ const statesSlice = createSlice({
     },
     setUserApiKey: (state, action) => {
       state.userApiKey = action.payload;
+    },
+    setPollsOption: (state, action) => {
+      state.pollsOption = action.payload;
     },
     setRewards: (state, action) => {
       state.rewards = action.payload;
@@ -62,10 +66,11 @@ export const {
   setDetails,
   setRewards,
   setPreview,
-  setUserApiKey,
   setTokenMint,
   setActionType,
+  setUserApiKey,
   setUserProfile,
+  setPollsOption,
   setDigitalProduct,
   setSelectedProductImage,
 } = statesSlice.actions;

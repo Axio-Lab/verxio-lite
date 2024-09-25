@@ -72,7 +72,7 @@ const CampaignTypeAndActions = ({
   campaignType,
   selectedActions,
   toggleAction,
-  updateActionData,
+  updateActionData, 
   actionData,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);

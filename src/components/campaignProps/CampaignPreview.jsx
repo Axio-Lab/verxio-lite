@@ -249,9 +249,11 @@ const CampaignPreview = ({ campaignData }) => {
         },
       };
       console.log(requestBody, "data here!!!");
-      const url = `${apiBaseURL}/campaign?campaignType=${encodeURIComponent(
-        selectedActionType
-      )}`;
+      const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
+
+      // const url = `${apiBaseURL}/campaign?campaignType=${encodeURIComponent(
+      //   selectedActionType
+      // )}`;
 
       // Set up the headers
       const headers = {

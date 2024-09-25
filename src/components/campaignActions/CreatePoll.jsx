@@ -55,6 +55,8 @@ const PollAction = () => {
       return;
     }
     dispatch(setPollsOption(filteredOptions));
+    toast.success("Saved successful");
+
   };
 
   return (

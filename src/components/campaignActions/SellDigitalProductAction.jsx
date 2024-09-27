@@ -10,10 +10,9 @@ import { setDigitalProduct } from "@/store/slices/statesSlice";
 import { Button } from "@/components/Button";
 
 const SellDigitalProductAction = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef(null);
-
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.target.files[0];
@@ -56,9 +55,7 @@ const SellDigitalProductAction = () => {
       .required("Product amount is required")
       .min(1, "Product amount must be at least 1")
       .typeError("Product amount must be a valid number"),
-    productQuantity: Yup.number().required(
-      "Product productQuantity is required"
-    ),
+    productQuantity: Yup.number().required("Product quantity is required"),
     productFile: Yup.string().required("Product file is required"),
   });
 
@@ -66,7 +63,7 @@ const SellDigitalProductAction = () => {
     productAmount: digitalProduct?.productAmount || "",
     productQuantity: digitalProduct?.productQuantity || "",
     productFile: digitalProduct?.productFile || "",
-    isCustomAmount: digitalProduct?.isCustomAmount || false,
+    // isCustomAmount: digitalProduct?.isCustomAmount || false,
   };
 
   return (
@@ -75,62 +72,60 @@ const SellDigitalProductAction = () => {
       validationSchema={validationSchema}
       initialValues={initialValues}
     >
-      {({ values, setFieldValue, errors, touched, dirty }) => (
+      {({ values, setFieldValue, errors, touched, dirty, isValid }) => (
         <Form className="space-y-8 sm:space-y-12">
           <div className="p-4 bg-white rounded-lg shadow border-none outline-none">
             <h3 className="text-lg font-semibold mb-4 flex items-center">
               <ShoppingCart className="mr-2 text-purple-500" />
               Sell Digital Product Details
             </h3>
-            <div className="flex flex-col items-start gap-3 mb-3">
+            <div className="flex flex-col items-start gap-2 mb-3">
               <Field
-                id="product"
-                type={values.isCustomAmount ? "text" : "number"}
+                id="productAmount"
+                type={"number"}
                 className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
                   errors.productAmount && touched.productAmount
                     ? "border-red-500 focus:border-red-500"
                     : "border-gray-300 focus:border-primary"
                 } focus:ring-1 focus:ring-primary outline-none`}
-                name="title"
+                name="productAmount"
                 value={values.productAmount}
                 placeholder="Product amount"
                 onChange={(event) => {
                   setFieldValue("productAmount", event.target.value);
                 }}
-                disabled={values.isCustomAmount}
               />
 
               {errors.productAmount && touched.productAmount && (
-                <div className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm mt-1">
                   {errors.productAmount}
-                </div>
+                </p>
               )}
-
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={values.isCustomAmount}
-                  onChange={(event) =>
-                    setFieldValue("isCustomAmount", event.target.checked)
-                  }
-                />
-                <span className="ml-2 text-sm font-medium text-gray-700">
-                  Custom amount
-                </span>
-              </label>
             </div>
 
-            <Field
-              id="quantity"
-              type="number"
-              className="border outline-none bg-transparent  font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
-              name="number"
-              value={values.productQuantity}
-              placeholder="Product quantity"
-              onChange={(event) => {
-                setFieldValue("productQuantity", event.target.value);
-              }}
-            />
+            <div className="flex flex-col items-start gap-2 mb-3">
+              <Field
+                id="productQuantity"
+                type="number"
+                className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
+                  errors.productQuantity && touched.productQuantity
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-gray-300 focus:border-primary"
+                } focus:ring-1 focus:ring-primary outline-none`}
+                name="number"
+                value={values.productQuantity}
+                placeholder="Product quantity"
+                onChange={(event) => {
+                  setFieldValue("productQuantity", event.target.value);
+                }}
+              />
+
+              {errors.productQuantity && touched.productQuantity && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.productQuantity}
+                </p>
+              )}
+            </div>
 
             <div className="my-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -144,7 +139,11 @@ const SellDigitalProductAction = () => {
                   <div className="relative w-full h-32 sm:h-48">
                     <Image
                       src={selectedImage}
-                      alt="product image"
+                      alt={
+                        selectedImage
+                          ? "File uploaded successful"
+                          : "An error occured"
+                      }
                       layout="fill"
                       objectFit="cover"
                       className="rounded-lg"
@@ -157,7 +156,7 @@ const SellDigitalProductAction = () => {
                       Click to upload product file
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                    PDF, DOCX, ZIP up to 100MB
+                      PDF, DOCX, ZIP up to 100MB
                     </p>
                   </>
                 )}
@@ -169,11 +168,17 @@ const SellDigitalProductAction = () => {
                   accept="image/*,.pdf,.docx,.zip"
                 />
               </div>
+
+              {errors.productFile && touched.productFile && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.productFile}
+                </p>
+              )}
             </div>
             <Button
               name={"Save"}
               onClick={() => {
-                if (dirty) {
+                if (dirty && isValid) {
                   dispatch(setDigitalProduct(values));
                   toast.success("Saved successful");
                 }

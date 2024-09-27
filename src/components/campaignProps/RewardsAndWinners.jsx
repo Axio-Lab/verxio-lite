@@ -94,7 +94,7 @@ const RewardsAndWinners = () => {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-lg shadow-md">
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
-        {({ values, errors, touched, setFieldValue }) => (
+        {({ values, errors, touched, setFieldValue, isValid}) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-6 sm:mb-8">
               <h3 className="text-xl font-semibold mb-4 text-gray-700">

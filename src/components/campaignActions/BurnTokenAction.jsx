@@ -11,7 +11,7 @@ const BurnTokenAction = () => {
   const tokenMint = useSelector((state) => state.generalStates.tokenMint);
 
   const initialValues = {
-    tokenMintAmount: tokenMint?.tokenMintAmount || 0,
+    tokenMintAmount: tokenMint?.tokenMintAmount || "",
     tokenMintAddress: tokenMint?.tokenMintAddress || "",
   };
 
@@ -27,7 +27,7 @@ const BurnTokenAction = () => {
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
-        {({ values, setFieldValue, errors, touched, dirty }) => (
+        {({ values, setFieldValue, errors, touched, dirty, isValid }) => (
           <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
             <h3 className="text-lg font-semibold mb-4 flex items-center">
               <Flame className="mr-2 text-red-500" />
@@ -70,9 +70,12 @@ const BurnTokenAction = () => {
               name={"Save"}
               type="button"
               onClick={() => {
-                if (dirty && touched) {
+                if (dirty && isValid) {
                   dispatch(setTokenMint(values));
                   toast.success("Saved successful");
+                } else {
+                  toast.error("Please fill out the fields correctly");
+                  return;
                 }
               }}
             />

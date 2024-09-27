@@ -48,16 +48,28 @@ const PollAction = () => {
     }
   };
 
-  const handleSave = (values) => {
+  const handleSave = (values, isValid) => {
     const filteredOptions = values.optionsArray.filter(
       (option) => option.trim() !== ""
     );
     if (filteredOptions.length < 2) {
-      toast("Please provide at least two non-empty options.");
+      toast.error("Please provide at least two non-empty options.");
       return;
     }
-    dispatch(setPollsOption({ pollTitle: values.pollTitle, optionsArray: filteredOptions }));
-    toast.success("Saved successfully");
+
+    if (isValid) {
+      dispatch(
+        setPollsOption({
+          pollTitle: values.pollTitle,
+          optionsArray: filteredOptions,
+        })
+      );
+      toast.success("Saved successfully");
+      console.log(pollsOption, "polls options");
+    } else {
+      toast.error("Please fill out the fields correctly");
+      return;
+    }
   };
 
   return (
@@ -66,7 +78,7 @@ const PollAction = () => {
       validationSchema={validationSchema}
       onSubmit={() => {}}
     >
-      {({ values, setFieldValue, errors, touched }) => (
+      {({ values, setFieldValue, errors, touched, isValid }) => (
         <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
           <div>
             <h3 className="text-lg font-semibold mb-4 flex items-center">
@@ -74,16 +86,29 @@ const PollAction = () => {
               Create Poll Details
             </h3>
 
-            <div className="mb-4">
-              <label htmlFor="pollTitle" className="block mb-2 font-medium">Poll Title:</label>
+            <div className="mb-4 space-y-2">
+              <label htmlFor="pollTitle" className="block mb-2 font-medium">
+                Poll Title:
+              </label>
               <Field
-                type="text"
                 id="pollTitle"
+                className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded w-full px-4 py-2 ${
+                  errors.pollTitle && touched.pollTitle
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-gray-300 focus:border-primary"
+                } focus:ring-1 focus:ring-primary outline-none`}
                 name="pollTitle"
-                className="w-full p-2 border rounded outline-none"
+                value={values.pollTitle}
                 placeholder="e.g. Vote for your favorite superteam chapter"
+                onChange={(event) => {
+                  setFieldValue("pollTitle", event.target.value);
+                }}
               />
-              <ErrorMessage name="pollTitle" component="div" className="text-red-500 text-sm mt-1" />
+              <ErrorMessage
+                name="pollTitle"
+                component="p"
+                className="text-red-500 text-sm mt-1"
+              />
             </div>
 
             <label className="block mb-2 font-medium">Poll Options:</label>
@@ -114,9 +139,7 @@ const PollAction = () => {
                 )}
               </div>
             ))}
-            {errors.optionsArray && touched.optionsArray && (
-              <div className="text-red-500 text-sm mt-1">{errors.optionsArray}</div>
-            )}
+
             {values.optionsArray.length < 5 && (
               <Button
                 name={"Add Option"}
@@ -130,7 +153,7 @@ const PollAction = () => {
           <Button
             name={"Save"}
             onClick={() => {
-              handleSave(values);
+              handleSave(values, isValid);
             }}
             className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
           />

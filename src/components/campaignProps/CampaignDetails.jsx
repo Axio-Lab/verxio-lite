@@ -107,7 +107,6 @@ const CampaignDetails = () => {
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-300 focus:border-primary"
                     } focus:ring-1 focus:ring-primary outline-none`}
-                    // className="border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
                     name="title"
                     value={values.title}
                     placeholder="Enter campaign name"
@@ -115,6 +114,9 @@ const CampaignDetails = () => {
                       setFieldValue("title", event.target.value);
                     }}
                   />
+                  {errors.title && touched.title && (
+                    <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+                  )}
                 </div>
 
                 <div>
@@ -128,6 +130,11 @@ const CampaignDetails = () => {
                     onChange={handleDescriptionChange}
                     setFieldValue={setFieldValue}
                   />
+                  {errors.description && touched.description && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -167,6 +174,12 @@ const CampaignDetails = () => {
                       accept="image/*"
                     />
                   </div>
+
+                  {errors.bannerImg && touched.bannerImg && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.bannerImg}
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -185,6 +198,11 @@ const CampaignDetails = () => {
                       }}
                       className="w-full"
                     />
+                    {errors.startDate && touched.startDate && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.startDate}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="font-medium text-base sm:text-lg text-gray-700 mb-2 block">
@@ -201,6 +219,11 @@ const CampaignDetails = () => {
                       }}
                       className="w-full"
                     />
+                    {errors.endDate && touched.endDate && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.endDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -210,7 +233,9 @@ const CampaignDetails = () => {
                   href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
                   onClick={() => {
-                    dispatch(setDetails(values));
+                    if (dirty && isValid) {
+                      dispatch(setDetails(values));
+                    }
                   }}
                   className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                 />

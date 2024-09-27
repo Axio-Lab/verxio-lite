@@ -12,7 +12,7 @@ const initialState = {
   selectedProductImage: {},
   tokenMint: {},
   digitalProduct: {},
-  pollsOption: [],
+  pollsOption: {},
 };
 
 const statesSlice = createSlice({
@@ -66,6 +66,11 @@ const statesSlice = createSlice({
     resetApiKey: (state) => {
       state.userApiKey = initialState.userApiKey;
     },
+    resetActionType: (state) => {
+      state.tokenMint = initialState.tokenMint;
+      state.digitalProduct = initialState.digitalProduct;
+      state.pollsOption = initialState.pollsOption;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, () => {
@@ -83,6 +88,7 @@ export const {
   setTokenMint,
   setActionType,
   setUserApiKey,
+  resetActionType,
   setUserProfile,
   setPollsOption,
   setDigitalProduct,

@@ -15,7 +15,7 @@ const ApiSection = () => {
   const [generatedAPIKey, setGeneratedAPIKey] = useState(null);
   const userApiKey = useSelector((state) => state.generalStates.userApiKey);
   const isVerified = useSelector((state) => state.generalStates.userProfile.isVerified);
-console.log(useSelector((state) => state.generalStates))
+  console.log(useSelector((state) => state.generalStates))
 
   useEffect(() => {
     if (userApiKey) {

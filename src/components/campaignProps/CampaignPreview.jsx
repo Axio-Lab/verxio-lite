@@ -251,13 +251,18 @@ const CampaignPreview = ({ campaignData }) => {
         rewardInfo,
       };
 
-      console.log(requestBody, "data here!!");
+      console.log(requestBody, userApiKey, "data here!!");
 
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
 
       // Set up the headers
+      // const headers = {
+      //   "X-API-Key": userApiKey,
+      //   "Content-Type": "application/json",
+      // };
+
       const headers = {
-        "X-API-Key": userApiKey,
+        "X-API-Key": `${userApiKey}`,
         "Content-Type": "application/json",
       };
 

@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { BarChart2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/Button";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { setPollsOption } from "@/store/slices/statesSlice";
 
@@ -11,10 +11,12 @@ const PollAction = () => {
   const pollsOption = useSelector((state) => state.generalStates.pollsOption);
 
   const initialValues = {
+    pollTitle: pollsOption?.pollTitle || "",
     optionsArray: pollsOption?.optionsArray || ["", ""],
   };
 
   const validationSchema = Yup.object().shape({
+    pollTitle: Yup.string().required("Poll title is required"),
     optionsArray: Yup.array()
       .of(
         Yup.string()
@@ -54,8 +56,8 @@ const PollAction = () => {
       toast("Please provide at least two non-empty options.");
       return;
     }
-    dispatch(setPollsOption(filteredOptions));
-    toast.success("Saved successful");
+    dispatch(setPollsOption({ pollTitle: values.pollTitle, optionsArray: filteredOptions }));
+    toast.success("Saved successfully");
   };
 
   return (
@@ -64,7 +66,7 @@ const PollAction = () => {
       validationSchema={validationSchema}
       onSubmit={() => {}}
     >
-      {({ values, setFieldValue }) => (
+      {({ values, setFieldValue, errors, touched }) => (
         <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
           <div>
             <h3 className="text-lg font-semibold mb-4 flex items-center">
@@ -72,7 +74,19 @@ const PollAction = () => {
               Create Poll Details
             </h3>
 
-            <label className="block mb-2">Poll Options:</label>
+            <div className="mb-4">
+              <label htmlFor="pollTitle" className="block mb-2 font-medium">Poll Title:</label>
+              <Field
+                type="text"
+                id="pollTitle"
+                name="pollTitle"
+                className="w-full p-2 border rounded outline-none"
+                placeholder="e.g. Vote for your favorite superteam chapter"
+              />
+              <ErrorMessage name="pollTitle" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
+            <label className="block mb-2 font-medium">Poll Options:</label>
             {values.optionsArray.map((option, index) => (
               <div key={index} className="flex items-center mb-2">
                 <Field
@@ -100,6 +114,9 @@ const PollAction = () => {
                 )}
               </div>
             ))}
+            {errors.optionsArray && touched.optionsArray && (
+              <div className="text-red-500 text-sm mt-1">{errors.optionsArray}</div>
+            )}
             {values.optionsArray.length < 5 && (
               <Button
                 name={"Add Option"}

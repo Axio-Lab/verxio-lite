@@ -63,6 +63,9 @@ const statesSlice = createSlice({
       state.digitalProduct = initialState.digitalProduct;
       state.pollsOption = initialState.pollsOption;
     },
+    resetApiKey: (state) => {
+      state.userApiKey = initialState.userApiKey;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, () => {
@@ -85,5 +88,6 @@ export const {
   setDigitalProduct,
   setSelectedProductImage,
   resetCreateCampaignFormData,
+  resetApiKey,
 } = statesSlice.actions;
 export default statesSlice.reducer;

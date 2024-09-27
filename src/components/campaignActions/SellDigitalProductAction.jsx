@@ -157,7 +157,7 @@ const SellDigitalProductAction = () => {
                       Click to upload product file
                     </p>
                     <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                      PNG, JPG, GIF up to 10MB
+                    PDF, DOCX, ZIP up to 100MB
                     </p>
                   </>
                 )}

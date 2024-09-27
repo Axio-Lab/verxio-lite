@@ -257,7 +257,7 @@ const CampaignPreview = ({ campaignData }) => {
 
       // Set up the headers
       const headers = {
-        "X-API-Key": `${userApiKey}`,
+        "X-API-Key": userApiKey,
         "Content-Type": "application/json",
       };
 

@@ -72,6 +72,7 @@ const BurnTokenAction = () => {
               onClick={() => {
                 if (dirty && isValid) {
                   dispatch(setTokenMint(values));
+                  console.log(values);
                   toast.success("Saved successful");
                 } else {
                   toast.error("Please fill out the fields correctly");

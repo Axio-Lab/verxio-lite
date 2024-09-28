@@ -10,7 +10,7 @@ import ApiSection from "@/components/profileProps/ApiKey";
 import { createProfile } from "@/store/slices/profileSlice";
 import { verifyUser } from "@/store/slices/apiKeySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserId, setUserProfile, resetApiKey } from "@/store/slices/statesSlice";
+import { setUserProfile } from "@/store/slices/statesSlice";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { VerifyAUser } from "@/components/modals/verifyUser";
 import LoadingSpinner from "@/components/componentLoader";
@@ -69,10 +69,10 @@ const Page = () => {
       read: false,
     },
   ]);
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
+  
   const dispatch = useDispatch();
-  let userId = "";
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  let userId = useSelector((state) => state.generalStates?.userProfile?._id);
 
   if (publicKey) {
     userId = publicKey?.toString();
@@ -83,7 +83,6 @@ const Page = () => {
       const response = await dispatch(createProfile({ id: userId }));
       if (response.payload.success === true) {
         toast.success(response.payload.message);
-        dispatch(setUserId(response.payload.profile._id));
         dispatch(setUserProfile(response.payload.profile));
       } else {
         toast.error(response.payload.message);
@@ -143,7 +142,6 @@ const Page = () => {
 
   function handleLogout() {
     disconnect();
-    dispatch(resetApiKey());
   }
 
   return (

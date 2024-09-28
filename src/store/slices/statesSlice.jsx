@@ -2,17 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 const initialState = {
-  userId: "",
-  userApiKey: "",
   details: {},
   actionType: {},
   rewards: {},
   preview: {},
-  userProfile: {},
-  selectedProductImage: {},
   tokenMint: {},
-  digitalProduct: {},
+  userProfile: {},
   pollsOption: {},
+  digitalProduct: {},
+  selectedProductImage: {},
 };
 
 const statesSlice = createSlice({
@@ -25,17 +23,11 @@ const statesSlice = createSlice({
     setDigitalProduct: (state, action) => {
       state.digitalProduct = action.payload;
     },
-    setUserId: (state, action) => {
-      state.userId = action.payload;
-    },
     setTokenMint: (state, action) => {
       state.tokenMint = action.payload;
     },
     setActionType: (state, action) => {
       state.actionType = action.payload;
-    },
-    setUserApiKey: (state, action) => {
-      state.userApiKey = action.payload;
     },
     setPollsOption: (state, action) => {
       state.pollsOption = action.payload;
@@ -62,9 +54,6 @@ const statesSlice = createSlice({
       state.tokenMint = initialState.tokenMint;
       state.digitalProduct = initialState.digitalProduct;
       state.pollsOption = initialState.pollsOption;
-    },
-    resetApiKey: (state) => {
-      state.userApiKey = initialState.userApiKey;
     },
     resetActionType: (state) => {
       state.tokenMint = initialState.tokenMint;
@@ -94,6 +83,5 @@ export const {
   setDigitalProduct,
   setSelectedProductImage,
   resetCreateCampaignFormData,
-  resetApiKey,
 } = statesSlice.actions;
 export default statesSlice.reducer;

@@ -11,11 +11,11 @@ const ApiSection = () => {
   const [createdDate, setCreatedDate] = useState("");
   const [loadingCreateApi, setLoadingCreateApi] = useState(false);
   const [loadingDeleteApi, setLoadingDeleteApi] = useState(false);
-  const userId = useSelector((state) => state.generalStates.userId);
   const [generatedAPIKey, setGeneratedAPIKey] = useState(null);
-  const userApiKey = useSelector((state) => state.generalStates.userApiKey);
+  const userId = useSelector((state) => state.generalStates.userProfile._id);
+  const userApiKey = useSelector((state) => state.generalStates.userProfile.key);
   const isVerified = useSelector((state) => state.generalStates.userProfile.isVerified);
-  console.log(useSelector((state) => state.generalStates))
+  console.log(useSelector((state) => state.generalStates.userProfile));
 
   useEffect(() => {
     if (userApiKey) {
@@ -72,7 +72,11 @@ const ApiSection = () => {
     }
   };
 
-  const NoApiKeyFound = ({ isVerified, handleCreateApiKey, loadingCreateApi }) => (
+  const NoApiKeyFound = ({
+    isVerified,
+    handleCreateApiKey,
+    loadingCreateApi,
+  }) => (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg">
       <Key className="w-12 h-12 text-gray-400 mb-4" />
       <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -89,9 +93,15 @@ const ApiSection = () => {
           isLoading={loadingCreateApi}
         />
       ) : (
-        <div className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4" role="alert">
+        <div
+          className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4"
+          role="alert"
+        >
           <AlertCircle className="h-5 w-5 mr-2" />
-          <p>Please complete verification with Reclaim Protocol to generate an API key.</p>
+          <p>
+            Please complete verification with Reclaim Protocol to generate an
+            API key.
+          </p>
         </div>
       )}
     </div>
@@ -119,9 +129,15 @@ const ApiSection = () => {
                     isLoading={loadingCreateApi}
                   />
                 ) : (
-                  <div className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                  <div
+                    className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4"
+                    role="alert"
+                  >
                     <AlertCircle className="h-5 w-5 mr-2" />
-                    <p>Please complete verification with Reclaim Protocol to generate a new API key.</p>
+                    <p>
+                      Please complete verification with Reclaim Protocol to
+                      generate a new API key.
+                    </p>
                   </div>
                 )}
               </div>

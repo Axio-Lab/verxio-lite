@@ -75,9 +75,9 @@ const CampaignTypeAndActions = ({
   updateActionData,
   actionData,
 }) => {
+  const dispatch = useDispatch();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState(null);
-  const dispatch = useDispatch();
   const actionType = useSelector((state) => state.generalStates.actionType);
 
   const handleActionToggle = (action, setFieldValue) => {
@@ -85,7 +85,7 @@ const CampaignTypeAndActions = ({
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
       setFieldValue("selectedActionType", "");
-      dispatch(resetActionType());
+      // dispatch(resetActionType());
     } else if (selectedActions.length > 0) {
       toast.error("An action is already selected. Please deselect it first.");
     } else {
@@ -160,7 +160,9 @@ const CampaignTypeAndActions = ({
               />
               <Button
                 href="/dashboard/create-campaign?route=reward"
-                onClick={() => {if(isValid) {dispatch(setActionType(values))}}}
+                onClick={() => {
+                  dispatch(setActionType(values));
+                }}
                 name={"Continue"}
               />
             </div>

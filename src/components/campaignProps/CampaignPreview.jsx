@@ -36,7 +36,6 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
 
-
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
 // import { setRewards } from "@/store/slices/statesSlice";
@@ -79,7 +78,9 @@ const CampaignPreview = ({ campaignData }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
-  const userApiKey = useSelector((state) => state.generalStates.userApiKey);
+  const userApiKey = useSelector(
+    (state) => state.generalStates?.userProfile?.key
+  );
 
   const selectedActionType = useSelector(
     (state) => state.generalStates?.actionType?.selectedActionType
@@ -125,10 +126,8 @@ const CampaignPreview = ({ campaignData }) => {
   const productFile = useSelector(
     (state) => state.generalStates?.digitalProduct?.productFile
   );
-  const isCustomAmount = useSelector(
-    (state) => state.generalStates?.digitalProduct?.isCustomAmount
-  );
-  const pollsOption = useSelector((state) => state.generalStates.pollsOption);
+  const optionsArray = useSelector((state) => state.generalStates?.pollsOption?.optionsArray);
+  const pollTitle = useSelector((state) => state.generalStates?.pollsOption?.pollTitle);
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";
@@ -172,13 +171,21 @@ const CampaignPreview = ({ campaignData }) => {
           case "Decompress-Token":
             fields.address = tokenMintAddress;
             fields.minAmount = parseInt(tokenMintAmount);
+            if (!fields.address || !fields.minAmount) {
+              toast.error("Token address and minimum amount for action cannot be empty");
+              return null;
+            }
             break;
 
           case "Poll":
-            fields.options = pollsOption;
-            if (!Array.isArray(fields.options) || fields.options.length === 0) {
-              toast("Options must be a non-empty array for Poll action type.");
+            fields.options = optionsArray;
+            fields.pollTitle = pollTitle;
+            if (fields.options.length === 0) {
+              toast.error("Poll options must be a non-empty array for Poll action type.");
               return null;
+            }
+            if(!fields.pollTitle) {
+              toast.error("Poll title cannot be empty")
             }
             break;
 
@@ -194,9 +201,9 @@ const CampaignPreview = ({ campaignData }) => {
 
           case "Sell-Product":
             fields.product = productFile;
-            fields.amount = parseInt(productAmount, 10);
-            fields.quantity = parseInt(productQuantity, 10);
-            if (typeof fields.product !== "string" || !fields.product) {
+            fields.amount = parseInt(productAmount);
+            fields.quantity = parseInt(productQuantity);
+            if (!fields.product) {
               toast.error(
                 "Product must be a non-empty string for Sell-Product action type."
               );
@@ -205,6 +212,12 @@ const CampaignPreview = ({ campaignData }) => {
             if (isNaN(fields.amount) || isNaN(fields.quantity)) {
               toast.error(
                 "Amount and quantity must be numbers for Sell-Product action type."
+              );
+              return null;
+            }
+            if (!fields.amount || !fields.quantity) {
+              toast.error(
+                "Product Amount and quantity cannot be empty for Sell-Product action type."
               );
               return null;
             }
@@ -218,8 +231,10 @@ const CampaignPreview = ({ campaignData }) => {
       };
 
       const fields = constructDynamicInputResponse();
-      if (!fields) return; // Early exit if validation fails
-
+      if (!fields) {
+        setLoading(false);
+        return; // Early exit if validation fails
+      }
       const rewardInfo = {
         type: selectedReward,
         noOfPeople: numberOfWinners,
@@ -237,6 +252,10 @@ const CampaignPreview = ({ campaignData }) => {
           toast.error("Amount must be a number for the selected reward type.");
           return;
         }
+      }
+      if (!rewardInfo) {
+        setLoading(false);
+        return; // Early exit if validation fails
       }
 
       const requestBody = {
@@ -256,22 +275,22 @@ const CampaignPreview = ({ campaignData }) => {
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
 
       // Set up the headers
-      // const headers = {
-      //   "X-API-Key": userApiKey,
-      //   "Content-Type": "application/json",
-      // };
-
       const headers = {
-        "X-API-Key": `${userApiKey}`,
+        "X-API-Key": userApiKey,
         "Content-Type": "application/json",
       };
+
+      // const headers = {
+      //   "X-API-Key": `${userApiKey}`,
+      //   "Content-Type": "application/json",
+      // };
 
       // Make the API call using Axios
       const response = await axios.post(url, requestBody, { headers });
 
       if (response.data.success === true) {
         toast.success(response.data.message);
-        dispatch(resetCreateCampaignFormData())
+        dispatch(resetCreateCampaignFormData());
       } else {
         toast.error(response.data.message);
       }
@@ -323,7 +342,9 @@ const CampaignPreview = ({ campaignData }) => {
             <StatCard
               icon={Clock}
               title="Duration"
-              value={`${startDate} - ${endDate}`}
+              value={`${startDate ? startDate : "Start Date"} - ${
+                endDate ? endDate : "End Date"
+              }`}
               color="bg-amber-50 text-black"
             />
           </div>

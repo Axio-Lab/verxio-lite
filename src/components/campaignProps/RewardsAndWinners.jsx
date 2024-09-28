@@ -94,7 +94,7 @@ const RewardsAndWinners = () => {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-lg shadow-md">
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
-        {({ values, errors, touched, setFieldValue, isValid}) => (
+        {({ values, errors, touched, setFieldValue, isValid }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-6 sm:mb-8">
               <h3 className="text-xl font-semibold mb-4 text-gray-700">
@@ -220,14 +220,14 @@ const RewardsAndWinners = () => {
 
             <div className="flex items-center justify-between mt-6">
               <Button
-                href="/dashboard/create-campaign?route=action"
                 name={"Previous"}
                 className="w-[48%]"
+                href="/dashboard/create-campaign?route=action"
               />
               <Button
                 type="submit"
-                href="/dashboard/create-campaign?route=preview"
                 name={"Continue"}
+                href="/dashboard/create-campaign?route=preview"
                 onClick={() => {
                   dispatch(setRewards(values));
                 }}

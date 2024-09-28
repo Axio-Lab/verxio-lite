@@ -60,7 +60,7 @@ const CompressTokenAction = () => {
               } focus:ring-1 focus:ring-primary outline-none`}
               name="tokenAmount"
               value={values.tokenMintAmount}
-              placeholder="Minimum burn amount"
+              placeholder="Minimum compress amount"
               onChange={(event) => {
                 setFieldValue("tokenMintAmount", event.target.value);
               }}

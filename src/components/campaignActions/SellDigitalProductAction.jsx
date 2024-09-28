@@ -13,6 +13,7 @@ const SellDigitalProductAction = () => {
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const verxiocloudinaryApiKey = process.env.VERXIO_CORE_CLOUDINARY_KEY;
 
   const handleFileChange = async (event, setFieldValue) => {
     const file = event.target.files[0];
@@ -28,12 +29,12 @@ const SellDigitalProductAction = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "Ibelachi_Test_Run");
-    formData.append("api_key", "968631257356497");
+    formData.append("upload_preset", "verxio_core_team_inc");
+    formData.append("api_key", `${verxiocloudinaryApiKey}`);
 
     try {
       const response = await fetch(
-        "https://api.cloudinary.com/v1_1/verxioaventor/image/upload",
+        "https://api.cloudinary.com/v1_1/dum54wavg/image/upload",
         {
           method: "POST",
           body: formData,
@@ -192,3 +193,4 @@ const SellDigitalProductAction = () => {
 };
 
 export default SellDigitalProductAction;
+

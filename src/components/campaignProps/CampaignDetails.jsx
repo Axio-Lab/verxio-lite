@@ -6,6 +6,7 @@ import { Formik, Form, Field } from "formik";
 import React, { useState, useRef } from "react";
 import "react-markdown-editor-lite/lib/index.css";
 import { Button } from "@/components/Button";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -63,6 +64,7 @@ const CampaignDetails = () => {
       setFieldValue("bannerImg", results.url);
     } catch (error) {
       console.log("Error uploading image:", error);
+      toast.error("An error occured while uploading image. Please rty again.");
     }
   };
 

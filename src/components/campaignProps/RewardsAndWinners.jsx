@@ -109,7 +109,7 @@ const RewardsAndWinners = () => {
                     }
                     className={`flex items-center p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
                       values.title === reward.value
-                        ? "bg-blue-200 shadow-md transform scale-105"
+                            ? "bg-green-200 hover:bg-green-300"
                         : "bg-white hover:bg-gray-100"
                     }`}
                   >
@@ -184,6 +184,7 @@ const RewardsAndWinners = () => {
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="0.01"
+                      placeholder="Enter Sol Amount"
                     />
                     <p className="text-sm text-gray-600 mt-1">
                       The SOL amount will be split equally between{" "}
@@ -207,12 +208,19 @@ const RewardsAndWinners = () => {
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
                       step="1"
+                      placeholder="Enter Verxio Xp"
                     />
                     <p className="text-sm text-gray-600 mt-1">
                       The Verxio XP amount will be split equally between{" "}
                       {values.numberOfWinners} winner
                       {values.numberOfWinners > 1 ? "s" : ""}.
                     </p>
+
+                    {errors.title && touched.title && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.title}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -240,5 +248,6 @@ const RewardsAndWinners = () => {
     </div>
   );
 };
+// ? "bg-blue-200 shadow-md transform scale-105"
 
 export default RewardsAndWinners;

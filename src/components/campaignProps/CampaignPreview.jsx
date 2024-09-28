@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import MarkdownIt from "markdown-it";
-import { PURGE } from "redux-persist";
+// import MdEditor from "react-markdown-editor-lite";
+// import { PURGE } from "redux-persist";
 import "react-markdown-editor-lite/lib/index.css";
-import MdEditor from "react-markdown-editor-lite";
 // import { FaExchangeAlt } from "react-icons/fa";
 // import { SiExpertsexchange } from "react-icons/si";
 // import { GiWaveCrest } from "react-icons/gi";
@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
@@ -126,8 +127,12 @@ const CampaignPreview = ({ campaignData }) => {
   const productFile = useSelector(
     (state) => state.generalStates?.digitalProduct?.productFile
   );
-  const optionsArray = useSelector((state) => state.generalStates?.pollsOption?.optionsArray);
-  const pollTitle = useSelector((state) => state.generalStates?.pollsOption?.pollTitle);
+  const optionsArray = useSelector(
+    (state) => state.generalStates?.pollsOption?.optionsArray
+  );
+  const pollTitle = useSelector(
+    (state) => state.generalStates?.pollsOption?.pollTitle
+  );
 
   // const formatDate = (dateString) => {
   //   if (!dateString) return "N/A";
@@ -172,32 +177,29 @@ const CampaignPreview = ({ campaignData }) => {
             fields.address = tokenMintAddress;
             fields.minAmount = parseInt(tokenMintAmount);
             if (!fields.address || !fields.minAmount) {
-              toast.error("Token address and minimum amount for action cannot be empty");
+              toast.error(
+                "Token address and minimum amount for action cannot be empty"
+              );
               return null;
             }
             break;
 
           case "Poll":
             fields.options = optionsArray;
-            fields.pollTitle = pollTitle;
+            fields.title = pollTitle;
             if (fields.options.length === 0) {
-              toast.error("Poll options must be a non-empty array for Poll action type.");
+              toast.error(
+                "Poll options must be a non-empty array for Poll action type."
+              );
               return null;
             }
-            if(!fields.pollTitle) {
-              toast.error("Poll title cannot be empty")
+            if (!fields.title) {
+              toast.error("Poll title cannot be empty");
             }
             break;
 
           case "Submit-Url":
-            fields.url = values.url;
-            if (!fields.url) {
-              toast.error(
-                "URL must be a non-empty string for Submit-Url action type."
-              );
-              return null;
-            }
-            break;
+            return { fields: {}, action: {} };
 
           case "Sell-Product":
             fields.product = productFile;
@@ -289,6 +291,7 @@ const CampaignPreview = ({ campaignData }) => {
       const response = await axios.post(url, requestBody, { headers });
 
       if (response.data.success === true) {
+        setLoading(false);
         toast.success(response.data.message);
         dispatch(resetCreateCampaignFormData());
       } else {
@@ -365,10 +368,10 @@ const CampaignPreview = ({ campaignData }) => {
             onClick={() => createANewCampaign()}
             name={"Create Campaign"}
             className="w-full sm:w-auto"
-            isLoading={loading}
           />
         </div>
       </div>
+      {loading && <LoadingSpinner />}
     </>
   );
 };

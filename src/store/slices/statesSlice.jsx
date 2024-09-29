@@ -10,6 +10,7 @@ const initialState = {
   userProfile: {},
   pollsOption: {},
   digitalProduct: {},
+  allCampaigns: [],
   selectedProductImage: {},
 };
 
@@ -22,6 +23,9 @@ const statesSlice = createSlice({
     },
     setDigitalProduct: (state, action) => {
       state.digitalProduct = action.payload;
+    },
+    setAllCampaigns: (state, action) => {
+      state.allCampaigns = action.payload;
     },
     setTokenMint: (state, action) => {
       state.tokenMint = action.payload;
@@ -78,6 +82,7 @@ export const {
   setActionType,
   setUserApiKey,
   resetActionType,
+  setAllCampaigns,
   setUserProfile,
   setPollsOption,
   setDigitalProduct,

@@ -52,17 +52,21 @@ const statesSlice = createSlice({
     // Action for reseting the redux state after create campaign submission
     resetCreateCampaignFormData: (state) => {
       state.details = initialState.details;
-      state.actionType = initialState.actionType;
       state.rewards = initialState.rewards;
       state.preview = initialState.preview;
       state.tokenMint = initialState.tokenMint;
-      state.digitalProduct = initialState.digitalProduct;
+      state.actionType = initialState.actionType;
       state.pollsOption = initialState.pollsOption;
+      state.digitalProduct = initialState.digitalProduct;
     },
     resetActionType: (state) => {
       state.tokenMint = initialState.tokenMint;
       state.digitalProduct = initialState.digitalProduct;
       state.pollsOption = initialState.pollsOption;
+    },
+
+    resetUserProfile: (state) => {
+      state.userProfile = initialState.userProfile;
     },
   },
   extraReducers: (builder) => {
@@ -87,6 +91,7 @@ export const {
   setPollsOption,
   setDigitalProduct,
   setSelectedProductImage,
+  resetUserProfile,
   resetCreateCampaignFormData,
 } = statesSlice.actions;
 export default statesSlice.reducer;

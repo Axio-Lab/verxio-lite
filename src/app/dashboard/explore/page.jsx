@@ -1,120 +1,23 @@
 "use client";
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
-import { toast, Toaster } from "react-hot-toast";
-import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import CampaignPage from "@/components/CampaignPage";
+import { Toaster } from "react-hot-toast";
+import React, { useState, useMemo, useContext } from "react";
 import CampaignCard from "@/components/campaignProps/CampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
-import { setAllCampaigns } from "@/store/slices/statesSlice";
+import { CampaignContext } from "@/context/campaignContext";
 
 const Explore = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [campaigns, setCampaigns] = useState([]);
-  const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
-  // const campaigns = useSelector((state) => state.generalStates?.allCampaigns);
-  const userApiKey = useSelector(
-    (state) => state.generalStates?.userProfile?.key
-  );
-
-  const fetchAllCampaigns = async () => {
-    try {
-      setLoading(true);
-      if (!userApiKey) {
-        toast.error(
-          "Please generate an api key on your profile in order to view all campaigns"
-        );
-        setLoading(false);
-        return;
-      }
-      const url = `${apiBaseURL}/campaign/all`;
-
-      // Set up the headers
-      const headers = {
-        "X-API-Key": userApiKey,
-        "Content-Type": "application/json",
-      };
-
-      // Make the API call using Axios
-      const response = await axios.get(url, { headers });
-
-      if (response.data.success === true) {
-        setLoading(false);
-        toast.success(response.data.message);
-        dispatch(setAllCampaigns(response.data));
-        setCampaigns(response.data);
-      } else {
-        toast.error(response.data.message);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching campaign:", error);
-      toast.error(error.message);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllCampaigns();
-  }, []);
-
-  console.log(campaigns, "from redux");
-
-  // const [campaigns] = useState([
-  //   // {
-  //   //   id: 1,
-  //   //   title: "Summer Token Swap",
-  //   //   status: "Active",
-  //   //   participants: 1234,
-  //   //   winners: 50,
-  //   //   daysLeft: 7,
-  //   //   action: "Compress Token",
-  //   //   reward: "NFT Drop",
-  //   // },
-  //   // {
-  //   //   id: 2,
-  //   //   title: "Franklyn Test Run",
-  //   //   status: "Ended",
-  //   //   participants: 34,
-  //   //   winners: 50,
-  //   //   daysLeft: 2,
-  //   //   action: "Sell Digital Product",
-  //   //   reward: "Merch Drop",
-  //   // },
-  //   // {
-  //   //   id: 3,
-  //   //   title: "Bonk Token Burn Giveaway 🎉🎊 ",
-  //   //   status: "Upcoming",
-  //   //   participants: 3000,
-  //   //   winners: 100,
-  //   //   daysLeft: 47,
-  //   //   action: "Burn Token",
-  //   //   reward: "Token",
-  //   // },
-  //   // {
-  //   //   id: 4,
-  //   //   title: "Verxio x Breakpoint Extravaganza 🎊",
-  //   //   status: "Active",
-  //   //   participants: 700,
-  //   //   winners: 20,
-  //   //   action: "Submit Url",
-  //   //   reward: "Merch Drop",
-  //   // },
-  //   // Add more campaign objects here
-  // ]);
-
-  const [selectedCampaign, setSelectedCampaign] = useState(null);
-  const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
-  const [currentPage, setCurrentPage] = useState(1);
+  const { state } = useContext(CampaignContext);
+  const campaigns = state.allCampaigns;
   const campaignsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
   const filteredCampaigns = useMemo(() => {
     return campaigns.filter((campaign) => {
@@ -159,13 +62,9 @@ const Explore = () => {
     </div>
   );
 
-  if (selectedCampaign) {
-    return <CampaignPage campaign={selectedCampaign} />;
-  }
-
   return (
     <>
-      {loading && <LoadingSpinner />}
+      {state?.loading && <LoadingSpinner />}
       <Toaster position="top-right" />
 
       <div className="min-h-screen px-4 py-8 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
@@ -242,11 +141,7 @@ const Explore = () => {
           <div className="space-y-6">
             {currentCampaigns.length > 0 ? (
               currentCampaigns.map((campaign) => (
-                <div
-                  key={campaign.id}
-                  className="cursor-pointer"
-                  onClick={() => setSelectedCampaign(campaign)}
-                >
+                <div key={campaign._id} className="cursor-pointer">
                   <CampaignCard campaign={campaign} />
                 </div>
               ))

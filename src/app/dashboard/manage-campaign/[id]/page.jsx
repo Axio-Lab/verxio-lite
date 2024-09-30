@@ -59,7 +59,7 @@ const Page = () => {
   }, [id]);
 
   if (!campaign) {
-    return <div>Loading...</div>;
+    return <div>no campaigns...</div>;
   }
 
   return <CampaignInfo campaign={campaign} />;

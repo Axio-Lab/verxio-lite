@@ -15,7 +15,7 @@ const ApiSection = () => {
   const userId = useSelector((state) => state.generalStates.userProfile._id);
   const userApiKey = useSelector((state) => state.generalStates.userProfile.key);
   const isVerified = useSelector((state) => state.generalStates.userProfile.isVerified);
-  // console.log(useSelector((state) => state.generalStates.userProfile));
+
 
   useEffect(() => {
     if (userApiKey) {

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import React, { useState, useMemo, useContext } from "react";
 import ExploreCampaignCard from "@/components/campaignProps/ExploreCampaignCard";
-// import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
@@ -62,6 +61,8 @@ const Explore = () => {
       </p>
     </div>
   );
+
+ 
 
   return (
     <>

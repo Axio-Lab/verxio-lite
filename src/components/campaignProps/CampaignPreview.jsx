@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import axios from "axios";
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
@@ -36,6 +36,9 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
+import CampaignContext from "@/context/campaignContext";
+
+const { getAllCampaigns } = useContext(CampaignContext);
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
@@ -289,6 +292,7 @@ const CampaignPreview = ({ campaignData }) => {
         setLoading(false);
         toast.success(response.data.message);
         dispatch(resetCreateCampaignFormData());
+        getAllCampaigns()
       } else {
         toast.error(response.data.message);
       }

@@ -75,7 +75,7 @@ const CampaignProvider = ({ children }) => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
       const response = await axios.get(`${apiBaseURL}/campaign`, { headers });
-      console.log(response, "My campaigns");
+      // console.log(response, "My campaigns");
       if (response.data.success === true) {
         dispatch({
           type: "GET_MY_CAMPAIGNS",
@@ -97,11 +97,6 @@ const CampaignProvider = ({ children }) => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    getMyCampaigns();
-    // eslint-disable-next-line
-  }, []);
-
   const [state, dispatch] = useReducer(campaignReducer, initialState);
 
   return (
@@ -109,6 +104,7 @@ const CampaignProvider = ({ children }) => {
       value={{
         state,
         dispatch,
+        getMyCampaigns,
         getAllCampaigns,
       }}
     >

@@ -1,25 +1,21 @@
 "use client";
+import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/Button";
-import { useWallet } from "@solana/wallet-adapter-react";
+// import { useWallet } from "@solana/wallet-adapter-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
 import { CampaignContext } from "@/context/campaignContext";
-import React, { useState, useMemo, useContext /*useEffect*/ } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
-import { useSelector, useDispatch } from "react-redux";
 
 const MyCampaigns = () => {
-  const { state } = useContext(CampaignContext);
+  const { state, getMyCampaigns } = useContext(CampaignContext);
   const campaigns = state.myCampaigns;
   const campaignsPerPage = 10;
-  const { isConnected } = useWallet();
+  // const { isConnected } = useWallet();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
-  const userApiKey = useSelector(
-    (state) => state.generalStates?.userProfile?.key
-  );
-  const userId = useSelector((state) => state.generalStates?.userProfile?._id);
 
   const filteredCampaigns = useMemo(() => {
     return campaigns.filter((campaign) => {
@@ -61,11 +57,21 @@ const MyCampaigns = () => {
     </div>
   );
 
-  if (!userApiKey && !userId) {
+  const userApiKey = useSelector(
+    (state) => state.generalStates?.userProfile?.key
+  );
+
+  if (!userApiKey) {
     return (
       <NoRecordsFound description="We couldn't find any campaigns. Please connect your wallet." />
     );
   }
+
+  useEffect(() => {
+    if (userApiKey) {
+      getMyCampaigns();
+    }
+  }, [userApiKey]);
 
   return (
     <>

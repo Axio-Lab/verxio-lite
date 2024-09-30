@@ -65,9 +65,8 @@ const Explore = () => {
 
   return (
     <>
-      {state?.loading && <LoadingSpinner />}
       <Toaster position="top-right" />
-
+      {state?.loading && <LoadingSpinner />}
       <div className="min-h-screen px-4 py-8 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-row items-center justify-between mb-6">

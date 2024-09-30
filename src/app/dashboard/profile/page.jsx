@@ -84,7 +84,6 @@ const Page = () => {
       if (response.payload.success === true) {
         toast.success(response.payload.message);
         dispatch(setUserProfile(response.payload.profile));
-        loginVerxioUser(response.payload.profile);
       } else {
         toast.error(response.payload.message);
         console.log(response);

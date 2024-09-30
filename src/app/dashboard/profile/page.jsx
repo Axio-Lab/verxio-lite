@@ -15,6 +15,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import { VerifyAUser } from "@/components/modals/verifyUser";
 import LoadingSpinner from "@/components/componentLoader";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { resetUserProfile } from "@/store/slices/statesSlice";
 
 const NoWalletConnected = () => (
   <div className="flex items-center justify-center min-h-screen bg-[#FBFBFE]">
@@ -52,7 +53,6 @@ const NoWalletConnected = () => (
   </div>
 );
 
-
 const Page = () => {
   const userProfile = useSelector((state) => state.generalStates.userProfile);
   const { publicKey, disconnect } = useWallet();
@@ -69,7 +69,7 @@ const Page = () => {
       read: false,
     },
   ]);
-  
+
   const dispatch = useDispatch();
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   let userId = useSelector((state) => state.generalStates?.userProfile?._id);
@@ -84,6 +84,7 @@ const Page = () => {
       if (response.payload.success === true) {
         toast.success(response.payload.message);
         dispatch(setUserProfile(response.payload.profile));
+        loginVerxioUser(response.payload.profile);
       } else {
         toast.error(response.payload.message);
         console.log(response);
@@ -142,6 +143,7 @@ const Page = () => {
 
   function handleLogout() {
     disconnect();
+    resetUserProfile();
   }
 
   return (
@@ -176,9 +178,14 @@ const Page = () => {
                         alt="Profile"
                       />
                       {userProfile && userProfile.isVerified === true ? (
-                        <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
-                            Verified
-                          </div>
+                        <div
+                          className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+                          style={{
+                            textShadow: "0px 1px 2px rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
+                          Verified
+                        </div>
                       ) : (
                         <button
                           onClick={() => VerifyNewUser()}
@@ -238,7 +245,7 @@ const Page = () => {
                     <StatCard
                       icon={BarChart2}
                       title="Campaigns"
-                      value={`${userProfile?.campaigns?? 0}`}
+                      value={`${userProfile?.campaignCount ?? 0}`}
                       unit="Participated"
                     />
                   </div>

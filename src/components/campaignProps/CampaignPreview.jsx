@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import axios from "axios";
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
 // import { PURGE } from "redux-persist";
@@ -33,7 +34,6 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
 
@@ -281,11 +281,6 @@ const CampaignPreview = ({ campaignData }) => {
         "X-API-Key": userApiKey,
         "Content-Type": "application/json",
       };
-
-      // const headers = {
-      //   "X-API-Key": `${userApiKey}`,
-      //   "Content-Type": "application/json",
-      // };
 
       // Make the API call using Axios
       const response = await axios.post(url, requestBody, { headers });

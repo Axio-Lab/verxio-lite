@@ -15,7 +15,7 @@ import Link from "next/link";
 import WinnerSelection from "./WinnerSelection";
 import WinnersList from "./WinnersList";
 
-const CampaignInfo = ({ campaign }) => {
+const ExploreCampaignInfo = ({ campaign }) => {
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
   const [winners, setWinners] = useState([]);
 
@@ -228,4 +228,4 @@ const ActionButton = ({ onClick, icon: Icon, text, color }) => (
   </button>
 );
 
-export default CampaignInfo;
+export default ExploreCampaignInfo;

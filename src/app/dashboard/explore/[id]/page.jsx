@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import CampaignInfo from "@/components/CampaignInfo";
+import ExploreCampaignInfo from "@/components/ExploreCampaignInfo";
 import { useEffect } from "react";
 import { CampaignContext } from "@/context/campaignContext";
 import React, { useState, useContext } from "react";
@@ -9,7 +9,7 @@ const Page = () => {
   const { state } = useContext(CampaignContext);
   const campaigns = state.allCampaigns;
 
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [campaign, setCampaign] = useState(null);
 
   const NoRecordsFound = () => (
@@ -38,7 +38,9 @@ const Page = () => {
 
   useEffect(() => {
     if (id) {
-      const selectedCampaign = campaigns.find((singleCampaign) => singleCampaign._id === id);
+      const selectedCampaign = campaigns.find(
+        (singleCampaign) => singleCampaign._id === id
+      );
       if (selectedCampaign) {
         setCampaign(selectedCampaign);
       }
@@ -49,7 +51,7 @@ const Page = () => {
     return <NoRecordsFound />;
   }
 
-  return <CampaignInfo campaign={campaign} />;
+  return <ExploreCampaignInfo campaign={campaign} />;
 };
 
 export default Page;

@@ -245,7 +245,7 @@ const Page = () => {
                     <StatCard
                       icon={BarChart2}
                       title="Campaigns"
-                      value={`${userProfile?.campaigns ?? 0}`}
+                      value={`${userProfile?.campaignCount ?? 0}`}
                       unit="Participated"
                     />
                   </div>

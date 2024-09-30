@@ -5,7 +5,8 @@ import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import React, { useState, useMemo, useContext } from "react";
-import CampaignCard from "@/components/campaignProps/CampaignCard";
+import ExploreCampaignCard from "@/components/campaignProps/ExploreCampaignCard";
+// import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
@@ -142,7 +143,7 @@ const Explore = () => {
             {currentCampaigns.length > 0 ? (
               currentCampaigns.map((campaign) => (
                 <div key={campaign._id} className="cursor-pointer">
-                  <CampaignCard campaign={campaign} />
+                  <ExploreCampaignCard campaign={campaign} />
                 </div>
               ))
             ) : (

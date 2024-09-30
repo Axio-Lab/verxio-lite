@@ -96,7 +96,7 @@ const Stat = ({ icon, label, value }) => (
   </div>
 );
 
-const CampaignCard = ({ campaign }) => {
+const ManageCampaignCard = ({ campaign }) => {
   const rewardIcon = availableRewards.find(
     (reward) => reward.value === campaign?.rewardInfo?.type
   )?.icon || <Gift className="text-gray-500" />;
@@ -106,7 +106,7 @@ const CampaignCard = ({ campaign }) => {
   )?.icon || <Clock className="text-gray-500" />;
 
   return (
-    <Link href={`/dashboard/explore/${campaign._id}`}>
+    <Link href={`/dashboard/manage-campaign/${campaign._id}`}>
       <div className="bg-[#FBFBFE] rounded-lg shadow hover:shadow-sm transition-all duration-300 p-6 mb-4 relative overflow-hidden border border-[#DCE0EF]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-800">
@@ -138,7 +138,7 @@ const CampaignCard = ({ campaign }) => {
           <Stat
             icon={<Calendar className="text-green-500" />}
             label="Days Left"
-            submission
+            value={`${campaign.daysLeft ?? "5 Days"}`}
           />
           <Stat
             icon={actionIcon}
@@ -159,4 +159,4 @@ const CampaignCard = ({ campaign }) => {
   );
 };
 
-export default CampaignCard;
+export default ManageCampaignCard;

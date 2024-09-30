@@ -57,14 +57,8 @@ export default function Hero() {
           <Button
             href="https://documenter.getpostman.com/view/22416364/2sA3kaCeiH"
             name="Read Docs"
-            className="text-lg font-bold px-8 py-3 bg-white text-blue-600 hover:bg-gray-100"
+            className="text-lg font-bold px-8 py-3 bg-white text-[#00ADEF] hover:bg-gray-100"
           />
-          {/* <Button
-            href="https://documenter.getpostman.com/view/22416364/2sA3kaCeiH"
-            name="Read Docs"
-            shade={"bg-[#00ADEF]"}
-            className="text-lg font-bold px-8 py-3 bg-transparent border border-red-500 text-white hover:bg-gray-100"
-          /> */}
           <Button
             href="/dashboard/explore"
             name="Launch App"

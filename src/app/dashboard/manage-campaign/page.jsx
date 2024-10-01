@@ -1,16 +1,19 @@
 "use client";
+import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/Button";
+// import { useWallet } from "@solana/wallet-adapter-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
 import { CampaignContext } from "@/context/campaignContext";
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 
 const MyCampaigns = () => {
-  const { state } = useContext(CampaignContext);
+  const { state, getMyCampaigns } = useContext(CampaignContext);
   const campaigns = state.myCampaigns;
   const campaignsPerPage = 10;
+  // const { isConnected } = useWallet();
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
@@ -32,7 +35,7 @@ const MyCampaigns = () => {
     return filteredCampaigns.slice(indexOfFirstCampaign, indexOfLastCampaign);
   }, [filteredCampaigns, currentPage]);
 
-  const NoRecordsFound = () => (
+  const NoRecordsFound = ({ description }) => (
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
       <svg
         className="w-16 h-16 text-gray-400 mb-4"
@@ -50,12 +53,25 @@ const MyCampaigns = () => {
       <h3 className="text-xl font-semibold text-gray-900 mb-2">
         No Campaigns Found
       </h3>
-      <p className="text-gray-600 text-center">
-        We couldn't find any campaigns matching your current filters. Try
-        adjusting your search criteria.
-      </p>
+      <p className="text-gray-600 text-center">{description}</p>
     </div>
   );
+
+  const userApiKey = useSelector(
+    (state) => state.generalStates?.userProfile?.key
+  );
+
+  if (!userApiKey) {
+    return (
+      <NoRecordsFound description="We couldn't find any campaigns. Please connect your wallet." />
+    );
+  }
+
+  useEffect(() => {
+    if (userApiKey) {
+      getMyCampaigns();
+    }
+  }, [userApiKey]);
 
   return (
     <>
@@ -82,7 +98,10 @@ const MyCampaigns = () => {
                   </div>
                 ))
               ) : (
-                <NoRecordsFound />
+                <NoRecordsFound
+                  description={`We couldn't find any campaigns matching your current filters. Try
+                  adjusting your search criteria.`}
+                />
               )}
             </div>
             {filteredCampaigns.length > campaignsPerPage && (

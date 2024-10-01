@@ -50,10 +50,9 @@ const CampaignProvider = ({ children }) => {
     }
   };
 
-  const createANewCampaign = async () => {
+  const getAllCampaigns = async () => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
-
       const response = await axios.get(`${apiBaseURL}/campaign/all`);
       // console.log(response?.data?.campaigns);
       if (response.data.success === true) {
@@ -76,7 +75,7 @@ const CampaignProvider = ({ children }) => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
       const response = await axios.get(`${apiBaseURL}/campaign`, { headers });
-      console.log(response, "My campaigns");
+      // console.log(response, "My campaigns");
       if (response.data.success === true) {
         dispatch({
           type: "GET_MY_CAMPAIGNS",
@@ -94,12 +93,7 @@ const CampaignProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    createANewCampaign();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    getMyCampaigns();
+    getAllCampaigns();
     // eslint-disable-next-line
   }, []);
 
@@ -110,7 +104,8 @@ const CampaignProvider = ({ children }) => {
       value={{
         state,
         dispatch,
-        createANewCampaign,
+        getMyCampaigns,
+        getAllCampaigns,
       }}
     >
       {children}

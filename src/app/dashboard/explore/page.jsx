@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import React, { useState, useMemo, useContext } from "react";
 import ExploreCampaignCard from "@/components/campaignProps/ExploreCampaignCard";
-// import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
@@ -63,11 +62,12 @@ const Explore = () => {
     </div>
   );
 
+ 
+
   return (
     <>
-      {state?.loading && <LoadingSpinner />}
       <Toaster position="top-right" />
-
+      {state?.loading && <LoadingSpinner />}
       <div className="min-h-screen px-4 py-8 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-row items-center justify-between mb-6">

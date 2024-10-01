@@ -82,7 +82,7 @@ const Page = () => {
     try {
       const response = await dispatch(createProfile({ id: userId }));
       if (response.payload.success === true) {
-        toast.success(response.payload.message);
+        // toast.success(response.payload.message);
         dispatch(setUserProfile(response.payload.profile));
       } else {
         toast.error(response.payload.message);
@@ -140,10 +140,10 @@ const Page = () => {
     return <NoWalletConnected />;
   }
 
-  function handleLogout() {
+  const handleLogout = () => {
     disconnect();
-    resetUserProfile();
-  }
+    dispatch(resetUserProfile());
+  };
 
   return (
     <>
@@ -154,7 +154,7 @@ const Page = () => {
             <div className="relative">
               <div className="absolute top-4 right-4 z-10">
                 <button
-                  onClick={handleLogout}
+                  onClick={() => handleLogout()}
                   className="flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
                   style={{
                     fontFamily: '"Space Grotesk", sans-serif',

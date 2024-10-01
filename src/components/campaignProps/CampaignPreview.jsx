@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useContext } from "react";
 import axios from "axios";
+import { useWallet } from '@solana/wallet-adapter-react';
+import { VersionedTransaction } from '@solana/web3.js';
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
 // import { PURGE } from "redux-persist";
@@ -36,7 +38,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
-import {CampaignContext} from "@/context/campaignContext";
+import { CampaignContext } from "@/context/campaignContext";
+
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
@@ -71,8 +74,9 @@ import {CampaignContext} from "@/context/campaignContext";
 //   Kamino: { icon: GiWaveCrest, color: "text-green-500" },
 // };
 
-
 const CampaignPreview = ({ campaignData }) => {
+  const { signTransaction } = useWallet();
+
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
@@ -142,15 +146,23 @@ const CampaignPreview = ({ campaignData }) => {
   //   const options = { year: "numeric", month: "long", day: "numeric" };
   //   return new Date(dateString).toLocaleDateString(undefined, options);
   // };
-
+  function convertToISO8601DateOnly(dateString) {
+    const [day, month, year] = dateString.split('/');
+    const date = new Date(year, month - 1, day);
+    return date.toISOString().split('T')[0];
+  }
   const getCampaignStatus = () => {
     const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = now.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
     const start = startDate;
     const end = endDate;
 
-    if (now < start) {
+    if (formattedDate < start) {
       return { status: "Upcoming", color: "bg-blue-100 text-blue-800" };
-    } else if (now >= start && now <= end) {
+    } else if (formattedDate >= start && formattedDate <= end) {
       return { status: "Active", color: "bg-green-100 text-green-800" };
     } else {
       return { status: "Ended", color: "bg-red-100 text-red-800" };
@@ -266,8 +278,8 @@ const CampaignPreview = ({ campaignData }) => {
       const requestBody = {
         campaignInfo: {
           title: title,
-          start: startDate,
-          end: endDate,
+          start: convertToISO8601DateOnly(startDate),
+          end: convertToISO8601DateOnly(endDate),
           description: description,
           banner: bannerImg,
         },
@@ -278,17 +290,54 @@ const CampaignPreview = ({ campaignData }) => {
       console.log(requestBody, userApiKey, "data here!!");
 
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
+      const prepareURL = `${apiBaseURL}/campaign/prepare?campaignType=${selectedActionType}`;
 
       // Set up the headers
       const headers = {
         "X-API-Key": userApiKey,
         "Content-Type": "application/json",
       };
-
+      
       // Make the API call using Axios
-      const response = await axios.post(url, requestBody, { headers });
-
-      if (response.data.success === true) {
+      if (selectedReward === "Token") {
+        // Step 1: Prepare the campaign creation (get the transaction)
+        const prepareResponse = await axios.post(prepareURL, { campaignData: requestBody }, { headers });
+      console.log(prepareResponse, "prepare response here!!");
+        if (!prepareResponse.data.success) {
+          throw new Error(prepareResponse.data.message);
+        }
+  
+        // Step 2: Sign the transaction
+        const transaction = VersionedTransaction.deserialize(
+          Buffer.from(prepareResponse.data.transaction, 'base64')
+        );
+  
+        if (!signTransaction) {
+          throw new Error('Wallet is not connected');
+        }
+  
+        const signedTransaction = await signTransaction(transaction);
+        const serializedSignedTransaction = Buffer.from(signedTransaction.serialize()).toString('base64');
+  
+        // Step 3: Create the campaign with the signed transaction
+        const createResponse = await axios.post(url, {
+          signedTransaction: serializedSignedTransaction,
+          campaignData: requestBody
+        }, { headers });
+  
+        if (createResponse.data.success) {
+          setLoading(false);
+          toast.success(createResponse.data.message);
+          dispatch(resetCreateCampaignFormData());
+          getAllCampaigns();
+        } else {
+          throw new Error(createResponse.data.message);
+        }
+      } else {
+        // For non-token campaigns, directly call the create endpoint
+        const response = await axios.post(url, requestBody, { headers });
+  
+        if (response.data.success === true) {
         setLoading(false);
         toast.success(response.data.message);
         dispatch(resetCreateCampaignFormData());
@@ -296,6 +345,7 @@ const CampaignPreview = ({ campaignData }) => {
       } else {
         toast.error(response.data.message);
       }
+    }
 
       setLoading(false);
     } catch (error) {

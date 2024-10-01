@@ -36,9 +36,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
-import CampaignContext from "@/context/campaignContext";
-
-const { getAllCampaigns } = useContext(CampaignContext);
+import {CampaignContext} from "@/context/campaignContext";
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
@@ -73,12 +71,14 @@ const { getAllCampaigns } = useContext(CampaignContext);
 //   Kamino: { icon: GiWaveCrest, color: "text-green-500" },
 // };
 
-const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
+  const { getAllCampaigns } = useContext(CampaignContext);
+  const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);

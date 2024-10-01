@@ -11,7 +11,8 @@ import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 
 const MyCampaigns = () => {
   const { state, getMyCampaigns } = useContext(CampaignContext);
-  const campaigns = state.myCampaigns;
+  // const campaigns = state.myCampaigns;
+  const campaigns = state.allCampaigns;
   const campaignsPerPage = 10;
   // const { isConnected } = useWallet();
   const [currentPage, setCurrentPage] = useState(1);

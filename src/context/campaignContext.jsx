@@ -9,17 +9,19 @@ const CampaignProvider = ({ children }) => {
     loading: false,
     allCampaigns: [],
     myCampaigns: [],
+    campaignParticipants: [],
   };
 
   const SET_LOADING = "SET_LOADING";
   const GET_MY_CAMPAIGNS = "GET_MY_CAMPAIGNS";
   const GET_ALL_CAMPAIGNS = "GET_ALL_CAMPAIGNS";
+  const GET_CAMPAIGN_PARTICIPANTS = "GET_CAMPAIGN_PARTICIPANTS";
 
   const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
   const userApiKey = useSelector(
     (state) => state.generalStates.userProfile.key
   );
-  
+
   const headers = {
     "X-API-Key": userApiKey,
     "Content-Type": "application/json",
@@ -43,6 +45,11 @@ const CampaignProvider = ({ children }) => {
         return {
           ...state,
           myCampaigns: action.payload,
+        };
+      case GET_CAMPAIGN_PARTICIPANTS:
+        return {
+          ...state,
+          campaignParticipants: action.payload,
         };
 
       default:
@@ -71,11 +78,34 @@ const CampaignProvider = ({ children }) => {
     }
   };
 
+  const getAllParticipants = async (campaignId) => {
+    try {
+      dispatch({ type: SET_LOADING, payload: true });
+      const response = await axios.get(
+        `${apiBaseURL}/participation/${campaignId}`
+      );
+      console.log(response);
+      if (response.data.success === true) {
+        dispatch({
+          type: "GET_CAMPAIGN_PARTICIPANTS",
+          payload: response?.data?.data?.submissions,
+        });
+        dispatch({ type: SET_LOADING, payload: false });
+      } else {
+        toast.error(response.data.message);
+      }
+      dispatch({ type: SET_LOADING, payload: false });
+    } catch (error) {
+      console.error("Error fetching campaign participants:", error);
+      toast.error(error.message);
+    }
+  };
+
   const getMyCampaigns = async () => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
       const response = await axios.get(`${apiBaseURL}/campaign`, { headers });
-      // console.log(response, "My campaigns");
+      console.log(response?.data?.campaigns, "My campaigns");
       if (response.data.success === true) {
         dispatch({
           type: "GET_MY_CAMPAIGNS",
@@ -92,6 +122,7 @@ const CampaignProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     getAllCampaigns();
     // eslint-disable-next-line
@@ -106,6 +137,7 @@ const CampaignProvider = ({ children }) => {
         dispatch,
         getMyCampaigns,
         getAllCampaigns,
+        getAllParticipants,
       }}
     >
       {children}

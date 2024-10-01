@@ -31,6 +31,8 @@ export const VerifyAUser = ({ requestUrl, closeModal }) => {
             className="w-full max-w-[300px] h-auto"
           />
 
+          <p>Scan this QR to verify your Google account</p>
+
           {isSmallScreen && (
             <Button
               name="Verify in reclaim app"

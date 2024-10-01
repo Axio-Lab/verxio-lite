@@ -75,6 +75,23 @@ const WinnerSelection = ({ campaign, onClose, onWinnersSelected }) => {
   //   );
   // };
 
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  };
+
+  const handleRandomSelection = () => {
+    const shuffledUsers = shuffleArray([...participants]);
+    const randomizedUsers = shuffledUsers
+      .slice(0, campaign.rewardInfo.noOfPeople)
+      .map((user) => user.userId);
+
+    setSelectedWinners(randomizedUsers);
+  };
+
   const handleSelectWinners = (userId) => {
     setSelectedWinners((prevSelected) => {
       if (prevSelected.includes(userId)) {
@@ -171,7 +188,7 @@ const WinnerSelection = ({ campaign, onClose, onWinnersSelected }) => {
 
         <div className="mb-6 flex space-x-4">
           <button
-            onClick={randomlyPickWinners}
+            onClick={handleRandomSelection}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-600 transition duration-300"
           >
             <RefreshCw size={20} className="mr-2" />

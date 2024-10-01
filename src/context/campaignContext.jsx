@@ -122,7 +122,6 @@ const CampaignProvider = ({ children }) => {
     }
   };
 
-
   useEffect(() => {
     getAllCampaigns();
     // eslint-disable-next-line

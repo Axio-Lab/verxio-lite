@@ -8,6 +8,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import { CampaignContext } from "@/context/campaignContext";
 
 const generateRandomAddress = () =>
@@ -33,8 +34,17 @@ const WinnerSelection = ({ campaign, onClose, onWinnersSelected }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const participantsPerPage = 10;
-  const { state } = useContext(CampaignContext);
+  const { state, dispatch } = useContext(CampaignContext);
   const participants = state.campaignParticipants;
+  const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
+  const userApiKey = useSelector(
+    (state) => state.generalStates.userProfile.key
+  );
+
+  const headers = {
+    "X-API-Key": userApiKey,
+    "Content-Type": "application/json",
+  };
 
   console.log(participants, "participants array");
 

@@ -53,8 +53,8 @@ const RewardsAndWinners = () => {
 
   const initialValues = {
     selectedReward: rewards?.selectedReward || "",
-    numberOfWinners: rewards?.numberOfWinners || 0,
-    solAmount: rewards?.solAmount || 0,
+    numberOfWinners: rewards?.numberOfWinners || 1,
+    solAmount: rewards?.solAmount || "",
     xpAmount: rewards?.xpAmount || 0,
   };
 
@@ -63,6 +63,15 @@ const RewardsAndWinners = () => {
     numberOfWinners: Yup.number()
       .min(1, "Number of winners must be at least 1.")
       .required("Please enter the number of winners."),
+    solAmount: Yup.number()
+      .typeError("Must be a number")
+      .min(0, "SOL amount must be non-negative.")
+      .test('is-decimal', 'Invalid decimal', value =>
+        value === undefined || value === '' || (value + "").match(/^\d*\.?\d{0,9}$/)
+      ),
+    xpAmount: Yup.number()
+      .min(0, "XP amount must be non-negative.")
+      .integer("XP amount must be an integer."),
   });
 
   const handleRewardToggle = (rewardValue, setFieldValue) => {
@@ -93,14 +102,25 @@ const RewardsAndWinners = () => {
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-lg shadow-md">
-      <Formik initialValues={initialValues} validationSchema={validationSchema}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          const processedValues = {
+            ...values,
+            solAmount: values.solAmount ? parseFloat(values.solAmount) : 0,
+          };
+          console.log('Form submitted with values:', processedValues);
+          dispatch(setRewards(processedValues));
+        }}
+      >
         {({ values, errors, touched, setFieldValue, isValid }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-6 sm:mb-8">
               <h3 className="text-xl font-semibold mb-4 text-gray-700">
                 Available Rewards
               </h3>
-              {/* <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {availableRewards.map((reward) => (
                   <div
                     key={reward.value}
@@ -108,8 +128,8 @@ const RewardsAndWinners = () => {
                       handleRewardToggle(reward.value, setFieldValue)
                     }
                     className={`flex items-center p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                      values.title === reward.value
-                            ? "bg-green-200 hover:bg-green-300"
+                      values.selectedReward === reward.value
+                        ? "bg-blue-200 shadow-md transform scale-105"
                         : "bg-white hover:bg-gray-100"
                     }`}
                   >
@@ -119,28 +139,7 @@ const RewardsAndWinners = () => {
                     </span>
                   </div>
                 ))}
-              </div> */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {availableRewards.map((reward) => (
-                  <div
-                    key={reward.value}
-                    onClick={() =>
-                      handleRewardToggle(reward.value, setFieldValue)
-                    }
-                    className={`flex items-center p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                      values.title === reward.value
-                        ? "bg-green-200 hover:bg-green-300 shadow-md transform scale-105" // selected reward styles
-                        : "bg-white hover:bg-gray-100 shadow-sm" // unselected reward styles
-                    }`}
-                  >
-                    {reward.icon}
-                    <span className="ml-2 font-medium text-sm sm:text-base">
-                      {reward.name}
-                    </span>
-                  </div>
-                ))}
               </div>
-
               {errors.selectedReward && touched.selectedReward ? (
                 <div className="text-sm text-red-500 text-normal">
                   {errors.selectedReward}
@@ -184,66 +183,74 @@ const RewardsAndWinners = () => {
                 </div>
               ) : null}
             </div>
-            {(values.selectedReward === "Token" ||
-              values.selectedReward === "Verxio-XP") && (
+            {values.selectedReward === "Token" && (
               <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">
                   Reward Details
                 </h3>
-                {values.selectedReward === "Token" && (
-                  <div className="mb-4">
-                    <label
-                      htmlFor="solAmount"
-                      className="block mb-2 font-medium text-gray-700"
-                    >
-                      SOL Amount for Prize Pool:
-                    </label>
-                    <Field
-                      type="number"
-                      id="solAmount"
-                      name="solAmount"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
-                      min="0"
-                      step="1"
-                      placeholder="Enter Sol Amount"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">
-                      The SOL amount will be split equally between{" "}
-                      {values.numberOfWinners} winner
-                      {values.numberOfWinners > 1 ? "s" : ""}.
+                <div className="mb-4">
+                  <label
+                    htmlFor="solAmount"
+                    className="block mb-2 font-medium text-gray-700"
+                  >
+                    Total SOL Amount to be Shared:
+                  </label>
+                  <Field
+                    type="text"
+                    id="solAmount"
+                    name="solAmount"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    placeholder="Enter total SOL amount"
+                  />
+                  {errors.solAmount && touched.solAmount && (
+                    <div className="text-sm text-red-500 mt-1">
+                      {errors.solAmount}
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-600 mt-1">
+                    The total SOL amount of {values.solAmount || 0} will be split equally between{" "}
+                    {values.numberOfWinners} winner{values.numberOfWinners > 1 ? "s" : ""}.
+                  </p>
+                  {values.solAmount && values.numberOfWinners > 0 && (
+                    <p className="text-sm font-semibold text-blue-600 mt-2">
+                      Each winner will receive approximately {(parseFloat(values.solAmount) / values.numberOfWinners).toFixed(1)} SOL.
                     </p>
-                  </div>
-                )}
-                {values.selectedReward === "Verxio-XP" && (
-                  <div className="mb-4">
-                    <label
-                      htmlFor="xpAmount"
-                      className="block mb-2 font-medium text-gray-700"
-                    >
-                      Verxio XP Amount for Prize Pool:
-                    </label>
-                    <Field
-                      type="number"
-                      id="xpAmount"
-                      name="xpAmount"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
-                      min="0"
-                      step="1"
-                      placeholder="Enter Verxio Xp"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">
-                      The Verxio XP amount will be split equally between{" "}
-                      {values.numberOfWinners} winner
-                      {values.numberOfWinners > 1 ? "s" : ""}.
-                    </p>
-
-                    {errors.title && touched.title && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.title}
-                      </p>
-                    )}
-                  </div>
-                )}
+                  )}
+                </div>
+              </div>
+            )}
+            {values.selectedReward === "Verxio-XP" && (
+              <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                  Reward Details
+                </h3>
+                <div className="mb-4">
+                  <label
+                    htmlFor="xpAmount"
+                    className="block mb-2 font-medium text-gray-700"
+                  >
+                    Verxio XP Amount for Prize Pool:
+                  </label>
+                  <Field
+                    type="number"
+                    id="xpAmount"
+                    name="xpAmount"
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    min="0"
+                    step="1"
+                    placeholder="Enter Verxio XP"
+                  />
+                  {errors.xpAmount && touched.xpAmount && (
+                    <div className="text-sm text-red-500 mt-1">
+                      {errors.xpAmount}
+                    </div>
+                  )}
+                  <p className="text-sm text-gray-600 mt-1">
+                    The Verxio XP amount will be split equally between{" "}
+                    {values.numberOfWinners} winner
+                    {values.numberOfWinners > 1 ? "s" : ""}.
+                  </p>
+                </div>
               </div>
             )}
 
@@ -258,7 +265,12 @@ const RewardsAndWinners = () => {
                 name={"Continue"}
                 href="/dashboard/create-campaign?route=preview"
                 onClick={() => {
-                  dispatch(setRewards(values));
+                  const processedValues = {
+                    ...values,
+                    solAmount: values.solAmount ? parseFloat(values.solAmount) : 0,
+                  };
+                  console.log('Continue button clicked. Current values:', processedValues);
+                  dispatch(setRewards(processedValues));
                 }}
                 className="w-[48%]"
               />
@@ -269,6 +281,5 @@ const RewardsAndWinners = () => {
     </div>
   );
 };
-// ? "bg-blue-200 shadow-md transform scale-105"
 
 export default RewardsAndWinners;

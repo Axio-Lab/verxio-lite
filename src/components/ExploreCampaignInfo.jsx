@@ -3,6 +3,8 @@ import {
   ChevronLeft,
   Users,
   Save,
+  Gift,
+  Coins,
   ExternalLink,
   Award,
   Calendar,
@@ -85,14 +87,14 @@ const ExploreCampaignInfo = ({ campaign }) => {
             icon={Users}
             title="Participants"
             value={campaign?.submission}
-            color="bg-purple-100 text-purple-800"
+            color="bg-green-100 text-purple-800"
           />
-          <StatCard
-            icon={TrophyIcon}
-            title="Winners"
-            value={`${campaign.rewardInfo.noOfPeople}`}
-            color="bg-yellow-100 text-yellow-800"
-          />
+            <StatCard
+              icon={TrophyIcon}
+              title="Number of Winners"
+              value={`${campaign.rewardInfo.noOfPeople}`}
+              color="bg-yellow-100 text-yellow-800"
+            />
         </div>
 
         <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
@@ -113,12 +115,39 @@ const ExploreCampaignInfo = ({ campaign }) => {
               icon={Zap}
               color="bg-blue-50 text-blue-800"
             />
-            <DetailCard
-              title="Reward"
-              value={campaign?.rewardInfo?.type}
-              icon={Award}
-              color="bg-green-50 text-green-800"
-            />
+      <DetailCard
+            title="Reward"
+            icon={(() => {
+              switch (campaign.rewardInfo.type) {
+                case 'Token':
+                  return Coins;
+                case 'Verxio-XP':
+                  return Award;
+                default:
+                  return Gift;
+              }
+            })()}
+            color="bg-purple-200 text-purple-800"
+            value={(() => {
+              const { type, amount } = campaign.rewardInfo;
+              const formattedAmount = (n) => {
+                const parsed = parseFloat(n);
+                return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 1
+                }).format(parsed);
+              };
+
+              switch (type) {
+                case 'Token':
+                  return `${formattedAmount(amount)} SOL`;
+                case 'Verxio-XP':
+                  return `${formattedAmount(amount)} vCredit`;
+                default:
+                  return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+              }
+            })()}
+          />
           </div>
         </div>
 

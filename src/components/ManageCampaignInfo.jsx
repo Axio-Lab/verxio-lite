@@ -2,6 +2,8 @@ import React, { useState, useContext, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
+  Coins,
+  Gift,
   Save,
   ExternalLink,
   Award,
@@ -83,17 +85,17 @@ const ManageCampaignInfo = ({ campaign }) => {
               icon={Calendar}
               title="Days Left"
               value={`${campaign?.daysLeft} Days`}
-              color="bg-green-100 text-green-800"
+              color="bg-amber-100 text-green-800"
             />
             <StatCard
               icon={Users}
               title="Participants"
               value={campaign?.submission}
-              color="bg-purple-100 text-purple-800"
+              color="bg-green-100 text-purple-800"
             />
             <StatCard
               icon={TrophyIcon}
-              title="Winners"
+              title="Number of Winners"
               value={`${campaign.rewardInfo.noOfPeople}`}
               color="bg-yellow-100 text-yellow-800"
             />
@@ -122,11 +124,38 @@ const ManageCampaignInfo = ({ campaign }) => {
                 icon={Zap}
                 color="bg-blue-50 text-blue-800"
               />
-              <DetailCard
+          <DetailCard
                 title="Reward"
-                value={campaign?.rewardInfo?.type}
-                icon={Award}
-                color="bg-green-50 text-green-800"
+                icon={(() => {
+                  switch (campaign.rewardInfo.type) {
+                    case 'Token':
+                      return Coins;
+                    case 'Verxio-XP':
+                      return Award;
+                    default:
+                      return Gift;
+                  }
+                })()}
+                color="bg-purple-200 text-purple-800"
+                value={(() => {
+                  const { type, amount } = campaign.rewardInfo;
+                  const formattedAmount = (n) => {
+                    const parsed = parseFloat(n);
+                    return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1
+                    }).format(parsed);
+                  };
+
+                  switch (type) {
+                    case 'Token':
+                      return `${formattedAmount(amount)} SOL`;
+                    case 'Verxio-XP':
+                      return `${formattedAmount(amount)} vCredit`;
+                    default:
+                      return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                  }
+                })()}
               />
             </div>
           </div>

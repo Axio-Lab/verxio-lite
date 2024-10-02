@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useContext } from "react";
 import axios from "axios";
 import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+
 import { VersionedTransaction } from '@solana/web3.js';
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
@@ -75,13 +77,16 @@ import { CampaignContext } from "@/context/campaignContext";
 // };
 
 const CampaignPreview = ({ campaignData }) => {
-  const { signTransaction } = useWallet();
+  const { publicKey, signTransaction, sendTransaction } = useWallet();
 
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
   const { getAllCampaigns } = useContext(CampaignContext);
   const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
+  const NEXT_PUBLIC_TREASURY_WALLET_ADDRESS = process.env.NEXT_PUBLIC_TREASURY_WALLET;
+  const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
+  const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -288,7 +293,6 @@ const CampaignPreview = ({ campaignData }) => {
       }};
 
       console.log(requestBody, userApiKey, "data here!!");
-
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
       const prepareURL = `${apiBaseURL}/campaign/prepare?campaignType=${selectedActionType}`;
 
@@ -300,39 +304,50 @@ const CampaignPreview = ({ campaignData }) => {
 
       // Make the API call using Axios
       if (selectedReward === "Token") {
-        // Step 1: Prepare the campaign creation (get the transaction)
-        const prepareResponse = await axios.post(prepareURL, requestBody, { headers });
-      console.log(prepareResponse, "prepare response here!!");
-        if (!prepareResponse.data.success) {
-          throw new Error(prepareResponse.data.message);
-        }
+      if (!publicKey) {
+        throw new Error('Wallet not connected');
+      }
+
+      const { amount } = requestBody.campaignData.rewardInfo;
+      const treasuryAddress = new PublicKey(NEXT_PUBLIC_TREASURY_WALLET_ADDRESS);
+      const RPC_URL = `${NEXT_PUBLIC_SOLANA_RPC_URL}/?api-key=${NEXT_PUBLIC_API_KEY}`;
+      const connection = new Connection(RPC_URL);
+
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: treasuryAddress,
+          lamports: amount * 1e9 // Convert SOL to lamports
+        })
+      );
+
+      const { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = publicKey;
+
+      const signedTransaction = await signTransaction(transaction);
   
-        // Step 2: Sign the transaction
-        const transaction = VersionedTransaction.deserialize(
-          Buffer.from(prepareResponse.data.transaction, 'base64')
-        );
-  
-        if (!signTransaction) {
-          throw new Error('Wallet is not connected');
-        }
-  
-        const signedTransaction = await signTransaction(transaction);
-        const serializedSignedTransaction = Buffer.from(signedTransaction.serialize()).toString('base64');
-  
-        // Step 3: Create the campaign with the signed transaction
-        const createResponse = await axios.post(url, {
-          signedTransaction: serializedSignedTransaction,
-          campaignData: requestBody
-        }, { headers });
-  
-        if (createResponse.data.success) {
-          setLoading(false);
-          toast.success(createResponse.data.message);
-          dispatch(resetCreateCampaignFormData());
-          getAllCampaigns();
-        } else {
-          throw new Error(createResponse.data.message);
-        }
+      // // Send the signed transaction to the network
+      const signature = await sendTransaction(signedTransaction, connection);
+      // Wait for the transaction to be confirmed
+      await connection.confirmTransaction(signature, 'confirmed');
+      console.log('Transaction confirmed. Signature:', signature);
+    
+      // // Now create the campaign
+      const response = await axios.post(url, {
+        signedTransaction: signedTransaction,
+        campaignData: requestBody.campaignData
+      }, { headers });
+
+      if (response.data.success) {
+        setLoading(false);
+        toast.success(response.data.message);
+        dispatch(resetCreateCampaignFormData());
+        getAllCampaigns();
+      } else {
+        throw new Error(response.data.message);
+      }
+
       } else {
         // For non-token campaigns, directly call the create endpoint
         const response = await axios.post(url, requestBody, { headers });
@@ -378,15 +393,21 @@ const CampaignPreview = ({ campaignData }) => {
             />
           </PreviewSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               icon={Activity}
               title="Campaign Type"
               value={campaignData.type || "N/A"}
               color="bg-blue-100 text-blue-800"
             />
+              <StatCard
+              icon={Coins}
+              title="Campaign Pool"
+              value={`${solAmount ? solAmount.toFixed(1) : "0"} SOL`}
+              color="bg-purple-200 text-purple-800"
+            />
             <StatCard
-              icon={Award}
+              icon={Trophy}
               title="Number of Winners"
               value={numberOfWinners || "N/A"}
               color="bg-green-100 text-green-800"

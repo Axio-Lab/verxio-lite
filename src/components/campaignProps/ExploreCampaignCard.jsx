@@ -133,7 +133,7 @@ const ExploreCampaignCard = ({ campaign }) => {
           <Stat
             icon={<Award className="text-yellow-500" />}
             label="Winners"
-            value={`${campaign.winners ?? 0}`}
+            value={`${campaign.rewardInfo.noOfPeople}`}
           />
           <Stat
             icon={<Calendar className="text-green-500" />}
@@ -147,8 +147,26 @@ const ExploreCampaignCard = ({ campaign }) => {
           />
           <Stat
             icon={rewardIcon}
-            label="Reward"
-            value={campaign?.rewardInfo?.type}
+            label="Reward Pool"
+            value={(() => {
+              const { type, amount } = campaign.rewardInfo;
+              const formattedAmount = (n) => {
+                const parsed = parseFloat(n);
+                return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 1
+                }).format(parsed);
+              };
+
+              switch (type) {
+                case 'Token':
+                  return `${formattedAmount(amount)} SOL`;
+                case 'Verxio-XP':
+                  return `${formattedAmount(amount)} vCredit`;
+                default:
+                  return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+              }
+            })()}
           />
         </div>
         <div className="flex justify-end items-center text-sm text-gray-600">

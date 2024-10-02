@@ -84,7 +84,7 @@ const CampaignProvider = ({ children }) => {
       const response = await axios.get(
         `${apiBaseURL}/participation/${campaignId}`
       );
-      console.log(response);
+      // console.log(response);
       if (response.data.success === true) {
         dispatch({
           type: "GET_CAMPAIGN_PARTICIPANTS",
@@ -105,7 +105,7 @@ const CampaignProvider = ({ children }) => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
       const response = await axios.get(`${apiBaseURL}/campaign`, { headers });
-      console.log(response?.data?.campaigns, "My campaigns");
+      // console.log(response?.data?.campaigns, "My campaigns");
       if (response.data.success === true) {
         dispatch({
           type: "GET_MY_CAMPAIGNS",

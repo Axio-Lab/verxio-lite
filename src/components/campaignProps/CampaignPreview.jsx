@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useContext } from "react";
 import axios from "axios";
-import { useWallet } from '@solana/wallet-adapter-react';
-import { VersionedTransaction } from '@solana/web3.js';
+import { useWallet } from "@solana/wallet-adapter-react";
+import { VersionedTransaction } from "@solana/web3.js";
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
 // import { PURGE } from "redux-persist";
@@ -39,7 +39,6 @@ import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
 import { CampaignContext } from "@/context/campaignContext";
-
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
@@ -80,7 +79,7 @@ const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
-  const { getAllCampaigns } = useContext(CampaignContext);
+  const { getAllCampaigns, getMyCampaigns } = useContext(CampaignContext);
   const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
 
   const dispatch = useDispatch();
@@ -144,14 +143,14 @@ const CampaignPreview = ({ campaignData }) => {
   //   return new Date(dateString).toLocaleDateString(undefined, options);
   // };
   function convertToISO8601DateOnly(dateString) {
-    const [day, month, year] = dateString.split('/');
+    const [day, month, year] = dateString.split("/");
     const date = new Date(year, month - 1, day);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   }
   const getCampaignStatus = () => {
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = now.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
     const start = startDate;
@@ -182,6 +181,7 @@ const CampaignPreview = ({ campaignData }) => {
 
       const constructDynamicInputResponse = () => {
         const fields = {};
+
         switch (selectedActionType) {
           case "Burn-Token":
           case "Compress-Token":
@@ -211,7 +211,8 @@ const CampaignPreview = ({ campaignData }) => {
             break;
 
           case "Submit-Url":
-            return { fields: {}, action: {} };
+            console.log("Submit-Url case executed: returning null");
+            return fields;
 
           case "Sell-Product":
             fields.product = productFile;
@@ -245,10 +246,15 @@ const CampaignPreview = ({ campaignData }) => {
       };
 
       const fields = constructDynamicInputResponse();
-      if (!fields) {
+      if (!fields && selectedActionType === "Submit-Url") {
+        console.log("Action type is submit url!")
+        return null;
+      } else if (!fields) {
         setLoading(false);
-        return; // Early exit if validation fails
+        console.log("No fields to send, skipping API call");
+        return;
       }
+
       const rewardInfo = {
         type: selectedReward,
         noOfPeople: numberOfWinners,
@@ -272,20 +278,21 @@ const CampaignPreview = ({ campaignData }) => {
         return; // Early exit if validation fails
       }
 
-      const requestBody = {campaignData: {
-        campaignInfo: {
-          title: title,
-          start: convertToISO8601DateOnly(startDate),
-          end: convertToISO8601DateOnly(endDate),
-          description: description,
-          banner: bannerImg,
+      const requestBody = {
+        campaignData: {
+          campaignInfo: {
+            title: title,
+            start: convertToISO8601DateOnly(startDate),
+            end: convertToISO8601DateOnly(endDate),
+            description: description,
+            banner: bannerImg,
+          },
+          action: { fields },
+          rewardInfo,
         },
-        action: { fields },
-        rewardInfo,
-      }};
+      };
 
-      console.log(requestBody, userApiKey, "data here!!");
-
+      console.log(requestBody);
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
       const prepareURL = `${apiBaseURL}/campaign/prepare?campaignType=${selectedActionType}`;
 
@@ -298,51 +305,61 @@ const CampaignPreview = ({ campaignData }) => {
       // Make the API call using Axios
       if (selectedReward === "Token") {
         // Step 1: Prepare the campaign creation (get the transaction)
-      const prepareResponse = await axios.post(prepareURL, requestBody, { headers });
-      console.log(prepareResponse, "prepare response here!!");
+        const prepareResponse = await axios.post(prepareURL, requestBody, {
+          headers,
+        });
+        console.log(prepareResponse, "prepare response here!!");
         if (!prepareResponse.data.success) {
           throw new Error(prepareResponse.data.message);
         }
-  
+
         // Step 2: Sign the transaction
         const transaction = VersionedTransaction.deserialize(
-          Buffer.from(prepareResponse.data.transaction, 'base64')
+          Buffer.from(prepareResponse.data.transaction, "base64")
         );
-  
+
         if (!signTransaction) {
-          throw new Error('Wallet is not connected');
+          throw new Error("Wallet is not connected");
         }
-  
+
         const signedTransaction = await signTransaction(transaction);
-        const serializedSignedTransaction = Buffer.from(signedTransaction.serialize()).toString('base64');
-  
+        const serializedSignedTransaction = Buffer.from(
+          signedTransaction.serialize()
+        ).toString("base64");
+
         // Step 3: Create the campaign with the signed transaction
-        const createResponse = await axios.post(url, {
-          signedTransaction: serializedSignedTransaction,
-          campaignData: requestBody
-        }, { headers });
-  
+        const createResponse = await axios.post(
+          url,
+          {
+            signedTransaction: serializedSignedTransaction,
+            campaignData: requestBody,
+          },
+          { headers }
+        );
+
         if (createResponse.data.success) {
           setLoading(false);
           toast.success(createResponse.data.message);
           dispatch(resetCreateCampaignFormData());
           getAllCampaigns();
+          getMyCampaigns();
         } else {
           throw new Error(createResponse.data.message);
         }
       } else {
         // For non-token campaigns, directly call the create endpoint
         const response = await axios.post(url, requestBody, { headers });
-  
+
         if (response.data.success === true) {
-        setLoading(false);
-        toast.success(response.data.message);
-        dispatch(resetCreateCampaignFormData());
-        getAllCampaigns()
-      } else {
-        toast.error(response.data.message);
+          setLoading(false);
+          toast.success(response.data.message);
+          dispatch(resetCreateCampaignFormData());
+          getAllCampaigns();
+          getMyCampaigns();
+        } else {
+          toast.error(response.data.message);
+        }
       }
-    }
 
       setLoading(false);
     } catch (error) {

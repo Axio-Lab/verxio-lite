@@ -100,7 +100,7 @@ const RewardsAndWinners = () => {
               <h3 className="text-xl font-semibold mb-4 text-gray-700">
                 Available Rewards
               </h3>
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {/* <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {availableRewards.map((reward) => (
                   <div
                     key={reward.value}
@@ -119,7 +119,28 @@ const RewardsAndWinners = () => {
                     </span>
                   </div>
                 ))}
+              </div> */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {availableRewards.map((reward) => (
+                  <div
+                    key={reward.value}
+                    onClick={() =>
+                      handleRewardToggle(reward.value, setFieldValue)
+                    }
+                    className={`flex items-center p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                      values.title === reward.value
+                        ? "bg-green-200 hover:bg-green-300 shadow-md transform scale-105" // selected reward styles
+                        : "bg-white hover:bg-gray-100 shadow-sm" // unselected reward styles
+                    }`}
+                  >
+                    {reward.icon}
+                    <span className="ml-2 font-medium text-sm sm:text-base">
+                      {reward.name}
+                    </span>
+                  </div>
+                ))}
               </div>
+
               {errors.selectedReward && touched.selectedReward ? (
                 <div className="text-sm text-red-500 text-normal">
                   {errors.selectedReward}
@@ -183,7 +204,7 @@ const RewardsAndWinners = () => {
                       name="solAmount"
                       className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
                       min="0"
-                      step="0.01"
+                      step="1"
                       placeholder="Enter Sol Amount"
                     />
                     <p className="text-sm text-gray-600 mt-1">

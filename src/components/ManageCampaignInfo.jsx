@@ -107,7 +107,10 @@ const ManageCampaignInfo = ({ campaign }) => {
             <div className="text-gray-600 mb-4">
               <p
                 dangerouslySetInnerHTML={{
-                  __html: mdParser.render(campaign?.campaignInfo?.description || "No description available.")
+                  __html: mdParser.render(
+                    campaign?.campaignInfo?.description ||
+                      "No description available."
+                  ),
                 }}
               />
             </div>

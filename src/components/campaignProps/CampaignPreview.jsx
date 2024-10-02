@@ -17,6 +17,7 @@ import {
   Repeat,
   Droplet,
   Coins,
+  CheckCircle,
   ShoppingCart,
   Minimize,
   Maximize,
@@ -288,9 +289,13 @@ const CampaignPreview = ({ campaignData }) => {
           description: description,
           banner: bannerImg,
         },
-        action: { fields },
         rewardInfo,
       }};
+          
+      // Only add the action field if it's not a Submit-Url action type
+      if (selectedActionType !== "Submit-Url") {
+        requestBody.campaignData.action = { fields };
+      }
 
       console.log(requestBody, userApiKey, "data here!!");
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
@@ -400,10 +405,24 @@ const CampaignPreview = ({ campaignData }) => {
               value={campaignData.type || "N/A"}
               color="bg-blue-100 text-blue-800"
             />
-              <StatCard
-              icon={Coins}
-              title="Campaign Pool"
-              value={`${solAmount ? solAmount.toFixed(1) : "0"} SOL`}
+            <StatCard
+              icon={
+                selectedReward === "Token" ? Coins :
+                selectedReward === "Verxio-XP" ? CheckCircle :
+                selectedReward === "Airdrop" ? PlusCircle :
+                selectedReward === "NFT-Drop" ? ImagePlay :
+                selectedReward === "Whitelist-Spot" ? Users :
+                selectedReward === "Merch-Drop" ? ShoppingBasket :
+                Award
+              }
+              title="Reward"
+              value={
+                selectedReward === "Token"
+                  ? `${solAmount ? solAmount.toFixed(1) : "0"} SOL`
+                  : selectedReward === "Verxio-XP"
+                  ? `${xpAmount ? xpAmount : "0"} XP`
+                  : selectedReward || "N/A"
+              }
               color="bg-purple-200 text-purple-800"
             />
             <StatCard
@@ -426,11 +445,11 @@ const CampaignPreview = ({ campaignData }) => {
             title="Campaign Action"
             content={selectedActionType || "N/A"}
           />
-
+          {/* 
           <PreviewSection
             title="Campaign Reward"
             content={selectedReward || "N/A"}
-          />
+          /> */}
         </div>
 
         <div className="mt-8">

@@ -138,7 +138,7 @@ const ManageCampaignCard = ({ campaign }) => {
           <Stat
             icon={<Calendar className="text-green-500" />}
             label="Days Left"
-            value={`${campaign.daysLeft ?? "5 Days"}`}
+            value={`${campaign.daysLeft} Days`}
           />
           <Stat
             icon={actionIcon}

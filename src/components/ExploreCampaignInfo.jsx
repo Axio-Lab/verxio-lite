@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
@@ -14,8 +14,11 @@ import Image from "next/image";
 import Link from "next/link";
 import WinnerSelection from "./WinnerSelection";
 import WinnersList from "./WinnersList";
+import MarkdownIt from "markdown-it";
+import "react-markdown-editor-lite/lib/index.css";
 
 const ExploreCampaignInfo = ({ campaign }) => {
+  const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
   const [winners, setWinners] = useState([]);
 
@@ -75,7 +78,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
           <StatCard
             icon={Calendar}
             title="Days Left"
-            value={campaign?.daysLeft}
+            value={`${campaign?.daysLeft} Days`}
             color="bg-green-100 text-green-800"
           />
           <StatCard
@@ -87,7 +90,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
           <StatCard
             icon={TrophyIcon}
             title="Winners"
-            value={`${campaign.winners ?? "5 winners"}`}
+            value={`${campaign.rewardInfo.noOfPeople}`}
             color="bg-yellow-100 text-yellow-800"
           />
         </div>
@@ -96,9 +99,13 @@ const ExploreCampaignInfo = ({ campaign }) => {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Campaign Details
           </h2>
-          <p className="text-gray-600 mb-4">
-            {campaign?.campaignInfo?.description || "No description available."}
-          </p>
+          <div className="text-gray-600 mb-4">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: mdParser.render(campaign?.campaignInfo?.description || "No description available.")
+                }}
+              />
+            </div>
           <div className="flex flex-wrap gap-4">
             <DetailCard
               title="Action"

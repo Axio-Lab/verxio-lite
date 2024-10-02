@@ -26,7 +26,7 @@ const Explore = () => {
         (filter.action === "" || campaign.action === filter.action) &&
         (filter.status === "" || campaign.status === filter.status)
       );
-    });
+    }).reverse();
   }, [campaigns, filter]);
 
   const totalPages = Math.ceil(filteredCampaigns.length / campaignsPerPage);

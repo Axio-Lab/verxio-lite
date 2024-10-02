@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
@@ -16,8 +16,11 @@ import WinnerSelection from "./WinnerSelection";
 import WinnersList from "./WinnersList";
 import { Toaster } from "react-hot-toast";
 import { CampaignContext } from "@/context/campaignContext";
+import MarkdownIt from "markdown-it";
+import "react-markdown-editor-lite/lib/index.css";
 
 const ManageCampaignInfo = ({ campaign }) => {
+  const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [winners, setWinners] = useState([]);
   const { getAllParticipants } = useContext(CampaignContext);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
@@ -79,7 +82,7 @@ const ManageCampaignInfo = ({ campaign }) => {
             <StatCard
               icon={Calendar}
               title="Days Left"
-              value={campaign?.daysLeft}
+              value={`${campaign?.daysLeft} Days`}
               color="bg-green-100 text-green-800"
             />
             <StatCard
@@ -91,7 +94,7 @@ const ManageCampaignInfo = ({ campaign }) => {
             <StatCard
               icon={TrophyIcon}
               title="Winners"
-              value={`${campaign.winners ?? "5 winners"}`}
+              value={`${campaign.rewardInfo.noOfPeople}`}
               color="bg-yellow-100 text-yellow-800"
             />
           </div>
@@ -100,10 +103,15 @@ const ManageCampaignInfo = ({ campaign }) => {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Campaign Details
             </h2>
-            <p className="text-gray-600 mb-4">
-              {campaign?.campaignInfo?.description ||
-                "No description available."}
-            </p>
+
+            <div className="text-gray-600 mb-4">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: mdParser.render(campaign?.campaignInfo?.description || "No description available.")
+                }}
+              />
+            </div>
+
             <div className="flex flex-wrap gap-4">
               <DetailCard
                 title="Action"

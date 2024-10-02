@@ -272,7 +272,7 @@ const CampaignPreview = ({ campaignData }) => {
         return; // Early exit if validation fails
       }
 
-      const requestBody = {
+      const requestBody = {campaignData: {
         campaignInfo: {
           title: title,
           start: convertToISO8601DateOnly(startDate),
@@ -282,7 +282,7 @@ const CampaignPreview = ({ campaignData }) => {
         },
         action: { fields },
         rewardInfo,
-      };
+      }};
 
       console.log(requestBody, userApiKey, "data here!!");
 
@@ -294,11 +294,11 @@ const CampaignPreview = ({ campaignData }) => {
         "X-API-Key": userApiKey,
         "Content-Type": "application/json",
       };
-      
+
       // Make the API call using Axios
       if (selectedReward === "Token") {
         // Step 1: Prepare the campaign creation (get the transaction)
-      const prepareResponse = await axios.post(prepareURL, { campaignData: requestBody }, { headers });
+      const prepareResponse = await axios.post(prepareURL, requestBody, { headers });
       console.log(prepareResponse, "prepare response here!!");
         if (!prepareResponse.data.success) {
           throw new Error(prepareResponse.data.message);

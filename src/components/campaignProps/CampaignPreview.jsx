@@ -122,9 +122,6 @@ const CampaignPreview = ({ campaignData }) => {
   const tokenMintAddress = useSelector(
     (state) => state.generalStates?.tokenMint?.tokenMintAddress
   );
-  const tokenURL = useSelector(
-    (state) => state.generalStates?.tokenMint?.tokenURL
-  );
   const productAmount = useSelector(
     (state) => state.generalStates?.digitalProduct?.productAmount
   );
@@ -301,7 +298,7 @@ const CampaignPreview = ({ campaignData }) => {
       // Make the API call using Axios
       if (selectedReward === "Token") {
         // Step 1: Prepare the campaign creation (get the transaction)
-        const prepareResponse = await axios.post(prepareURL, { campaignData: requestBody }, { headers });
+      const prepareResponse = await axios.post(prepareURL, { campaignData: requestBody }, { headers });
       console.log(prepareResponse, "prepare response here!!");
         if (!prepareResponse.data.success) {
           throw new Error(prepareResponse.data.message);

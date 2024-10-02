@@ -1,9 +1,15 @@
 import React, { useState, useMemo, useContext } from "react";
 import axios from "axios";
-import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey, SystemProgram, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 
-import { VersionedTransaction } from '@solana/web3.js';
+import { VersionedTransaction } from "@solana/web3.js";
 import MarkdownIt from "markdown-it";
 // import MdEditor from "react-markdown-editor-lite";
 // import { PURGE } from "redux-persist";
@@ -41,7 +47,6 @@ import { useSelector, useDispatch } from "react-redux";
 import LoadingSpinner from "@/components/componentLoader";
 import { resetCreateCampaignFormData } from "@/store/slices/statesSlice";
 import { CampaignContext } from "@/context/campaignContext";
-
 
 // import { createCampaign } from "@/store/slices/campaignSlice";
 // import { FiShield } from "react-icons/fi";
@@ -84,7 +89,8 @@ const CampaignPreview = ({ campaignData }) => {
   }
   const { getAllCampaigns } = useContext(CampaignContext);
   const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
-  const NEXT_PUBLIC_TREASURY_WALLET_ADDRESS = process.env.NEXT_PUBLIC_TREASURY_WALLET;
+  const NEXT_PUBLIC_TREASURY_WALLET_ADDRESS =
+    process.env.NEXT_PUBLIC_TREASURY_WALLET;
   const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
   const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -152,14 +158,14 @@ const CampaignPreview = ({ campaignData }) => {
   //   return new Date(dateString).toLocaleDateString(undefined, options);
   // };
   function convertToISO8601DateOnly(dateString) {
-    const [day, month, year] = dateString.split('/');
+    const [day, month, year] = dateString.split("/");
     const date = new Date(year, month - 1, day);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   }
   const getCampaignStatus = () => {
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = now.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
     const start = startDate;
@@ -219,7 +225,7 @@ const CampaignPreview = ({ campaignData }) => {
             break;
 
           case "Submit-Url":
-            return { fields: {}, action: {} };
+            return {};
 
           case "Sell-Product":
             fields.product = productFile;
@@ -253,10 +259,12 @@ const CampaignPreview = ({ campaignData }) => {
       };
 
       const fields = constructDynamicInputResponse();
-      if (!fields) {
-        setLoading(false);
-        return; // Early exit if validation fails
-      }
+
+      // if (!fields) {
+      //   setLoading(false);
+      //   return; // Early exit if validation fails
+      // }
+
       const rewardInfo = {
         type: selectedReward,
         noOfPeople: numberOfWinners,
@@ -280,17 +288,19 @@ const CampaignPreview = ({ campaignData }) => {
         return; // Early exit if validation fails
       }
 
-      const requestBody = {campaignData: {
-        campaignInfo: {
-          title: title,
-          start: convertToISO8601DateOnly(startDate),
-          end: convertToISO8601DateOnly(endDate),
-          description: description,
-          banner: bannerImg,
+      const requestBody = {
+        campaignData: {
+          campaignInfo: {
+            title: title,
+            start: convertToISO8601DateOnly(startDate),
+            end: convertToISO8601DateOnly(endDate),
+            description: description,
+            banner: bannerImg,
+          },
+          action: { fields },
+          rewardInfo,
         },
-        action: { fields },
-        rewardInfo,
-      }};
+      };
 
       console.log(requestBody, userApiKey, "data here!!");
       const url = `${apiBaseURL}/campaign?campaignType=${selectedActionType}`;
@@ -304,63 +314,68 @@ const CampaignPreview = ({ campaignData }) => {
 
       // Make the API call using Axios
       if (selectedReward === "Token") {
-      if (!publicKey) {
-        throw new Error('Wallet not connected');
-      }
+        if (!publicKey) {
+          throw new Error("Wallet not connected");
+        }
 
-      const { amount } = requestBody.campaignData.rewardInfo;
-      const treasuryAddress = new PublicKey(NEXT_PUBLIC_TREASURY_WALLET_ADDRESS);
-      const RPC_URL = `${NEXT_PUBLIC_SOLANA_RPC_URL}/?api-key=${NEXT_PUBLIC_API_KEY}`;
-      const connection = new Connection(RPC_URL);
+        const { amount } = requestBody.campaignData.rewardInfo;
+        const treasuryAddress = new PublicKey(
+          NEXT_PUBLIC_TREASURY_WALLET_ADDRESS
+        );
+        const RPC_URL = `${NEXT_PUBLIC_SOLANA_RPC_URL}/?api-key=${NEXT_PUBLIC_API_KEY}`;
+        const connection = new Connection(RPC_URL);
 
-      const transaction = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: publicKey,
-          toPubkey: treasuryAddress,
-          lamports: amount * 1e9 // Convert SOL to lamports
-        })
-      );
+        const transaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: publicKey,
+            toPubkey: treasuryAddress,
+            lamports: amount * 1e9, // Convert SOL to lamports
+          })
+        );
 
-      const { blockhash } = await connection.getLatestBlockhash();
-      transaction.recentBlockhash = blockhash;
-      transaction.feePayer = publicKey;
+        const { blockhash } = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = publicKey;
 
-      const signedTransaction = await signTransaction(transaction);
-  
-      // // Send the signed transaction to the network
-      const signature = await sendTransaction(signedTransaction, connection);
-      // Wait for the transaction to be confirmed
-      await connection.confirmTransaction(signature, 'confirmed');
-      console.log('Transaction confirmed. Signature:', signature);
-    
-      // // Now create the campaign
-      const response = await axios.post(url, {
-        signedTransaction: signedTransaction,
-        campaignData: requestBody.campaignData
-      }, { headers });
+        const signedTransaction = await signTransaction(transaction);
 
-      if (response.data.success) {
-        setLoading(false);
-        toast.success(response.data.message);
-        dispatch(resetCreateCampaignFormData());
-        getAllCampaigns();
-      } else {
-        throw new Error(response.data.message);
-      }
+        // // Send the signed transaction to the network
+        const signature = await sendTransaction(signedTransaction, connection);
+        // Wait for the transaction to be confirmed
+        await connection.confirmTransaction(signature, "confirmed");
+        console.log("Transaction confirmed. Signature:", signature);
 
+        // // Now create the campaign
+        const response = await axios.post(
+          url,
+          {
+            signedTransaction: signedTransaction,
+            campaignData: requestBody.campaignData,
+          },
+          { headers }
+        );
+
+        if (response.data.success) {
+          setLoading(false);
+          toast.success(response.data.message);
+          dispatch(resetCreateCampaignFormData());
+          getAllCampaigns();
+        } else {
+          throw new Error(response.data.message);
+        }
       } else {
         // For non-token campaigns, directly call the create endpoint
         const response = await axios.post(url, requestBody, { headers });
-  
+
         if (response.data.success === true) {
-        setLoading(false);
-        toast.success(response.data.message);
-        dispatch(resetCreateCampaignFormData());
-        getAllCampaigns()
-      } else {
-        toast.error(response.data.message);
+          setLoading(false);
+          toast.success(response.data.message);
+          dispatch(resetCreateCampaignFormData());
+          getAllCampaigns();
+        } else {
+          toast.error(response.data.message);
+        }
       }
-    }
 
       setLoading(false);
     } catch (error) {
@@ -400,7 +415,7 @@ const CampaignPreview = ({ campaignData }) => {
               value={campaignData.type || "N/A"}
               color="bg-blue-100 text-blue-800"
             />
-              <StatCard
+            <StatCard
               icon={Coins}
               title="Campaign Pool"
               value={`${solAmount ? solAmount.toFixed(1) : "0"} SOL`}

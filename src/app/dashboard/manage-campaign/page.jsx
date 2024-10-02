@@ -2,7 +2,6 @@
 import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { Button } from "@/components/Button";
-// import { useWallet } from "@solana/wallet-adapter-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LoadingSpinner from "@/components/componentLoader";
 import { CampaignContext } from "@/context/campaignContext";
@@ -11,10 +10,10 @@ import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 
 const MyCampaigns = () => {
   const { state, getMyCampaigns } = useContext(CampaignContext);
-  // const campaigns = state.myCampaigns;
-  const campaigns = state.allCampaigns;
+
+  const campaigns = state.myCampaigns;
   const campaignsPerPage = 10;
-  // const { isConnected } = useWallet();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
@@ -25,7 +24,7 @@ const MyCampaigns = () => {
         (filter.action === "" || campaign.action === filter.action) &&
         (filter.status === "" || campaign.status === filter.status)
       );
-    });
+    }).reverse();
   }, [campaigns, filter]);
 
   const totalPages = Math.ceil(filteredCampaigns.length / campaignsPerPage);

@@ -10,7 +10,6 @@ import ManageCampaignCard from "@/components/campaignProps/ManageCampaignCard";
 
 const MyCampaigns = () => {
   const { state, getMyCampaigns } = useContext(CampaignContext);
-
   const campaigns = state.myCampaigns;
   const campaignsPerPage = 10;
 
@@ -18,13 +17,15 @@ const MyCampaigns = () => {
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign) => {
-      return (
-        (filter.reward === "" || campaign.reward === filter.reward) &&
-        (filter.action === "" || campaign.action === filter.action) &&
-        (filter.status === "" || campaign.status === filter.status)
-      );
-    }).reverse();
+    return campaigns
+      .filter((campaign) => {
+        return (
+          (filter.reward === "" || campaign.reward === filter.reward) &&
+          (filter.action === "" || campaign.action === filter.action) &&
+          (filter.status === "" || campaign.status === filter.status)
+        );
+      })
+      .reverse();
   }, [campaigns, filter]);
 
   const totalPages = Math.ceil(filteredCampaigns.length / campaignsPerPage);
@@ -60,6 +61,7 @@ const MyCampaigns = () => {
   const userApiKey = useSelector(
     (state) => state.generalStates?.userProfile?.key
   );
+  const userId = useSelector((state) => state.generalStates?.userProfile?._id);
 
   if (!userApiKey) {
     return (
@@ -68,10 +70,10 @@ const MyCampaigns = () => {
   }
 
   useEffect(() => {
-    if (userApiKey) {
+    if (userApiKey && userId) {
       getMyCampaigns();
     }
-  }, [userApiKey]);
+  }, [userApiKey, userId]);
 
   return (
     <>

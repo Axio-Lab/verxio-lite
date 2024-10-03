@@ -2,20 +2,24 @@ import React, { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
 import WinnerAvatar from "./WinnerAvatar";
 
-const WinnersList = ({ winners, campaign }) => {
+const WinnersList = ({ winners }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const winnersPerPage = 50;
 
-  const totalPages = Math.ceil(winners.length / winnersPerPage);
+  // Transform the winners object into an array of values
+  const winnersArray = Object.values(winners);
+  // console.log(winnersArray, "winners here!!");
+
+  const totalPages = Math.ceil(winnersArray.length / winnersPerPage);
 
   const currentPageWinners = useMemo(() => {
     const indexOfLastWinner = currentPage * winnersPerPage;
     const indexOfFirstWinner = indexOfLastWinner - winnersPerPage;
-    return winners.slice(indexOfFirstWinner, indexOfLastWinner);
-  }, [winners, currentPage]);
+    return winnersArray.slice(indexOfFirstWinner, indexOfLastWinner);
+  }, [winnersArray, currentPage]);
 
   const exportWinners = () => {
-    const winnerData = winners.join("\n");
+    const winnerData = winnersArray.join("\n");
     const blob = new Blob([winnerData], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -29,12 +33,12 @@ const WinnersList = ({ winners, campaign }) => {
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Campaign Winners
       </h2>
-      {winners.length > 0 ? (
+      {winnersArray.length > 0 ? (
         <>
           <div className="mb-4 flex justify-between items-center">
             <p className="text-lg">
               Total winners 🏆:{" "}
-              <span className="font-semibold">{winners.length}</span>
+              <span className="font-semibold">{winnersArray.length}</span>
             </p>
             <button
               onClick={exportWinners}
@@ -46,12 +50,13 @@ const WinnersList = ({ winners, campaign }) => {
           </div>
 
           <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-15 gap-4 mb-6">
-            {currentPageWinners.map((address) => (
-              <WinnerAvatar key={address} address={address} />
+            {currentPageWinners.map((winner, index) => (
+              // <WinnerAvatar key={userId} userId={userId} />
+              <WinnerAvatar key={`winner-${index}`} userId={winner.userId} />
             ))}
           </div>
 
-          {winners.length > winnersPerPage && (
+          {winnersArray.length > winnersPerPage && (
             <div className="flex justify-center items-center mt-8 space-x-4">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

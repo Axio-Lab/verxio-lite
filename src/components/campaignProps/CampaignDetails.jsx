@@ -238,9 +238,9 @@ const CampaignDetails = () => {
                   className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                   onClick={() => {
                     dispatch(setDetails(values)), console.log(values);
-                    if (isValid && dirty) {
-                      dispatch(setDetails(values)), console.log(values);
-                    }
+                    // if (isValid && dirty) {
+                    //   dispatch(setDetails(values)), console.log(values);
+                    // }
                   }}
                 />
               </div>

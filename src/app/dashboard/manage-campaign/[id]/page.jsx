@@ -7,8 +7,7 @@ import React, { useState, useContext } from "react";
 
 const Page = () => {
   const { state } = useContext(CampaignContext);
-  // const campaigns = state.myCampaigns;
-  const campaigns = state.allCampaigns;
+  const campaigns = state.myCampaigns;
 
   const { id } = useParams();
   const [campaign, setCampaign] = useState(null);

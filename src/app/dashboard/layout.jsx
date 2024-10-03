@@ -67,8 +67,10 @@ const Layout = ({ children }) => {
         <WalletModalProvider>
           <CampaignProvider>
             <div className="flex flex-col h-screen bg-[#dde9ed]-100">
-              <main className="flex-1 p-4 overflow-y-auto">{children}</main>
-              <nav className="w-full max-w-full overflow-x-auto bg-white absolute bottom-0 left-0 right-0 border-t border-gray-200 z-[999]">
+              <main className="flex-1 p-4 overflow-y-auto mb-12">
+                {children}
+              </main>
+              <nav className="w-full max-w-full overflow-x-auto bg-white fixed bottom-0 left-0 right-0 border-t border-gray-200 z-[999]">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                   <div className="flex items-center justify-between">
                     {navItems.map((item, index) => (

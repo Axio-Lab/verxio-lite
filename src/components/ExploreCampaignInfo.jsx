@@ -19,6 +19,7 @@ import WinnersList from "./WinnersList";
 import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
 import { useSelector } from "react-redux";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { CampaignContext } from "@/context/campaignContext";
 
 const ExploreCampaignInfo = ({ campaign }) => {
@@ -30,7 +31,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
   );
   const { state, getAllParticipants } = useContext(CampaignContext);
   const participatntsList = state.campaignParticipants;
-
+  const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
   // console.log(participatntsList, "Participants ");
   // const [participants, setParticipants] = useState(1234);
@@ -42,6 +43,10 @@ const ExploreCampaignInfo = ({ campaign }) => {
   const handleParticipate = () => {
     if (!isVerified) {
       toast.error("Please verify your profile to participate in this campaign");
+      return;
+    }
+    if (campaign.status === "Ended") {
+      toast.error("Oops!! This campaign has ended...");
       return;
     }
     const participationUrl = `${campaign?.blink}`;
@@ -68,19 +73,23 @@ const ExploreCampaignInfo = ({ campaign }) => {
 
   return (
     <div className="min-h-screen bg-[#FBFBFE] rounded-2xl py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-8">
+      <div
+        className={`max-w-4xl mx-auto ${
+          isLargeScreen ? "bg-white rounded-xl shadow-md p-8" : "p-4"
+        }`}
+      >
         <Link
           href="/dashboard/explore"
           className="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-300 mb-6"
         >
           <ChevronLeft size={20} className="mr-2" />
-          Back to My Campaigns
+          Back to All Campaigns
         </Link>
-        <h1 className="text-4xl font-bold text-indigo-900 mb-6 text-center">
+        <h1 className="text-2xl md:text-4xl font-bold text-indigo-900 mb-6 text-center">
           {campaign?.campaignInfo?.title}
         </h1>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <StatCard
             icon={Activity}
             title="Status"
@@ -107,7 +116,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
           />
         </div>
 
-        <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
+        <div className="mb-8 p-6 rounded-xl shadow-md">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Campaign Details
           </h2>
@@ -273,12 +282,10 @@ const StatCard = ({ icon: Icon, title, value, color }) => (
 );
 
 const DetailCard = ({ title, value, icon: Icon, color }) => (
-  <div className={`${color} p-3 rounded-lg flex items-center`}>
+  <div className={`${color} p-3 rounded-lg flex flex-col items-center gap-2 w-full md:w-[230px]`}>
     <Icon size={20} className="mr-2" />
-    <div>
       <h3 className="text-sm font-semibold">{title}</h3>
       <p className="text-lg font-bold">{value}</p>
-    </div>
   </div>
 );
 

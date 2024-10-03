@@ -108,12 +108,12 @@ const ExploreCampaignCard = ({ campaign }) => {
   return (
     <Link href={`/dashboard/explore/${campaign._id}`}>
       <div className="bg-[#FBFBFE] rounded-lg shadow hover:shadow-sm transition-all duration-300 p-6 mb-4 relative overflow-hidden border border-[#DCE0EF]">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row items-start justify-start md:justify-between md:items-center mb-4 gap-3">
           <h2 className="text-2xl font-bold text-gray-800">
             {campaign?.campaignInfo?.title}
           </h2>
           <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${
+            className={`px-3 py-1 rounded-md text-sm font-semibold ${
               campaign.status === "Active"
                 ? "bg-green-100 text-green-800"
                 : campaign.status === "Upcoming"
@@ -152,19 +152,27 @@ const ExploreCampaignCard = ({ campaign }) => {
               const { type, amount } = campaign.rewardInfo;
               const formattedAmount = (n) => {
                 const parsed = parseFloat(n);
-                return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 1
-                }).format(parsed);
+                return isNaN(parsed)
+                  ? "0"
+                  : new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(parsed);
               };
 
               switch (type) {
-                case 'Token':
+                case "Token":
                   return `${formattedAmount(amount)} SOL`;
-                case 'Verxio-XP':
+                case "Verxio-XP":
                   return `${formattedAmount(amount)} vCredit`;
                 default:
-                  return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                  return (
+                    type.charAt(0).toUpperCase() +
+                    type
+                      .slice(1)
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                  );
               }
             })()}
           />

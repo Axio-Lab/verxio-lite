@@ -145,26 +145,34 @@ const ManageCampaignCard = ({ campaign }) => {
             label="Action"
             value={campaign.action?.actionType}
           />
-         <Stat
+          <Stat
             icon={rewardIcon}
             label="Reward Pool"
             value={(() => {
               const { type, amount } = campaign.rewardInfo;
               const formattedAmount = (n) => {
                 const parsed = parseFloat(n);
-                return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 1
-                }).format(parsed);
+                return isNaN(parsed)
+                  ? "0"
+                  : new Intl.NumberFormat("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 1,
+                    }).format(parsed);
               };
 
               switch (type) {
-                case 'Token':
+                case "Token":
                   return `${formattedAmount(amount)} SOL`;
-                case 'Verxio-XP':
+                case "Verxio-XP":
                   return `${formattedAmount(amount)} vCredit`;
                 default:
-                  return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                  return (
+                    type.charAt(0).toUpperCase() +
+                    type
+                      .slice(1)
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                  );
               }
             })()}
           />

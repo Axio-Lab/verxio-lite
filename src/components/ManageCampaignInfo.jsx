@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
@@ -24,16 +24,16 @@ import "react-markdown-editor-lite/lib/index.css";
 const ManageCampaignInfo = ({ campaign }) => {
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [winners, setWinners] = useState([]);
-  const { getAllParticipants } = useContext(CampaignContext);
+  const { state, getAllParticipants, getAllWinners } =
+    useContext(CampaignContext);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
+  const participatntsList = state.campaignParticipants;
+  const winnersList = state.campaignWinners;
 
-  // const handleParticipate = () => {
-  //   console.log("Participate in campaign");
-  // };
-
-  // const handleSaveAudience = () => {
-  //   console.log("Save as custom audience");
-  // };
+  useEffect(() => {
+    getAllParticipants(campaign?.id);
+    getAllWinners(campaign?.id);
+  }, []);
 
   const handlePickWinners = () => {
     setShowWinnerSelection(true);
@@ -49,14 +49,6 @@ const ManageCampaignInfo = ({ campaign }) => {
       address || "placeholder"
     }.svg`;
   };
-
-  const recentParticipants = [
-    { address: "0x1234...5678" },
-    { address: "0x2345...6789" },
-    { address: "0x3456...7890" },
-    { address: "0x4567...8901" },
-    { address: "0x5678...9012" },
-  ];
 
   return (
     <>
@@ -124,13 +116,13 @@ const ManageCampaignInfo = ({ campaign }) => {
                 icon={Zap}
                 color="bg-blue-50 text-blue-800"
               />
-          <DetailCard
+              <DetailCard
                 title="Reward"
                 icon={(() => {
                   switch (campaign.rewardInfo.type) {
-                    case 'Token':
+                    case "Token":
                       return Coins;
-                    case 'Verxio-XP':
+                    case "Verxio-XP":
                       return Award;
                     default:
                       return Gift;
@@ -141,19 +133,27 @@ const ManageCampaignInfo = ({ campaign }) => {
                   const { type, amount } = campaign.rewardInfo;
                   const formattedAmount = (n) => {
                     const parsed = parseFloat(n);
-                    return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 1
-                    }).format(parsed);
+                    return isNaN(parsed)
+                      ? "0"
+                      : new Intl.NumberFormat("en-US", {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 1,
+                        }).format(parsed);
                   };
 
                   switch (type) {
-                    case 'Token':
+                    case "Token":
                       return `${formattedAmount(amount)} SOL`;
-                    case 'Verxio-XP':
+                    case "Verxio-XP":
                       return `${formattedAmount(amount)} vCredit`;
                     default:
-                      return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                      return (
+                        type.charAt(0).toUpperCase() +
+                        type
+                          .slice(1)
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                      );
                   }
                 })()}
               />
@@ -211,25 +211,32 @@ const ManageCampaignInfo = ({ campaign }) => {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Recent Participants
             </h2>
-            <div className="flex flex-wrap gap-4">
-              {recentParticipants.map((participant, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <Image
-                    src={generateAvatar(participant.address)}
-                    alt={`Participant ${index + 1}`}
-                    width={60}
-                    height={60}
-                    className="rounded-full"
-                  />
-                  <span className="text-sm text-gray-600 mt-2">
-                    {participant.address}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {participatntsList.length > 0 ? (
+              <div className="flex flex-wrap gap-4">
+                {participatntsList.slice(0, 6).map((participant, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <Image
+                      src={generateAvatar(participant._id)}
+                      alt={`Participant ${index + 1}`}
+                      width={60}
+                      height={60}
+                      className="rounded-full"
+                    />
+                    <span className="text-sm text-gray-600 mt-2">
+                      {participant.userId.slice(0, 6)}...
+                      {participant.userId.slice(-4)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No Participants yet
+              </div>
+            )}
           </div>
 
-          <WinnersList winners={winners} campaign={campaign} />
+          <WinnersList winners={winnersList} />
 
           {showWinnerSelection && (
             <WinnerSelection

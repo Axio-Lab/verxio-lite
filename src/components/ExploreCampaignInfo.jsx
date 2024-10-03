@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
@@ -18,16 +18,34 @@ import WinnerSelection from "./WinnerSelection";
 import WinnersList from "./WinnersList";
 import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
+import { useSelector } from "react-redux";
+import { CampaignContext } from "@/context/campaignContext";
 
 const ExploreCampaignInfo = ({ campaign }) => {
+  const [winners, setWinners] = useState([]);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
-  const [winners, setWinners] = useState([]);
+  const isVerified = useSelector(
+    (state) => state.generalStates.userProfile.isVerified
+  );
+  const { state, getAllParticipants } = useContext(CampaignContext);
+  const participatntsList = state.campaignParticipants;
 
-  const [participants, setParticipants] = useState(1234);
+
+  // console.log(participatntsList, "Participants ");
+  // const [participants, setParticipants] = useState(1234);
+
+  useEffect(() => {
+    getAllParticipants(campaign?.id);
+  }, []);
 
   const handleParticipate = () => {
-    console.log("Participate in campaign");
+    if (!isVerified) {
+      toast.error("Please verify your profile to participate in this campaign");
+      return;
+    }
+    const participationUrl = `${campaign?.blink}`;
+    window.location.href = participationUrl;
   };
 
   const handleSaveAudience = () => {
@@ -47,14 +65,6 @@ const ExploreCampaignInfo = ({ campaign }) => {
       address || "placeholder"
     }.svg`;
   };
-
-  const recentParticipants = [
-    { address: "0x1234...5678" },
-    { address: "0x2345...6789" },
-    { address: "0x3456...7890" },
-    { address: "0x4567...8901" },
-    { address: "0x5678...9012" },
-  ];
 
   return (
     <div className="min-h-screen bg-[#FBFBFE] rounded-2xl py-8 px-4 sm:px-6 lg:px-8">
@@ -89,12 +99,12 @@ const ExploreCampaignInfo = ({ campaign }) => {
             value={campaign?.submission}
             color="bg-green-100 text-purple-800"
           />
-            <StatCard
-              icon={TrophyIcon}
-              title="Number of Winners"
-              value={`${campaign.rewardInfo.noOfPeople}`}
-              color="bg-yellow-100 text-yellow-800"
-            />
+          <StatCard
+            icon={TrophyIcon}
+            title="Number of Winners"
+            value={`${campaign.rewardInfo.noOfPeople}`}
+            color="bg-yellow-100 text-yellow-800"
+          />
         </div>
 
         <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
@@ -102,12 +112,15 @@ const ExploreCampaignInfo = ({ campaign }) => {
             Campaign Details
           </h2>
           <div className="text-gray-600 mb-4">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: mdParser.render(campaign?.campaignInfo?.description || "No description available.")
-                }}
-              />
-            </div>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: mdParser.render(
+                  campaign?.campaignInfo?.description ||
+                    "No description available."
+                ),
+              }}
+            />
+          </div>
           <div className="flex flex-wrap gap-4">
             <DetailCard
               title="Action"
@@ -115,39 +128,47 @@ const ExploreCampaignInfo = ({ campaign }) => {
               icon={Zap}
               color="bg-blue-50 text-blue-800"
             />
-      <DetailCard
-            title="Reward"
-            icon={(() => {
-              switch (campaign.rewardInfo.type) {
-                case 'Token':
-                  return Coins;
-                case 'Verxio-XP':
-                  return Award;
-                default:
-                  return Gift;
-              }
-            })()}
-            color="bg-purple-200 text-purple-800"
-            value={(() => {
-              const { type, amount } = campaign.rewardInfo;
-              const formattedAmount = (n) => {
-                const parsed = parseFloat(n);
-                return isNaN(parsed) ? '0' : new Intl.NumberFormat('en-US', {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 1
-                }).format(parsed);
-              };
+            <DetailCard
+              title="Reward"
+              icon={(() => {
+                switch (campaign.rewardInfo.type) {
+                  case "Token":
+                    return Coins;
+                  case "Verxio-XP":
+                    return Award;
+                  default:
+                    return Gift;
+                }
+              })()}
+              color="bg-purple-200 text-purple-800"
+              value={(() => {
+                const { type, amount } = campaign.rewardInfo;
+                const formattedAmount = (n) => {
+                  const parsed = parseFloat(n);
+                  return isNaN(parsed)
+                    ? "0"
+                    : new Intl.NumberFormat("en-US", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 1,
+                      }).format(parsed);
+                };
 
-              switch (type) {
-                case 'Token':
-                  return `${formattedAmount(amount)} SOL`;
-                case 'Verxio-XP':
-                  return `${formattedAmount(amount)} vCredit`;
-                default:
-                  return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1').trim();
-              }
-            })()}
-          />
+                switch (type) {
+                  case "Token":
+                    return `${formattedAmount(amount)} SOL`;
+                  case "Verxio-XP":
+                    return `${formattedAmount(amount)} vCredit`;
+                  default:
+                    return (
+                      type.charAt(0).toUpperCase() +
+                      type
+                        .slice(1)
+                        .replace(/([A-Z])/g, " $1")
+                        .trim()
+                    );
+                }
+              })()}
+            />
           </div>
         </div>
 
@@ -202,22 +223,29 @@ const ExploreCampaignInfo = ({ campaign }) => {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Recent Participants
           </h2>
-          <div className="flex flex-wrap gap-4">
-            {recentParticipants.map((participant, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <Image
-                  src={generateAvatar(participant.address)}
-                  alt={`Participant ${index + 1}`}
-                  width={60}
-                  height={60}
-                  className="rounded-full"
-                />
-                <span className="text-sm text-gray-600 mt-2">
-                  {participant.address}
-                </span>
-              </div>
-            ))}
-          </div>
+          {participatntsList.length > 0 ? (
+            <div className="flex flex-wrap gap-4">
+              {participatntsList.map((participant, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <Image
+                    src={generateAvatar(participant._id)}
+                    alt={`Participant ${index + 1}`}
+                    width={60}
+                    height={60}
+                    className="rounded-full"
+                  />
+                  <span className="text-sm text-gray-600 mt-2">
+                    {participant.userId.slice(0, 6)}...
+                    {participant.userId.slice(-4)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No Participants yet
+            </div>
+          )}
         </div>
 
         <WinnersList winners={winners} campaign={campaign} />

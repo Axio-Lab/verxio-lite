@@ -23,9 +23,8 @@ import "react-markdown-editor-lite/lib/index.css";
 
 const ManageCampaignInfo = ({ campaign }) => {
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
-  const [winners, setWinners] = useState([]);
-  const { state, getAllParticipants, getAllWinners } =
-    useContext(CampaignContext);
+  // const [winners, setWinners] = useState([]);
+  const { state, getAllParticipants, getAllWinners } = useContext(CampaignContext);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
   const participatntsList = state.campaignParticipants;
   const winnersList = state.campaignWinners;
@@ -40,9 +39,9 @@ const ManageCampaignInfo = ({ campaign }) => {
     getAllParticipants(campaign?.id);
   };
 
-  const handleWinnersSelected = (selectedWinners) => {
-    setWinners(selectedWinners);
-  };
+  // const handleWinnersSelected = (selectedWinners) => {
+  //   setWinners(selectedWinners);
+  // };
 
   const generateAvatar = (address) => {
     return `https://api.dicebear.com/9.x/micah/svg?seed=${

@@ -61,6 +61,7 @@ const MyCampaigns = () => {
   const userApiKey = useSelector(
     (state) => state.generalStates?.userProfile?.key
   );
+  const userId = useSelector((state) => state.generalStates?.userProfile?._id);
 
   if (!userApiKey) {
     return (
@@ -69,10 +70,10 @@ const MyCampaigns = () => {
   }
 
   useEffect(() => {
-    if (userApiKey) {
+    if (userApiKey && userId) {
       getMyCampaigns();
     }
-  }, [userApiKey]);
+  }, [userApiKey, userId]);
 
   return (
     <>

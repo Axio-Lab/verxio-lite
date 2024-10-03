@@ -50,9 +50,9 @@ const WinnersList = ({ winners }) => {
           </div>
 
           <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-15 gap-4 mb-6">
-            {currentPageWinners.map((winner) => (
+            {currentPageWinners.map((winner, index) => (
               // <WinnerAvatar key={userId} userId={userId} />
-              <WinnerAvatar key={winner.userId} userId={winner.userId} />
+              <WinnerAvatar key={`winner-${index}`} userId={winner.userId} />
             ))}
           </div>
 

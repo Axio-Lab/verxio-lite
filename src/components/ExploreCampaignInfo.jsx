@@ -151,7 +151,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
           </div>
         </div>
 
-        <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
+        {/* <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Action Data
           </h2>
@@ -175,7 +175,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
               color="bg-pink-50 text-pink-800"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-wrap gap-4 mb-8">
           <ActionButton

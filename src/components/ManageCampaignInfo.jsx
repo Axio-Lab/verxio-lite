@@ -27,9 +27,9 @@ const ManageCampaignInfo = ({ campaign }) => {
   const { getAllParticipants } = useContext(CampaignContext);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
 
-  // const handleParticipate = () => {
-  //   console.log("Participate in campaign");
-  // };
+  const handleParticipate = () => {
+    console.log("Participate in campaign");
+  };
 
   // const handleSaveAudience = () => {
   //   console.log("Save as custom audience");
@@ -157,7 +157,7 @@ const ManageCampaignInfo = ({ campaign }) => {
             </div>
           </div>
 
-          <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
+          {/* <div className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Action Data
             </h2>
@@ -181,15 +181,15 @@ const ManageCampaignInfo = ({ campaign }) => {
                 color="bg-pink-50 text-pink-800"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap gap-4 mb-8">
-            {/* <ActionButton
+            <ActionButton
             onClick={handleParticipate}
             icon={ExternalLink}
             text="Participate Now"
             color="bg-indigo-600 hover:bg-indigo-700"
-          /> */}
+          />
             <ActionButton
               onClick={handlePickWinners}
               icon={Award}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/navigation";
-import { Toaster } from "react-hot-toast";
+// import { Toaster } from "react-hot-toast";
 import React, { useState, useMemo, useContext } from "react";
 import ExploreCampaignCard from "@/components/campaignProps/ExploreCampaignCard";
 import VerxioLogo from "../../../components/assets/images/VerxioLogo.svg";
@@ -20,13 +20,15 @@ const Explore = () => {
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign) => {
-      return (
-        (filter.reward === "" || campaign.reward === filter.reward) &&
-        (filter.action === "" || campaign.action === filter.action) &&
-        (filter.status === "" || campaign.status === filter.status)
-      );
-    }).reverse();
+    return campaigns
+      .filter((campaign) => {
+        return (
+          (filter.reward === "" || campaign.reward === filter.reward) &&
+          (filter.action === "" || campaign.action === filter.action) &&
+          (filter.status === "" || campaign.status === filter.status)
+        );
+      })
+      .reverse();
   }, [campaigns, filter]);
 
   const totalPages = Math.ceil(filteredCampaigns.length / campaignsPerPage);
@@ -40,7 +42,7 @@ const Explore = () => {
   const NoRecordsFound = () => (
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
       <svg
-        className="w-16 h-16 text-gray-400 mb-4"
+        className="w-16 h-16 mb-4 text-gray-400"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -52,21 +54,19 @@ const Explore = () => {
           d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+      <h3 className="mb-2 text-xl font-semibold text-gray-900">
         No Campaigns Found
       </h3>
-      <p className="text-gray-600 text-center">
+      <p className="text-center text-gray-600">
         We couldn't find any campaigns matching your current filters. Try
         adjusting your search criteria.
       </p>
     </div>
   );
 
- 
-
   return (
     <>
-      <Toaster position="top-right" />
+      {/* <Toaster position="top-right" /> */}
       {state?.loading && <LoadingSpinner />}
       <div className="min-h-screen px-4 py-8 bg-[#FBFBFE] rounded-2xl sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
@@ -75,28 +75,28 @@ const Explore = () => {
               <Image
                 src={VerxioLogo}
                 alt="Verxio Logo"
-                className="h-8 sm:h-14 cursor-pointer"
+                className="h-8 cursor-pointer sm:h-14"
               />
             </Link>
 
             <Button
               name="Create Campaign"
-              className="text-sm sm:text-base px-2 sm:px-4 py-1 sm:py-2"
+              className="px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-2"
               onClick={() =>
                 router.push("/dashboard/create-campaign?route=detail")
               }
             />
           </div>
           <div className="mb-6">
-            <h2 className="text-xl font-bold mb-2">Filter Campaigns</h2>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+            <h2 className="mb-2 text-xl font-bold">Filter Campaigns</h2>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
               <select
                 value={filter.reward}
                 onChange={(e) => {
                   setFilter({ ...filter, reward: e.target.value });
                   setCurrentPage(1);
                 }}
-                className="border rounded p-2 w-full sm:w-auto"
+                className="w-full p-2 border rounded sm:w-auto"
               >
                 <option value="">Rewards</option>
                 <option value="NFT Drop">NFT Drop</option>
@@ -111,7 +111,7 @@ const Explore = () => {
                   setFilter({ ...filter, action: e.target.value });
                   setCurrentPage(1);
                 }}
-                className="border rounded p-2 w-full sm:w-auto"
+                className="w-full p-2 border rounded sm:w-auto"
               >
                 <option value="">Actions</option>
                 <option value="Swap Token">Swap Token</option>
@@ -130,7 +130,7 @@ const Explore = () => {
                   setFilter({ ...filter, status: e.target.value });
                   setCurrentPage(1);
                 }}
-                className="border rounded p-2 w-full sm:w-auto"
+                className="w-full p-2 border rounded sm:w-auto"
               >
                 <option value="">Status</option>
                 <option value="Active">Active</option>
@@ -151,7 +151,7 @@ const Explore = () => {
             )}
           </div>
           {filteredCampaigns.length > campaignsPerPage && (
-            <div className="flex justify-center items-center mt-8 space-x-4">
+            <div className="flex items-center justify-center mt-8 space-x-4">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}

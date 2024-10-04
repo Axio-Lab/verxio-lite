@@ -20,7 +20,7 @@ export const metadata = {
   title: "Verxio Protocol",
   description: "Ads creator for web3 developers and brands",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
   },
 };
 
@@ -31,8 +31,8 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <DatePickerProvider>
-          <ReduxProvider>{children}</ReduxProvider>
           <ToastContainer />
+          <ReduxProvider>{children}</ReduxProvider>
         </DatePickerProvider>
       </body>
     </html>

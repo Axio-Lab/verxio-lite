@@ -15,7 +15,7 @@ const Page = () => {
   const NoRecordsFound = () => (
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md">
       <svg
-        className="w-16 h-16 text-gray-400 mb-4"
+        className="w-16 h-16 mb-4 text-gray-400"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -27,10 +27,10 @@ const Page = () => {
           d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+      <h3 className="mb-2 text-xl font-semibold text-gray-900">
         No Campaigns Found
       </h3>
-      <p className="text-gray-600 text-center">
+      <p className="text-center text-gray-600">
         We couldn't find any campaign record!
       </p>
     </div>

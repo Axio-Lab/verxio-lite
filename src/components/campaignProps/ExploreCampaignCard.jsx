@@ -108,7 +108,7 @@ const ExploreCampaignCard = ({ campaign }) => {
   return (
     <Link href={`/dashboard/explore/${campaign._id}`}>
       <div className="bg-[#FBFBFE] rounded-lg shadow hover:shadow-sm transition-all duration-300 p-6 mb-4 relative overflow-hidden border border-[#DCE0EF]">
-        <div className="flex flex-col md:flex-row items-start justify-start md:justify-between md:items-center mb-4 gap-3">
+        <div className="flex flex-col items-start justify-start gap-3 mb-4 md:flex-row md:justify-between md:items-center">
           <h2 className="text-2xl font-bold text-gray-800">
             {campaign?.campaignInfo?.title}
           </h2>
@@ -124,7 +124,7 @@ const ExploreCampaignCard = ({ campaign }) => {
             {campaign?.status}
           </span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-4">
+        <div className="grid grid-cols-2 gap-4 mb-4 sm:grid-cols-5">
           <Stat
             icon={<Users className="text-indigo-500" />}
             label="Participants"
@@ -177,7 +177,7 @@ const ExploreCampaignCard = ({ campaign }) => {
             })()}
           />
         </div>
-        <div className="flex justify-end items-center text-sm text-gray-600">
+        <div className="flex items-center justify-end text-sm text-gray-600">
           <ChevronRight className="text-gray-400" />
         </div>
       </div>

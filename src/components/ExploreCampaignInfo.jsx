@@ -187,31 +187,31 @@ const ExploreCampaignInfo = ({ campaign }) => {
             </div>
           </div>
 
-          <div className="p-6 mb-8 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800">
-              Action Data
-            </h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <DetailCard
-                title="Platform"
-                value="Jupiter"
-                icon={ExternalLink}
-                color="bg-indigo-50 text-indigo-800"
-              />
-              <DetailCard
-                title="Token to Swap"
-                value="SOL"
-                icon={ExternalLink}
-                color="bg-purple-50 text-purple-800"
-              />
-              <DetailCard
-                title="Min Amount"
-                value="0.1 SOL"
-                icon={ExternalLink}
-                color="bg-pink-50 text-pink-800"
-              />
-            </div>
+        {/* <div className="p-6 mb-8 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+          <h2 className="mb-4 text-2xl font-semibold text-gray-800">
+            Action Data
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <DetailCard
+              title="Platform"
+              value="Jupiter"
+              icon={ExternalLink}
+              color="bg-indigo-50 text-indigo-800"
+            />
+            <DetailCard
+              title="Token to Swap"
+              value="SOL"
+              icon={ExternalLink}
+              color="bg-purple-50 text-purple-800"
+            />
+            <DetailCard
+              title="Min Amount"
+              value="0.1 SOL"
+              icon={ExternalLink}
+              color="bg-pink-50 text-pink-800"
+            />
           </div>
+        </div> */}
 
           <div className="flex flex-wrap gap-4 mb-8">
             <ActionButton

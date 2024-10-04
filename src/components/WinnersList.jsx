@@ -33,7 +33,7 @@ const WinnersList = ({ winners }) => {
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Campaign Winners
       </h2>
-      {winnersArray.length > 0 ? (
+      {winnersArray.length < 0 ? (
         <>
           <div className="mb-4 flex justify-between items-center">
             <p className="text-lg">

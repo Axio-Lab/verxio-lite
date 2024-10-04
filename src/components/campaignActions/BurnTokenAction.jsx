@@ -28,8 +28,8 @@ const BurnTokenAction = () => {
         initialValues={initialValues}
       >
         {({ values, setFieldValue, errors, touched, dirty, isValid }) => (
-          <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
-            <h3 className="text-lg font-semibold mb-4 flex items-center">
+          <Form className="p-4 space-y-3 bg-white border-none rounded-lg shadow outline-none sm:space-y-2">
+            <h3 className="flex items-center mb-4 text-lg font-semibold">
               <Flame className="mr-2 text-red-500" />
               Burn Token Details
             </h3>

@@ -20,9 +20,8 @@ import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
 import { useSelector } from "react-redux";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { ToastContainer } from "react-toastify";
 import { CampaignContext } from "@/context/campaignContext";
-// import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 const ExploreCampaignInfo = ({ campaign }) => {
   const [winners, setWinners] = useState([]);
@@ -77,7 +76,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
 
   return (
     <>
-      <ToastContainer />
+      <Toaster position="top-right" />
       <div className="min-h-screen bg-[#FBFBFE] rounded-2xl py-8 px-4 sm:px-6 lg:px-8">
         <div
           className={`max-w-4xl mx-auto ${
@@ -187,7 +186,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
             </div>
           </div>
 
-        {/* <div className="p-6 mb-8 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+          {/* <div className="p-6 mb-8 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
           <h2 className="mb-4 text-2xl font-semibold text-gray-800">
             Action Data
           </h2>

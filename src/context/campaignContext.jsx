@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import React, { createContext, useEffect, useReducer } from "react";
 
@@ -7,7 +7,6 @@ const CampaignContext = createContext();
 const CampaignProvider = ({ children }) => {
   const initialState = {
     loading: false,
-    allCampaigns: [],
     myCampaigns: [],
     campaignWinners: [],
     campaignParticipants: [],
@@ -150,6 +149,27 @@ const CampaignProvider = ({ children }) => {
     }
   };
 
+  const payWinners = async (campaignId) => {
+    try {
+      dispatch({ type: SET_LOADING, payload: true });
+      const response = await axios.post(
+        `${apiBaseURL}/campaign/pay/${campaignId}`,
+        { headers }
+      );
+      console.log(response, "paid winners response");
+      if (response.data.success === true) {
+        toast.success(response.data.message);
+        dispatch({ type: SET_LOADING, payload: false });
+      } else {
+        toast.error(response.data.message);
+      }
+      dispatch({ type: SET_LOADING, payload: false });
+    } catch (error) {
+      console.error("Error paying campaign winners:", error);
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getAllCampaigns();
     // eslint-disable-next-line
@@ -162,6 +182,7 @@ const CampaignProvider = ({ children }) => {
       value={{
         state,
         dispatch,
+        payWinners,
         getAllWinners,
         getMyCampaigns,
         getAllCampaigns,

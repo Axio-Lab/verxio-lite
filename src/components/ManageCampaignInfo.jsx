@@ -4,7 +4,7 @@ import {
   Users,
   Coins,
   Gift,
-  Save,
+  // Save,
   BadgeDollarSign,
   Award,
   Calendar,
@@ -23,26 +23,16 @@ import { CampaignContext } from "@/context/campaignContext";
 import MarkdownIt from "markdown-it";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import "react-markdown-editor-lite/lib/index.css";
-import axios from 'axios';
-import { useSelector } from "react-redux";
 
 const ManageCampaignInfo = ({ campaign }) => {
-  const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
-  const [winners, setWinners] = useState([]);
-  const { state, getAllParticipants, getAllWinners } =
+  const { state, getAllParticipants, getAllWinners, payWinners } =
     useContext(CampaignContext);
-  const [showWinnerSelection, setShowWinnerSelection] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
-  const isVerified = useSelector(
-    (state) => state.generalStates.userProfile.isVerified
-  );
-  const userApiKey = useSelector(
-    (state) => state.generalStates?.userProfile?.key
-  );
   const participatntsList = state.campaignParticipants;
   const winnersList = state.campaignWinners;
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
+  const [showWinnerSelection, setShowWinnerSelection] = useState(false);
 
   useEffect(() => {
     getAllParticipants(campaign?.id);
@@ -50,21 +40,30 @@ const ManageCampaignInfo = ({ campaign }) => {
   }, []);
 
   const handlePickWinners = () => {
+    if (campaign?.status !== "Ended") {
+      toast.error("Sorry you cannot select winners for an ongoing campaign");
+      return;
+    }
     setShowWinnerSelection(true);
     getAllParticipants(campaign?.id);
   };
 
-  const handleWinnersSelected = (selectedWinners) => {
-    setWinners(selectedWinners);
-  };
-
   const handlePayWinners = () => {
+    if (campaign?.status !== "Ended") {
+      toast.error("Cannot payout winners while campaign has not ended");
+      return;
+    }
+    if (winnersList.length === 0) {
+      toast.error("Please select winners");
+      return;
+    }
     setShowPaymentModal(true);
   };
 
   const handleCopyBlinkUrl = () => {
     if (campaign?.blink) {
-      navigator.clipboard.writeText(campaign.blink)
+      navigator.clipboard
+        .writeText(campaign.blink)
         .then(() => {
           toast.success("Blink URL copied to clipboard!");
         })
@@ -74,24 +73,6 @@ const ManageCampaignInfo = ({ campaign }) => {
         });
     } else {
       toast.error("No Blink URL available");
-    }
-  };
-
-        // Set up the headers
-    const headers = {
-        "X-API-Key": userApiKey,
-        "Content-Type": "application/json",
-    };
-
-  const handleConfirmPayment = async () => {
-    try {
-      const response = await axios.post(`${apiBaseURL}/campaign/pay/${campaign.id}`, {headers});
-      console.log('Payment response:', response.data);
-      // Handle successful payment (e.g., show success message, update UI)
-      setShowPaymentModal(false);
-    } catch (error) {
-      console.error('Error paying winners:', error);
-      // Handle error (e.g., show error message)
     }
   };
 
@@ -112,16 +93,16 @@ const ManageCampaignInfo = ({ campaign }) => {
         >
           <Link
             href="/dashboard/manage-campaign"
-            className="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-300 mb-6"
+            className="flex items-center mb-6 text-indigo-600 transition duration-300 hover:text-indigo-800"
           >
             <ChevronLeft size={20} className="mr-2" />
             Back to My Campaigns
           </Link>
-          <h1 className="text-2xl md:text-4xl font-bold text-indigo-900 mb-6 text-center">
+          <h1 className="mb-6 text-2xl font-bold text-center text-indigo-900 md:text-4xl">
             {campaign?.campaignInfo?.title}
           </h1>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 gap-6 mb-8 md:grid-cols-4">
             <StatCard
               icon={Activity}
               title="Status"
@@ -148,12 +129,12 @@ const ManageCampaignInfo = ({ campaign }) => {
             />
           </div>
 
-          <div className="mb-8 p-6 rounded-xl shadow-md">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <div className="p-6 mb-8 shadow-md rounded-xl">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-800">
               Campaign Details
             </h2>
 
-            <div className="text-gray-600 mb-4">
+            <div className="mb-4 text-gray-600">
               <p
                 dangerouslySetInnerHTML={{
                   __html: mdParser.render(
@@ -216,7 +197,7 @@ const ManageCampaignInfo = ({ campaign }) => {
           </div>
 
           <div className="flex flex-wrap gap-4 mb-8">
-              <ActionButton
+            <ActionButton
               onClick={handleCopyBlinkUrl}
               icon={Copy}
               text="Copy Blink URL"
@@ -234,16 +215,10 @@ const ManageCampaignInfo = ({ campaign }) => {
               text="SOL Payout"
               color="bg-green-600 hover:bg-green-700"
             />
-            {/* <ActionButton
-            onClick={handleSaveAudience}
-            icon={Save}
-            text="Save Audience"
-            color="bg-blue-600 hover:bg-blue-700"
-          /> */}
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl shadow-md mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <div className="p-6 mb-12 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-800">
               Recent Participants
             </h2>
             {participatntsList.length > 0 ? (
@@ -257,7 +232,7 @@ const ManageCampaignInfo = ({ campaign }) => {
                       height={60}
                       className="rounded-full"
                     />
-                    <span className="text-sm text-gray-600 mt-2">
+                    <span className="mt-2 text-sm text-gray-600">
                       {participant.userId.slice(0, 6)}...
                       {participant.userId.slice(-4)}
                     </span>
@@ -265,7 +240,7 @@ const ManageCampaignInfo = ({ campaign }) => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="py-8 text-center text-gray-500">
                 No Participants yet
               </div>
             )}
@@ -276,32 +251,34 @@ const ManageCampaignInfo = ({ campaign }) => {
             <WinnerSelection
               campaign={campaign}
               onClose={() => setShowWinnerSelection(false)}
-              onWinnersSelected={handleWinnersSelected}
             />
           )}
 
           {showPaymentModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full mx-4">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800">Confirm Payment</h2>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md p-8 mx-4 bg-white shadow-2xl rounded-xl">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Confirm Payment
+                  </h2>
                 </div>
                 <div className="mb-8">
-                  <p className="text-gray-600 leading-relaxed">
-                    Payment will be completed with Streamflow. A payment stream will be created for each winner.
+                  <p className="leading-relaxed text-gray-600">
+                    Payment will be completed with Streamflow. A payment stream
+                    will be created for each winner.
                   </p>
                 </div>
                 <div className="flex justify-end">
                   <button
                     onClick={() => setShowPaymentModal(false)}
-                    className="mr-4 px-4 py-2 text-gray-600 font-medium hover:text-gray-800 transition duration-150 ease-in-out"
+                    className="px-4 py-2 mr-4 font-medium text-gray-600 transition duration-150 ease-in-out hover:text-gray-800"
                   >
                     Cancel
                   </button>
                   <Button
                     name="Continue"
-                    className="text-sm sm:text-base px-4 sm:px-6 py-2"
-                      onClick={handleConfirmPayment}
+                    className="px-4 py-2 text-sm sm:text-base sm:px-6"
+                    onClick={() => payWinners(campaign?.id)}
                   />
                 </div>
               </div>
@@ -318,7 +295,7 @@ const StatCard = ({ icon: Icon, title, value, color }) => (
     className={`${color} p-4 rounded-lg flex flex-col items-center text-center`}
   >
     <Icon size={24} className="mb-2" />
-    <h2 className="text-lg font-semibold mb-1">{title}</h2>
+    <h2 className="mb-1 text-lg font-semibold">{title}</h2>
     <p className="text-2xl font-bold">{value}</p>
   </div>
 );

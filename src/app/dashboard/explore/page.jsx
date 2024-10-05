@@ -14,12 +14,14 @@ import { CampaignContext } from "@/context/campaignContext";
 const Explore = () => {
   const router = useRouter();
   const { state } = useContext(CampaignContext);
-  const campaigns = state.allCampaigns;
+  const campaigns = state.allCampaigns || []; 
   const campaignsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
   const filteredCampaigns = useMemo(() => {
+    if (!campaigns || campaigns.length === 0) return []; 
+
     return campaigns
       .filter((campaign) => {
         return (

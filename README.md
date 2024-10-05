@@ -13,6 +13,21 @@ Ads creator for web3 developers and brands
 </div>
 
 <hr />
+Projects share a common pain point; the difficulty connecting with the right users who would benefit from their product offerings.
+
+Users on the other hand are bombarded with countless projects daily, making it nearly impossible to discover product offerings that truly align with their interests and needs.
+
+Verxio makes ad creation easy, dynamic, interactive, and rewarding for users. Every campaign is a blink.
+
+The most important part of any marketing campaign is the call-to-action. Verxio renders this as a blink, enabling users to interact directly with the project's offering from their environment.
+
+Verxio increases the retention rate by 57% and creates a viral network effect for the project.
+
+Projects can quickly integrate our SDK/API infrastructure into their existing application or use our no-code interface to experience verxio on the go.
+
+During our private testing, over 126 blinks were created from campaigns by both web3 and web2 developers and brands with industries ranging from e-commerce to real estate, education, etc.
+
+Verxio is not just changing how projects advertise but it is also reshaping how they grow, connect, and engage their community.
 
 ## 📖 Protocol Architecture
 ```mermaid

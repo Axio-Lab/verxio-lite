@@ -9,7 +9,6 @@ import { setTokenMint } from "@/store/slices/statesSlice";
 const BurnTokenAction = () => {
   const dispatch = useDispatch();
   const tokenMint = useSelector((state) => state.generalStates.tokenMint);
-  
 
   const initialValues = {
     tokenMintAmount: tokenMint?.tokenMintAmount || "",
@@ -18,7 +17,7 @@ const BurnTokenAction = () => {
 
   const validationSchema = Yup.object().shape({
     tokenMintAmount: Yup.number().required("Token amount is required"),
-    tokenMintAddress: Yup.number().required("Token address is required"),
+    tokenMintAddress: Yup.string().required("Token address is required"),
   });
 
   return (
@@ -28,9 +27,9 @@ const BurnTokenAction = () => {
         validationSchema={validationSchema}
         initialValues={initialValues}
       >
-        {({ values, setFieldValue, errors, touched, dirty }) => (
-          <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
-            <h3 className="text-lg font-semibold mb-4 flex items-center">
+        {({ values, setFieldValue, errors, touched, dirty, isValid }) => (
+          <Form className="p-4 space-y-3 bg-white border-none rounded-lg shadow outline-none sm:space-y-2">
+            <h3 className="flex items-center mb-4 text-lg font-semibold">
               <Flame className="mr-2 text-red-500" />
               Burn Token Details
             </h3>
@@ -53,6 +52,7 @@ const BurnTokenAction = () => {
 
             <Field
               id="tokenAmount"
+              type="number"
               className={`border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 ${
                 errors.tokenMintAmount && touched.tokenMintAmount
                   ? "border-red-500 focus:border-red-500"
@@ -70,10 +70,13 @@ const BurnTokenAction = () => {
               name={"Save"}
               type="button"
               onClick={() => {
-                if (dirty) {
-                  console.log(values);
+                if (dirty && isValid) {
                   dispatch(setTokenMint(values));
+                  console.log(values);
                   toast.success("Saved successful");
+                } else {
+                  toast.error("Please fill out the fields correctly");
+                  return;
                 }
               }}
             />

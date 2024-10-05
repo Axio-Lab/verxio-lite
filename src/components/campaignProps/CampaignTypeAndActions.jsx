@@ -19,13 +19,13 @@ import { toast, Toaster } from "react-hot-toast";
 import { Formik, Form } from "formik";
 
 // Import your existing action components
+import PollAction from "../campaignActions/CreatePoll";
 import BurnTokenAction from "../campaignActions/BurnTokenAction";
-import SellDigitalProductAction from "../campaignActions/SellDigitalProductAction";
+import SubmitTokenUrlAction from "../campaignActions/SubmitUrlAction";
 import CompressTokenAction from "../campaignActions/CompressTokenAction";
 import DecompressTokenAction from "../campaignActions/DecompressTokenAction";
-import SubmitTokenUrlAction from "../campaignActions/SubmitUrlAction";
-import PollAction from "../campaignActions/CreatePoll";
-import { setActionType } from "@/store/slices/statesSlice";
+import { setActionType, resetActionType } from "@/store/slices/statesSlice";
+import SellDigitalProductAction from "../campaignActions/SellDigitalProductAction";
 
 const actions = {
   Onchain: [
@@ -75,9 +75,9 @@ const CampaignTypeAndActions = ({
   updateActionData,
   actionData,
 }) => {
+  const dispatch = useDispatch();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState(null);
-  const dispatch = useDispatch();
   const actionType = useSelector((state) => state.generalStates.actionType);
 
   const handleActionToggle = (action, setFieldValue) => {
@@ -85,6 +85,7 @@ const CampaignTypeAndActions = ({
       toggleAction(action.name);
       toast.success(`${action.name} deselected`);
       setFieldValue("selectedActionType", "");
+      // dispatch(resetActionType());
     } else if (selectedActions.length > 0) {
       toast.error("An action is already selected. Please deselect it first.");
     } else {
@@ -128,7 +129,7 @@ const CampaignTypeAndActions = ({
     <>
       <Toaster position="top-right" />
       <Formik initialValues={initialValues} validationSchema={validationSchema}>
-        {({ values, setFieldValue }) => (
+        {({ values, setFieldValue, isValid }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
@@ -159,7 +160,9 @@ const CampaignTypeAndActions = ({
               />
               <Button
                 href="/dashboard/create-campaign?route=reward"
-                onClick={() => dispatch(setActionType(values))}
+                onClick={() => {
+                  dispatch(setActionType(values));
+                }}
                 name={"Continue"}
               />
             </div>

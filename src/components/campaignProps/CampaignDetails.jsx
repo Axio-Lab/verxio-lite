@@ -6,6 +6,7 @@ import { Formik, Form, Field } from "formik";
 import React, { useState, useRef } from "react";
 import "react-markdown-editor-lite/lib/index.css";
 import { Button } from "@/components/Button";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
@@ -13,12 +14,12 @@ import { FiUploadCloud } from "react-icons/fi";
 import { setDetails } from "@/store/slices/statesSlice";
 
 const CampaignDetails = () => {
+  const dispatch = useDispatch();
   const fileInputRef = useRef(null);
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const dispatch = useDispatch();
-
   const details = useSelector((state) => state.generalStates.details);
+  const verxiocloudinaryApiKey = process.env.VERXIO_CORE_CLOUDINARY_KEY;
 
   const handleDateChange = (date) => {
     const formattedDate = dayjs(date).format("DD/MM/YYYY");
@@ -48,12 +49,12 @@ const CampaignDetails = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "Ibelachi_Test_Run");
-    formData.append("api_key", "968631257356497");
+    formData.append("upload_preset", "verxio_core_team_inc");
+    formData.append("api_key", `${verxiocloudinaryApiKey}`);
 
     try {
       const response = await fetch(
-        "https://api.cloudinary.com/v1_1/verxioaventor/image/upload",
+        "https://api.cloudinary.com/v1_1/dum54wavg/image/upload",
         {
           method: "POST",
           body: formData,
@@ -63,6 +64,7 @@ const CampaignDetails = () => {
       setFieldValue("bannerImg", results.url);
     } catch (error) {
       console.log("Error uploading image:", error);
+      toast.error("An error occured while uploading image. Please rty again.");
     }
   };
 
@@ -75,7 +77,7 @@ const CampaignDetails = () => {
   };
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("Campaign name is required"),
+    title: Yup.string().required("Campaign title is required"),
     bannerImg: Yup.string().required("Campaign banner is required"),
     description: Yup.string().required("Campaign description is required"),
     startDate: Yup.date().required("Start date is required").nullable(),
@@ -106,15 +108,17 @@ const CampaignDetails = () => {
                       errors.title && touched.title
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-300 focus:border-primary"
-                    } focus:ring-1 focus:ring-primary outline-none`}
-                    // className="border outline-none bg-transparent font-normal text-sm sm:text-base rounded-lg w-full px-4 py-3 border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+                    } focus:ring-1 focus:ring-primary`}
                     name="title"
                     value={values.title}
-                    placeholder="Enter campaign name"
+                    placeholder="Enter campaign title"
                     onChange={(event) => {
                       setFieldValue("title", event.target.value);
                     }}
                   />
+                  {errors.title && touched.title && (
+                    <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+                  )}
                 </div>
 
                 <div>
@@ -128,6 +132,11 @@ const CampaignDetails = () => {
                     onChange={handleDescriptionChange}
                     setFieldValue={setFieldValue}
                   />
+                  {errors.description && touched.description && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -136,7 +145,8 @@ const CampaignDetails = () => {
                   </label>
                   <div
                     className="border-2 border-dashed border-indigo-300 rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center bg-indigo-50 cursor-pointer hover:bg-indigo-100 transition duration-300"
-                    onClick={() => fileInputRef.current.click()}
+                    onClick={() => handleUploadButtonClick()}
+                    // onClick={() => fileInputRef.current.click()}
                   >
                     {selectedImage ? (
                       <div className="relative w-full h-32 sm:h-48">
@@ -167,6 +177,12 @@ const CampaignDetails = () => {
                       accept="image/*"
                     />
                   </div>
+
+                  {errors.bannerImg && touched.bannerImg && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.bannerImg}
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -183,8 +199,13 @@ const CampaignDetails = () => {
                           dayjs(date).format("DD/MM/YYYY")
                         );
                       }}
-                      className="w-full"
+                      className="w-full border border-red-500"
                     />
+                    {errors.startDate && touched.startDate && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.startDate}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="font-medium text-base sm:text-lg text-gray-700 mb-2 block">
@@ -201,21 +222,26 @@ const CampaignDetails = () => {
                       }}
                       className="w-full"
                     />
+                    {errors.endDate && touched.endDate && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.endDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="w-full mt-8 sm:mt-10">
                 <Button
-                  href="/dashboard/create-campaign?route=action"
                   name={"Continue"}
+                  href="/dashboard/create-campaign?route=action"
+                  className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                   onClick={() => {
-                    // if (dirty && isValid) {
-                    console.log(values);
-                    dispatch(setDetails(values));
+                    dispatch(setDetails(values)), console.log(values);
+                    // if (isValid && dirty) {
+                    //   dispatch(setDetails(values)), console.log(values);
                     // }
                   }}
-                  className="w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                 />
               </div>
             </div>

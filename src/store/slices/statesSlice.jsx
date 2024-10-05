@@ -1,17 +1,17 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userId: "",
-  userApiKey: "",
   details: {},
   actionType: {},
   rewards: {},
   preview: {},
-  userProfile: {},
-  selectedProductImage: {},
   tokenMint: {},
+  userProfile: {},
+  pollsOption: {},
   digitalProduct: {},
+  allCampaigns: [],
+  selectedProductImage: {},
 };
 
 const statesSlice = createSlice({
@@ -24,8 +24,8 @@ const statesSlice = createSlice({
     setDigitalProduct: (state, action) => {
       state.digitalProduct = action.payload;
     },
-    setUserId: (state, action) => {
-      state.userId = action.payload;
+    setAllCampaigns: (state, action) => {
+      state.allCampaigns = action.payload;
     },
     setTokenMint: (state, action) => {
       state.tokenMint = action.payload;
@@ -33,8 +33,8 @@ const statesSlice = createSlice({
     setActionType: (state, action) => {
       state.actionType = action.payload;
     },
-    setUserApiKey: (state, action) => {
-      state.userApiKey = action.payload;
+    setPollsOption: (state, action) => {
+      state.pollsOption = action.payload;
     },
     setRewards: (state, action) => {
       state.rewards = action.payload;
@@ -47,6 +47,26 @@ const statesSlice = createSlice({
     },
     setSelectedProductImage: (state, action) => {
       state.selectedProductImage = action.payload;
+    },
+
+    // Action for reseting the redux state after create campaign submission
+    resetCreateCampaignFormData: (state) => {
+      state.details = initialState.details;
+      state.rewards = initialState.rewards;
+      state.preview = initialState.preview;
+      state.tokenMint = initialState.tokenMint;
+      state.actionType = initialState.actionType;
+      state.pollsOption = initialState.pollsOption;
+      state.digitalProduct = initialState.digitalProduct;
+    },
+    resetActionType: (state) => {
+      state.tokenMint = initialState.tokenMint;
+      state.digitalProduct = initialState.digitalProduct;
+      state.pollsOption = initialState.pollsOption;
+    },
+
+    resetUserProfile: (state) => {
+      state.userProfile = initialState.userProfile;
     },
   },
   extraReducers: (builder) => {
@@ -62,11 +82,16 @@ export const {
   setDetails,
   setRewards,
   setPreview,
-  setUserApiKey,
   setTokenMint,
   setActionType,
+  setUserApiKey,
+  resetActionType,
+  setAllCampaigns,
   setUserProfile,
+  setPollsOption,
   setDigitalProduct,
   setSelectedProductImage,
+  resetUserProfile,
+  resetCreateCampaignFormData,
 } = statesSlice.actions;
 export default statesSlice.reducer;

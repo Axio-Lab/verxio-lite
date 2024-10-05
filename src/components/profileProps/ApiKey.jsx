@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button";
 import React, { useState, useEffect } from "react";
-import { Key, Copy, Trash2, Loader } from "lucide-react"; 
+import { Key, Copy, Trash2, Loader, AlertCircle } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { setUserApiKey } from "@/store/slices/statesSlice";
 import { createAPIKey, invalidateAPIKey } from "@/store/slices/apiKeySlice";
@@ -10,15 +10,17 @@ const ApiSection = () => {
   const dispatch = useDispatch();
   const [createdDate, setCreatedDate] = useState("");
   const [loadingCreateApi, setLoadingCreateApi] = useState(false);
-  const [loadingDeleteApi, setLoadingDeleteApi] = useState(false); 
-  const userId = useSelector((state) => state.generalStates.userId);
+  const [loadingDeleteApi, setLoadingDeleteApi] = useState(false);
   const [generatedAPIKey, setGeneratedAPIKey] = useState(null);
-  const userApiKey = useSelector((state) => state.generalStates.userApiKey);
+  const userId = useSelector((state) => state.generalStates.userProfile._id);
+  const userApiKey = useSelector((state) => state.generalStates.userProfile.key);
+  const isVerified = useSelector((state) => state.generalStates.userProfile.isVerified);
+
 
   useEffect(() => {
     if (userApiKey) {
       setGeneratedAPIKey(userApiKey);
-      setCreatedDate(new Date().toISOString().split("T")[0]); 
+      setCreatedDate(new Date().toISOString().split("T")[0]);
     }
   }, [userApiKey]);
 
@@ -36,8 +38,8 @@ const ApiSection = () => {
       setLoadingCreateApi(true);
       const response = await dispatch(createAPIKey({ id: userId }));
       if (response.payload.success === true) {
-        console.log(response.payload.message);
-        toast.success('ApiKey generated successfully');
+        // console.log(response.payload.message);
+        toast.success("ApiKey generated successfully");
         dispatch(setUserApiKey(response.payload.data));
         setGeneratedAPIKey(response.payload.data);
         setCreatedDate(new Date().toISOString().split("T")[0]);
@@ -70,17 +72,38 @@ const ApiSection = () => {
     }
   };
 
-  const NoApiKeyFound = () => (
+  const NoApiKeyFound = ({
+    isVerified,
+    handleCreateApiKey,
+    loadingCreateApi,
+  }) => (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg">
       <Key className="w-12 h-12 text-gray-400 mb-4" />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">No API Key Found</h3>
-      <p className="text-gray-600 text-center mb-4">You haven't generated an API key yet.</p>
-      <Button
-        onClick={createNewApiKey}
-        className="py-2 px-4"
-        name="Generate New API Key"
-        isLoading={loadingCreateApi}
-      />
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        No API Key Found
+      </h3>
+      <p className="text-gray-600 text-center mb-4">
+        You haven't generated an API key yet.
+      </p>
+      {isVerified ? (
+        <Button
+          onClick={handleCreateApiKey}
+          className="py-2 px-4"
+          name="Generate API Key"
+          isLoading={loadingCreateApi}
+        />
+      ) : (
+        <div
+          className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4"
+          role="alert"
+        >
+          <AlertCircle className="h-5 w-5 mr-2" />
+          <p>
+            Please complete verification with Reclaim Protocol to generate an
+            API key.
+          </p>
+        </div>
+      )}
     </div>
   );
 
@@ -90,16 +113,33 @@ const ApiSection = () => {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
         <div className="p-8 bg-gradient-to-br from-indigo-50 to-purple-50">
           {!generatedAPIKey ? (
-            <NoApiKeyFound />
+            <NoApiKeyFound
+              isVerified={isVerified}
+              handleCreateApiKey={createNewApiKey}
+              loadingCreateApi={loadingCreateApi}
+            />
           ) : (
             <>
               <div className="flex justify-between items-center mb-6">
-                <Button
-                  onClick={createNewApiKey}
-                  className="py-3 px-6"
-                  name="Generate New API Key"
-                  isLoading={loadingCreateApi}
-                />
+                {isVerified ? (
+                  <Button
+                    onClick={createNewApiKey}
+                    className="py-3 px-6"
+                    name="Generate New API Key"
+                    isLoading={loadingCreateApi}
+                  />
+                ) : (
+                  <div
+                    className="flex items-center bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4"
+                    role="alert"
+                  >
+                    <AlertCircle className="h-5 w-5 mr-2" />
+                    <p>
+                      Please complete verification with Reclaim Protocol to
+                      generate a new API key.
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <div className="flex items-center justify-between mb-4">

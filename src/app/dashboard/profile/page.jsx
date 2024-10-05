@@ -10,11 +10,13 @@ import ApiSection from "@/components/profileProps/ApiKey";
 import { createProfile } from "@/store/slices/profileSlice";
 import { verifyUser } from "@/store/slices/apiKeySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserId, setUserProfile } from "@/store/slices/statesSlice";
+import { setUserProfile } from "@/store/slices/statesSlice";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { VerifyAUser } from "@/components/modals/verifyUser";
 import LoadingSpinner from "@/components/componentLoader";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { resetUserProfile } from "@/store/slices/statesSlice";
+
 const NoWalletConnected = () => (
   <div className="flex items-center justify-center min-h-screen bg-[#FBFBFE]">
     <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md max-w-lg w-full">
@@ -67,10 +69,10 @@ const Page = () => {
       read: false,
     },
   ]);
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   const dispatch = useDispatch();
-  let userId = "";
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  let userId = useSelector((state) => state.generalStates?.userProfile?._id);
 
   if (publicKey) {
     userId = publicKey?.toString();
@@ -80,8 +82,7 @@ const Page = () => {
     try {
       const response = await dispatch(createProfile({ id: userId }));
       if (response.payload.success === true) {
-        toast.success(response.payload.message);
-        dispatch(setUserId(response.payload.profile._id));
+        // toast.success(response.payload.message);
         dispatch(setUserProfile(response.payload.profile));
       } else {
         toast.error(response.payload.message);
@@ -139,6 +140,11 @@ const Page = () => {
     return <NoWalletConnected />;
   }
 
+  const handleLogout = () => {
+    disconnect();
+    dispatch(resetUserProfile());
+  };
+
   return (
     <>
       <Toaster position="top-right" />
@@ -148,7 +154,7 @@ const Page = () => {
             <div className="relative">
               <div className="absolute top-4 right-4 z-10">
                 <button
-                  onClick={disconnect}
+                  onClick={() => handleLogout()}
                   className="flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
                   style={{
                     fontFamily: '"Space Grotesk", sans-serif',
@@ -170,10 +176,15 @@ const Page = () => {
                         src={generateAvatar(publicKey.toBase58())}
                         alt="Profile"
                       />
-                      {userProfile.isVerified === true ? (
-                        <div className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md" style={{ textShadow: '0px 1px 2px rgba(0, 0, 0, 0.3)' }}>
-                            Verified
-                          </div>
+                      {userProfile && userProfile.isVerified === true ? (
+                        <div
+                          className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+                          style={{
+                            textShadow: "0px 1px 2px rgba(0, 0, 0, 0.3)",
+                          }}
+                        >
+                          Verified
+                        </div>
                       ) : (
                         <button
                           onClick={() => VerifyNewUser()}
@@ -191,7 +202,7 @@ const Page = () => {
                         src={generateAvatar(publicKey.toBase58())}
                         alt="Profile"
                       />
-                      {userProfile.isVerified === true ? (
+                      {userProfile && userProfile.isVerified === true ? (
                         <div
                           className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
                           style={{
@@ -233,7 +244,7 @@ const Page = () => {
                     <StatCard
                       icon={BarChart2}
                       title="Campaigns"
-                      value={`${userProfile?.campaigns?? 0}`}
+                      value={`${userProfile?.campaignCount ?? 0}`}
                       unit="Participated"
                     />
                   </div>

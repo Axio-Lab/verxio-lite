@@ -18,7 +18,7 @@ export const createCampaign = createAsyncThunk(
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `${userApiKey}`, // Use the passed userApiKey
+      "X-API-Key": `${userApiKey}`,
     };
 
     try {

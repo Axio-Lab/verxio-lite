@@ -18,6 +18,7 @@ const Explore = () => {
   const campaignsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
+  console.log(campaigns, "Campaigns!!")
 
   const filteredCampaigns = useMemo(() => {
     return campaigns

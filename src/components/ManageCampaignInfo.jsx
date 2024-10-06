@@ -25,8 +25,14 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import "react-markdown-editor-lite/lib/index.css";
 
 const ManageCampaignInfo = ({ campaign }) => {
-  const { state, getAllParticipants, getAllWinners, payWinners, showPaymentModal,  setShowPaymentModal } =
-    useContext(CampaignContext);
+  const {
+    state,
+    getAllParticipants,
+    getAllWinners,
+    payWinners,
+    showPaymentModal,
+    setShowPaymentModal,
+  } = useContext(CampaignContext);
   const participatntsList = state.campaignParticipants;
   const winnersList = state.campaignWinners;
   const isLargeScreen = useMediaQuery("(min-width: 768px)");

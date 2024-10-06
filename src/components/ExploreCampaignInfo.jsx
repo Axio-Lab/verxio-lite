@@ -52,17 +52,21 @@ const ExploreCampaignInfo = ({ campaign }) => {
       toast.error("Oops!! This campaign has ended");
       return;
     }
+    if (campaign.status === "Upcoming") {
+      toast.error("Oops!! This campaign has not started");
+      return;
+    }
     const participationUrl = `${campaign?.blink}`;
     window.location.href = participationUrl;
   };
 
-  const handleSaveAudience = () => {
-    console.log("Save as custom audience");
-  };
+  // const handleSaveAudience = () => {
+  //   console.log("Save as custom audience");
+  // };
 
-  const handlePickWinners = () => {
-    setShowWinnerSelection(true);
-  };
+  // const handlePickWinners = () => {
+  //   setShowWinnerSelection(true);
+  // };
 
   // const handleWinnersSelected = (selectedWinners) => {
   //   setWinners(selectedWinners);

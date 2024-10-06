@@ -83,11 +83,12 @@ const CampaignPreview = ({ campaignData }) => {
   if (!campaignData) {
     return <div>No campaign data available.</div>;
   }
-  const { getAllCampaigns } = useContext(CampaignContext);
+  
   const apiBaseURL = process.env.NEXT_PUBLIC_API_URL;
-  const NEXT_PUBLIC_TREASURY_WALLET_ADDRESS = process.env.NEXT_PUBLIC_TREASURY_WALLET;
-  const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
   const NEXT_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+  const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
+  const NEXT_PUBLIC_TREASURY_WALLET_ADDRESS = process.env.NEXT_PUBLIC_TREASURY_WALLET;
+  const { getAllCampaigns, getMyCampaigns } = useContext(CampaignContext);
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -362,6 +363,7 @@ const CampaignPreview = ({ campaignData }) => {
         toast.success(response.data.message);
         dispatch(resetCreateCampaignFormData());
         getAllCampaigns()
+        getMyCampaigns()
       } else {
         toast.error(response.data.message);
       }
@@ -378,9 +380,9 @@ const CampaignPreview = ({ campaignData }) => {
   return (
     <>
       <Toaster position="top-right" />
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 p-4 sm:p-6 rounded-xl">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <h2 className="text-3xl font-bold text-indigo-800 mb-2 sm:mb-0">
+      <div className="p-4 bg-gradient-to-br from-indigo-50 to-purple-100 sm:p-6 rounded-xl">
+        <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center">
+          <h2 className="mb-2 text-3xl font-bold text-indigo-800 sm:mb-0">
             Campaign Preview
           </h2>
           <StatusBadge status={status} color={color} />
@@ -398,7 +400,7 @@ const CampaignPreview = ({ campaignData }) => {
             />
           </PreviewSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard
               icon={Activity}
               title="Campaign Type"
@@ -476,7 +478,7 @@ const StatCard = ({ icon: Icon, title, value, color }) => (
     className={`${color} p-4 rounded-lg flex flex-col items-center text-center`}
   >
     <Icon size={24} className="mb-2" />
-    <h3 className="text-lg font-semibold mb-1">{title}</h3>
+    <h3 className="mb-1 text-lg font-semibold">{title}</h3>
     <p className="text-lg font-bold">{value}</p>
   </div>
 );
@@ -495,7 +497,7 @@ const ActionDataCard = ({ action, data }) => {
   const platformColor = platformIcons[data.platform]?.color || "text-gray-500";
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-sm">
+    <div className="p-4 bg-white rounded-lg shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-lg font-semibold text-indigo-700">{action}</h4>
         <div className="flex items-center">
@@ -509,7 +511,7 @@ const ActionDataCard = ({ action, data }) => {
         {Object.entries(data).map(
           ([key, value]) =>
             key !== "platform" && (
-              <div key={key} className="bg-gray-50 p-2 rounded-md">
+              <div key={key} className="p-2 rounded-md bg-gray-50">
                 <span className="font-medium text-gray-700">{key}: </span>
                 <span className="text-gray-900">{value}</span>
               </div>
@@ -521,8 +523,8 @@ const ActionDataCard = ({ action, data }) => {
 };
 
 const PreviewSection = ({ title, children, content }) => (
-  <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
-    <h3 className="text-xl font-semibold mb-4 text-indigo-700">{title}</h3>
+  <div className="p-4 bg-white shadow-md rounded-xl sm:p-6">
+    <h3 className="mb-4 text-xl font-semibold text-indigo-700">{title}</h3>
     {content ? <p className="text-lg text-gray-800">{content}</p> : children}
   </div>
 );

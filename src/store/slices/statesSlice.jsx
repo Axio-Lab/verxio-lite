@@ -64,7 +64,6 @@ const statesSlice = createSlice({
       state.digitalProduct = initialState.digitalProduct;
       state.pollsOption = initialState.pollsOption;
     },
-
     resetUserProfile: (state) => {
       state.userProfile = initialState.userProfile;
     },
@@ -85,13 +84,13 @@ export const {
   setTokenMint,
   setActionType,
   setUserApiKey,
-  resetActionType,
-  setAllCampaigns,
   setUserProfile,
   setPollsOption,
+  setAllCampaigns,
+  resetActionType,
+  resetUserProfile,
   setDigitalProduct,
   setSelectedProductImage,
-  resetUserProfile,
   resetCreateCampaignFormData,
 } = statesSlice.actions;
 export default statesSlice.reducer;

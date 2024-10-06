@@ -25,12 +25,12 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import "react-markdown-editor-lite/lib/index.css";
 
 const ManageCampaignInfo = ({ campaign }) => {
-  const { state, getAllParticipants, getAllWinners, payWinners } =
+  const { state, getAllParticipants, getAllWinners, payWinners, showPaymentModal,  setShowPaymentModal } =
     useContext(CampaignContext);
   const participatntsList = state.campaignParticipants;
   const winnersList = state.campaignWinners;
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  // const [showPaymentModal, setShowPaymentModal] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
 

@@ -132,8 +132,8 @@ const CampaignTypeAndActions = ({
         {({ values, setFieldValue, isValid }) => (
           <Form className="space-y-6 sm:space-y-8">
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Campaign Actions</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <h3 className="mb-4 text-xl font-semibold">Campaign Actions</h3>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {actions[campaignType].map((action) => (
                   <div
                     key={action.name}
@@ -145,7 +145,7 @@ const CampaignTypeAndActions = ({
                     }`}
                   >
                     {action.icon}
-                    <span className="mt-2 text-center text-sm sm:text-base">
+                    <span className="mt-2 text-sm text-center sm:text-base">
                       {action.name}
                     </span>
                   </div>
@@ -204,13 +204,6 @@ const CampaignTypeAndActions = ({
                 onSave: handleSave,
                 initialData: actionData[currentAction.name],
               })}
-
-            {/* <Button
-              name={"Close"}
-              onClick={closeModal}
-              shade={"border border-red-600"}
-              className={"bg-red-600 border border-red-600 text-white max-w-[100px] mt-4"}
-            /> */}
             <Button
               name={"Close"}
               onClick={closeModal}

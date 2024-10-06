@@ -265,7 +265,7 @@ const ManageCampaignInfo = ({ campaign }) => {
               <div className="w-full max-w-md p-8 mx-4 bg-white shadow-2xl rounded-xl">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold text-gray-800">
-                    Confirm Payment
+                    Streamflow Payout 💰
                   </h2>
                 </div>
                 <div className="mb-8">

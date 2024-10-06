@@ -31,7 +31,7 @@ export const VerifyAUser = ({ requestUrl, closeModal }) => {
             className="w-full max-w-[300px] h-auto"
           />
 
-          {!isSmallScreen && <p>Scan this QR to verify your Google account</p>}
+          {isSmallScreen && <p>Scan this QR to verify your Google account</p>}
 
           {isSmallScreen && (
             <Button

@@ -108,7 +108,7 @@ const ManageCampaignInfo = ({ campaign }) => {
             {campaign?.campaignInfo?.title}
           </h1>
 
-          <div className="grid grid-cols-2 gap-6 mb-8 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-4">
             <StatCard
               icon={Activity}
               title="Status"

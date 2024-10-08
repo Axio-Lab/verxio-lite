@@ -350,6 +350,8 @@ const CampaignPreview = ({ campaignData }) => {
         toast.success(response.data.message);
         dispatch(resetCreateCampaignFormData());
         getAllCampaigns();
+        getMyCampaigns()
+
       } else {
         throw new Error(response.data.message);
       }

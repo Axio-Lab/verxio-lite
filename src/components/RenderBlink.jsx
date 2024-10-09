@@ -62,7 +62,7 @@ const NEXT_PUBLIC_SOLANA_RPC_URL = `${process.env.NEXT_PUBLIC_SOLANA_RPC_URL}/?a
 
 const RenderBlink = ({ campaign }) => {
   const [action, setAction] = useState(null);
-  const [showBlink, setShowBlink] = useState(false); // Control rendering of Blink
+  const [showBlink, setShowBlink] = useState(false);
   const actionApiUrl = campaign?.blink;
   const { adapter } = useActionSolanaWalletAdapter(NEXT_PUBLIC_SOLANA_RPC_URL);
   const { action: fetchedAction } = useAction({ url: actionApiUrl, adapter });
@@ -77,7 +77,6 @@ const RenderBlink = ({ campaign }) => {
   }, [fetchedAction]);
 
   const handleButtonClick = () => {
-    // Perform checks before rendering Blink
     if (!isVerified) {
       toast.error("Please verify your account to participate in this campaign");
     } else if (campaign.status === "Ended") {

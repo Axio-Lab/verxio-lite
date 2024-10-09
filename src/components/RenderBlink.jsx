@@ -93,7 +93,7 @@ const RenderBlink = ({ campaign }) => {
   };
 
   return (
-    <div className="outline-none shadow-sm my-4">
+    <div className="outline-none shadow-sm my-8">
       {!showBlink && (
         <ActionButton
           onClick={handleButtonClick}

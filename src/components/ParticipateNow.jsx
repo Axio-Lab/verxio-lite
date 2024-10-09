@@ -1,19 +1,23 @@
-"use client"
+"use client";
 import "@dialectlabs/blinks/index.css";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 // import { Action, ActionsRegistry } from "@dialectlabs/blinks";
 import { Blink, useAction } from "@dialectlabs/blinks";
-import { useActionSolanaWalletAdapter  } from "@dialectlabs/blinks/hooks/solana";
+import { useActionSolanaWalletAdapter } from "@dialectlabs/blinks/hooks/solana";
 import { ExternalLink } from "lucide-react";
 
 const NEXT_PUBLIC_SOLANA_RPC_URL = `${process.env.NEXT_PUBLIC_SOLANA_RPC_URL}/?api-key=${process.env.NEXT_PUBLIC_API_KEY}`;
 
 const ParticipateNow = ({ campaign }) => {
-    const actionApiUrl = campaign?.blink;
-    const { adapter } = useActionSolanaWalletAdapter(`${NEXT_PUBLIC_SOLANA_RPC_URL}`);
-    const { action: fetchedAction } = useAction({ url: actionApiUrl, adapter });
-    const isVerified = useSelector((state) => state.generalStates.userProfile.isVerified);
+  const actionApiUrl = campaign?.blink;
+  const { adapter } = useActionSolanaWalletAdapter(
+    `${NEXT_PUBLIC_SOLANA_RPC_URL}`
+  );
+  const { action: fetchedAction } = useAction({ url: actionApiUrl, adapter });
+  const isVerified = useSelector(
+    (state) => state.generalStates.userProfile.isVerified
+  );
 
   const handleParticipate = () => {
     if (!isVerified) {

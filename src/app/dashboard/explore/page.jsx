@@ -21,7 +21,7 @@ const Explore = () => {
 
   const filteredCampaigns = useMemo(() => {
     if (!Array.isArray(campaigns)) return []; 
-console.log(campaigns)
+// console.log(campaigns)
     return campaigns
       .filter((campaign) => {
         return (

@@ -1,3 +1,4 @@
+"use client"
 import "@dialectlabs/blinks/index.css";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
@@ -6,7 +7,7 @@ import { Blink, useAction } from "@dialectlabs/blinks";
 import { useActionSolanaWalletAdapter  } from "@dialectlabs/blinks/hooks/solana";
 import { ExternalLink } from "lucide-react";
 
-const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL;
+const NEXT_PUBLIC_SOLANA_RPC_URL = `${process.env.NEXT_PUBLIC_SOLANA_RPC_URL}/?api-key=${process.env.NEXT_PUBLIC_API_KEY}`;
 
 const ParticipateNow = ({ campaign }) => {
     const actionApiUrl = campaign?.blink;
@@ -34,8 +35,10 @@ const ParticipateNow = ({ campaign }) => {
       console.log("required action:", fetchedAction);
       return (
         <Blink
+          securityLevel="all"
           action={fetchedAction}
           websiteText={new URL(actionApiUrl).hostname}
+          stylePreset="default"
         />
       );
     } else {

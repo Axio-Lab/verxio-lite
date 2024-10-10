@@ -65,7 +65,7 @@ const PollAction = () => {
         })
       );
       toast.success("Saved successfully");
-      console.log(pollsOption, "polls options");
+      // console.log(pollsOption, "polls options");
     } else {
       toast.error("Please fill out the fields correctly");
       return;
@@ -79,9 +79,9 @@ const PollAction = () => {
       onSubmit={() => {}}
     >
       {({ values, setFieldValue, errors, touched, isValid }) => (
-        <Form className="space-y-3 sm:space-y-2 p-4 bg-white rounded-lg shadow border-none outline-none">
+        <Form className="p-4 space-y-3 bg-white border-none rounded-lg shadow outline-none sm:space-y-2">
           <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center">
+            <h3 className="flex items-center mb-4 text-lg font-semibold">
               <BarChart2 className="mr-2 text-green-500" />
               Create Poll Details
             </h3>
@@ -107,7 +107,7 @@ const PollAction = () => {
               <ErrorMessage
                 name="pollTitle"
                 component="p"
-                className="text-red-500 text-sm mt-1"
+                className="mt-1 text-sm text-red-500"
               />
             </div>
 
@@ -126,7 +126,7 @@ const PollAction = () => {
                       values
                     )
                   }
-                  className="flex-grow p-2 border rounded mr-2 outline-none"
+                  className="flex-grow p-2 mr-2 border rounded outline-none"
                   placeholder={`Option ${index + 1}`}
                 />
                 {values.optionsArray.length > 2 && (
@@ -146,7 +146,7 @@ const PollAction = () => {
                 outline
                 onClick={() => addOption(setFieldValue, values)}
                 style={{ backgroundColor: "white" }}
-                className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
+                className="w-full px-4 text-sm sm:w-auto sm:text-base sm:px-6 sm:py-3"
               />
             )}
           </div>
@@ -155,7 +155,7 @@ const PollAction = () => {
             onClick={() => {
               handleSave(values, isValid);
             }}
-            className="w-full sm:w-auto text-sm sm:text-base px-4 sm:px-6 sm:py-3"
+            className="w-full px-4 text-sm sm:w-auto sm:text-base sm:px-6 sm:py-3"
           />
         </Form>
       )}

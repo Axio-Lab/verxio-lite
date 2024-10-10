@@ -1,15 +1,10 @@
 "use client";
 import Image from "next/image";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import { Button } from "../Button";
-import { useEffect } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export const VerifyAUser = ({ requestUrl, closeModal }) => {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
-  useEffect(() => {
-    console.log(requestUrl, "request url");
-  }, [requestUrl]);
 
   return (
     <div
@@ -20,7 +15,7 @@ export const VerifyAUser = ({ requestUrl, closeModal }) => {
         onClick={(e) => e.stopPropagation()}
         className="bg-white flex flex-col items-center gap-5 relative p-6 rounded-lg w-full max-w-[400px]"
       >
-        <div className="flex items-center gap-6 flex-col text-center w-full">
+        <div className="flex flex-col items-center w-full gap-6 text-center">
           <Image
             width={300}
             height={300}

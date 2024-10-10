@@ -20,13 +20,13 @@ const Explore = () => {
   const [filter, setFilter] = useState({ reward: "", action: "", status: "" });
 
   const filteredCampaigns = useMemo(() => {
-    if (!campaigns || campaigns.length === 0) return []; 
-
+    if (!Array.isArray(campaigns)) return []; 
+// console.log(campaigns)
     return campaigns
       .filter((campaign) => {
         return (
-          (filter.reward === "" || campaign.reward === filter.reward) &&
-          (filter.action === "" || campaign.action === filter.action) &&
+          (filter.reward === "" || campaign.rewardInfo.type === filter.reward) &&
+          (filter.action === "" || campaign.action.actionType === filter.action) &&
           (filter.status === "" || campaign.status === filter.status)
         );
       })
@@ -101,10 +101,10 @@ const Explore = () => {
                 className="w-full p-2 border rounded sm:w-auto"
               >
                 <option value="">Rewards</option>
-                <option value="NFT Drop">NFT Drop</option>
-                <option value="Merch Drop">Merch Drop</option>
+                <option value="NFT Drop">NFT-Drop</option>
+                <option value="Merch Drop">Merch-Drop</option>
                 <option value="Token">Token</option>
-                <option value="Whitelist Spot">Whitelist Spot</option>
+                <option value="Whitelist Spot">Whitelist-Spot</option>
                 <option value="Airdrop">Airdrop</option>
               </select>
               <select
@@ -116,15 +116,15 @@ const Explore = () => {
                 className="w-full p-2 border rounded sm:w-auto"
               >
                 <option value="">Actions</option>
-                <option value="Swap Token">Swap Token</option>
-                <option value="Burn Token">Burn Token</option>
+                {/* <option value="Swap Token">Swap Token</option> */}
+                <option value="Burn-Token">Burn Token</option>
                 <option value="Sell Digital Product">
                   Sell Digital Product
                 </option>
-                <option value="Compress Token">Compress Token</option>
-                <option value="Create Poll">Create Poll</option>
-                <option value="Decompress Token">Decompress Token</option>
-                <option value="Share URL">Share URL</option>
+                <option value="Compress-Token">Compress Token</option>
+                <option value="Poll">Create Poll</option>
+                <option value="Decompress-Token">Decompress Token</option>
+                <option value="Share-URL">Share URL</option>
               </select>
               <select
                 value={filter.status}

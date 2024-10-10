@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
-import React, { createContext, useEffect, useReducer } from "react";
+import React, { createContext, useState, useEffect, useReducer } from "react";
 
 const CampaignContext = createContext();
 const CampaignProvider = ({ children }) => {
@@ -11,6 +11,7 @@ const CampaignProvider = ({ children }) => {
     campaignWinners: [],
     campaignParticipants: [],
   };
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const SET_LOADING = "SET_LOADING";
   const GET_MY_CAMPAIGNS = "GET_MY_CAMPAIGNS";
@@ -160,6 +161,7 @@ const CampaignProvider = ({ children }) => {
       if (response.data.success === true) {
         toast.success(response.data.message);
         dispatch({ type: SET_LOADING, payload: false });
+        setShowPaymentModal(false);
       } else {
         toast.error(response.data.message);
       }
@@ -186,7 +188,9 @@ const CampaignProvider = ({ children }) => {
         getAllWinners,
         getMyCampaigns,
         getAllCampaigns,
+        showPaymentModal,
         getAllParticipants,
+        setShowPaymentModal,
       }}
     >
       {children}

@@ -2,10 +2,10 @@ import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   ChevronLeft,
   Users,
-  Save,
   Gift,
   Coins,
-  ExternalLink,
+  // Save,
+  // ExternalLink,
   Award,
   Calendar,
   Activity,
@@ -18,55 +18,23 @@ import WinnerSelection from "./WinnerSelection";
 import WinnersList from "./WinnersList";
 import MarkdownIt from "markdown-it";
 import "react-markdown-editor-lite/lib/index.css";
-import { useSelector } from "react-redux";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { CampaignContext } from "@/context/campaignContext";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import ParticipateNow from "@/components/ParticipateNow";
+import RenderBlink from "@/components/RenderBlink";
 
 const ExploreCampaignInfo = ({ campaign }) => {
   const [winners, setWinners] = useState([]);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
-  const isVerified = useSelector(
-    (state) => state.generalStates.userProfile.isVerified
-  );
   const { state, getAllParticipants } = useContext(CampaignContext);
   const participatntsList = state.campaignParticipants;
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
-  // console.log(participatntsList, "Participants ");
-  // const [participants, setParticipants] = useState(1234);
-
   useEffect(() => {
     getAllParticipants(campaign?.id);
   }, []);
-
-  const handleParticipate = () => {
-    if (!isVerified) {
-      toast.error(
-        "Please verify your account to enable you participate in this campaign"
-      );
-      return;
-    }
-    if (campaign.status === "Ended") {
-      toast.error("Oops!! This campaign has ended");
-      return;
-    }
-    const participationUrl = `${campaign?.blink}`;
-    window.location.href = participationUrl;
-  };
-
-  const handleSaveAudience = () => {
-    console.log("Save as custom audience");
-  };
-
-  const handlePickWinners = () => {
-    setShowWinnerSelection(true);
-  };
-
-  // const handleWinnersSelected = (selectedWinners) => {
-  //   setWinners(selectedWinners);
-  // };
 
   const generateAvatar = (address) => {
     return `https://api.dicebear.com/9.x/micah/svg?seed=${
@@ -186,52 +154,7 @@ const ExploreCampaignInfo = ({ campaign }) => {
             </div>
           </div>
 
-          {/* <div className="p-6 mb-8 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-800">
-            Action Data
-          </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <DetailCard
-              title="Platform"
-              value="Jupiter"
-              icon={ExternalLink}
-              color="bg-indigo-50 text-indigo-800"
-            />
-            <DetailCard
-              title="Token to Swap"
-              value="SOL"
-              icon={ExternalLink}
-              color="bg-purple-50 text-purple-800"
-            />
-            <DetailCard
-              title="Min Amount"
-              value="0.1 SOL"
-              icon={ExternalLink}
-              color="bg-pink-50 text-pink-800"
-            />
-          </div>
-        </div> */}
-
-          <div className="flex flex-wrap gap-4 mb-8">
-            <ActionButton
-              onClick={handleParticipate}
-              icon={ExternalLink}
-              text="Participate Now"
-              color="bg-indigo-600 hover:bg-indigo-700"
-            />
-            {/* <ActionButton
-            onClick={handlePickWinners}
-            icon={Award}
-            text="Pick Winners"
-            color="bg-yellow-600 hover:bg-yellow-700"
-          />
-          <ActionButton
-            onClick={handleSaveAudience}
-            icon={Save}
-            text="Save Audience"
-            color="bg-blue-600 hover:bg-blue-700"
-          /> */}
-          </div>
+          <RenderBlink campaign={campaign} />
 
           <div className="p-6 mb-12 shadow-md bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
             <h2 className="mb-4 text-2xl font-semibold text-gray-800">
@@ -268,7 +191,6 @@ const ExploreCampaignInfo = ({ campaign }) => {
             <WinnerSelection
               campaign={campaign}
               onClose={() => setShowWinnerSelection(false)}
-              // onWinnersSelected={handleWinnersSelected}
             />
           )}
         </div>
@@ -296,15 +218,4 @@ const DetailCard = ({ title, value, icon: Icon, color }) => (
     <p className="text-lg font-bold">{value}</p>
   </div>
 );
-
-const ActionButton = ({ onClick, icon: Icon, text, color }) => (
-  <button
-    onClick={onClick}
-    className={`flex items-center ${color} text-white px-6 py-3 rounded-lg transition duration-300`}
-  >
-    <Icon size={20} className="mr-2" />
-    {text}
-  </button>
-);
-
 export default ExploreCampaignInfo;

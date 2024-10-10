@@ -25,12 +25,18 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import "react-markdown-editor-lite/lib/index.css";
 
 const ManageCampaignInfo = ({ campaign }) => {
-  const { state, getAllParticipants, getAllWinners, payWinners } =
-    useContext(CampaignContext);
+  const {
+    state,
+    getAllParticipants,
+    getAllWinners,
+    payWinners,
+    showPaymentModal,
+    setShowPaymentModal,
+  } = useContext(CampaignContext);
   const participatntsList = state.campaignParticipants;
   const winnersList = state.campaignWinners;
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  // const [showPaymentModal, setShowPaymentModal] = useState(false);
   const mdParser = useMemo(() => new MarkdownIt({ html: true }), []);
   const [showWinnerSelection, setShowWinnerSelection] = useState(false);
 
@@ -102,7 +108,7 @@ const ManageCampaignInfo = ({ campaign }) => {
             {campaign?.campaignInfo?.title}
           </h1>
 
-          <div className="grid grid-cols-2 gap-6 mb-8 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-4">
             <StatCard
               icon={Activity}
               title="Status"
